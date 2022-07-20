@@ -1,30 +1,38 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+	<el-container class="common-layout">
+		<el-header>
+			<HeaderNav/>
+		</el-header>		
+		<el-container>
+			<router-view/>
+		</el-container>
+	</el-container>
 </template>
-
+<script>
+import HeaderNav from '@/components/HeaderNav.vue'
+export default {
+	components: {
+		HeaderNav
+	}
+}
+</script>
 <style lang="scss">
+body{
+	margin: 0;
+	width: 100%;
+    min-width: 600px;
+    min-height: 100vh;
+
+	line-height: 1.4;
+    font-size: 16px;
+	color: var(--text-color);
+    background-color: var(--bg-color);
+	transition: background-color var(--el-transition-duration-fast);
+    overflow: hidden;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+//   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
 }
 </style>
