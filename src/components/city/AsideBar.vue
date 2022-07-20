@@ -1,10 +1,11 @@
 <template>
     <el-menu
-        :default-active="menuActive"
-        class="el-menu-vertical-demo"
+        id="cityAsideMenu"
         :collapse="isCollapse"
+        :default-active="menuActive"
         @open="handleOpen"
         @close="handleClose"
+        @select="handleSelect"
     >
         <el-menu-item 
             v-for="item in topics"
@@ -19,33 +20,20 @@
                 {{item.title}}
             </template>
         </el-menu-item>
-
-        <!-- 
-
-        <el-menu-item index="3" disabled>
-        <el-icon><document /></el-icon>
-        <template #title>Navigator Three</template>
-        </el-menu-item>
-        <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-        </el-menu-item> -->
     </el-menu>
 </template>
 
-<script setup>
-import { location } from '@element-plus/icons-vue'
-</script>
-
 <script>
 export default {
-	// components: {},
     data() {
         return {
             menuActive: "1",
             isCollapse: false,
             topics:[
-                { index: "1", icon:"location", title: "222", disabled: false}
+                { index: "1", icon:"ChatDotRound", title: "民情熱議", disabled: false},
+                { index: "2", icon:"Van", title: "城市交通", disabled: false},
+                { index: "3", icon:"OfficeBuilding", title: "城市建設", disabled: false},
+                { index: "4", icon:"Aim", title: "城市安防", disabled: false}
             ]
         }
     },
@@ -53,6 +41,9 @@ export default {
         handleOpen(key="", keyPath=[]){
         },
         handleClose(key="", keyPath=[]){
+        },
+        handleSelect(key="", keyPath=[]){
+            
         }
     }
 
@@ -60,8 +51,25 @@ export default {
 </script>
 
 <style lang="scss">
-    .el-menu-vertical-demo:not(.el-menu--collapse) {
-        width: 200px;
-        min-height: 400px;
+#cityAsideMenu{
+    background-color: var(--el-bg-color-page);
+    &:not(.el-menu--collapse) {
+        width: 100%;
+        .el-menu-item{
+            height: 1rem;
+            line-height: 1.5;
+            margin: 1.5rem 0 0 3rem;
+            padding: 1rem 0 1rem 1.25rem;
+            > i {
+                margin-right: 1rem;
+            }
+            &.is-active{
+                padding-left: 1rem;
+                border-left: .25rem solid var(--el-menu-text-color);
+                color: var(--el-text-color-primary);
+                font-weight: bold;
+            }
+        }
     }
+}
 </style>

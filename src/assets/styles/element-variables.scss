@@ -1,0 +1,86 @@
+html {
+    --filter: invert(0);
+    // --el-color-primary: invert(0);
+	&.light{
+		--el-bg-color-page: #f9f9f9;
+	}
+    &.dark{
+        --filter: invert(1);
+		// --el-color-primary: invert(0);
+    }
+}
+
+body{
+    width: 100%;
+    min-width: 600px;
+    min-height: 100vh;
+	margin: 0;
+    overflow: hidden;
+    
+    color: var(--el-text-color-primary);
+    background-color: var(--el-bg-color);
+    transition: background-color var(--el-transition-duration-fast);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: "微軟正黑體", 'Microsoft JhengHei', 'Droid Sans', 'Open Sans', 'Helvetica';
+    font-size: 14px;
+    //Dashboard
+    @media all and (min-width: 1920px){
+        font-size: 16px;
+    }
+    @media screen and (max-width: 1919px) and (min-width: 1281px) {
+        font-size: 14px;
+    }
+}
+
+h1{
+    font-size: 1.5rem;
+    font-weight: normal;
+}
+h2{
+    font-size: 1.4rem;
+    display: inline;
+    font-weight: 600;
+}
+h3{
+    font-size: 1.2rem;
+    font-weight: normal;
+}
+h4{
+    font-size: 1.6rem;
+    font-weight: normal;
+}
+h5{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+h6{
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+// 
+.el-menu--horizontal{
+	.el-menu-item:not(.is-disabled){
+		&:focus,
+		&:hover{
+			background-color: transparent;
+		}
+	}
+	>.el-menu-item.is-active{
+		border-bottom-width: .25rem;
+		border-bottom-color: var(--el-menu-text-color);
+		color: var(--el-menu-text-color) !important;
+	}
+
+}
+
+.el-button{
+	&.is-link{
+		[class*=el-icon]{
+			font-weight: bold;
+			font-size: 1.25rem;
+		}
+	}
+}

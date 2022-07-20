@@ -1,12 +1,13 @@
 <template>
     <el-menu
         :default-active="activeIndex"
-        class="el-menu-tuic"
+        id="MainHeaderBox"
+        :class="{fullScreen}"
         mode="horizontal"
         :ellipsis="false"
         @select="handleSelect"
     >
-        <el-menu-item index="0" class="logo">
+        <el-menu-item index="0" class="logoBox">
             <img 
                 src="../assets/img/TUIC.svg"
                 alt="城市運營聯合儀表板logo" 
@@ -30,19 +31,35 @@
 
         <div class="flex-grow" />
 
-        <el-button circle :icon="User">
-        </el-button>
+        <div>
+            <el-button 
+                @click="handlefull"
+                :icon="fullScreen ? Close: FullScreen" 
+                link
+            />
+            <el-button 
+                @click="mode = mode === 'dark' ? 'light' : 'dark'"
+                :icon="mode === 'dark' ? Moon : Sunny" 
+                link
+            />
+            <el-button circle :icon="User"/>
+        </div>
     </el-menu>
 </template>
 
 <script setup>
-import { User } from '@element-plus/icons-vue'
+import { User, Moon, Sunny, FullScreen, Close } from '@element-plus/icons-vue'
+import { useColorMode } from '@vueuse/core'
+const mode = useColorMode({
+    class: 'theme'
+})
 </script>
 
 <script>
 export default {
     data(){
         return {
+            fullScreen :false,
             activeIndex: "2",
             nav:[
                 {index: "1", title: "我的儀表板", disabled: true},
@@ -69,19 +86,23 @@ export default {
                 default:
                     break;
             }
+        },
+        handlefull(){
+            this.fullScreen = !this.fullScreen
+            this.$emit('full', this.fullScreen)
         }
     }
 }
 </script>
 
 <style lang="scss">
-.el-menu-tuic{
+#MainHeaderBox{
     height: 100%;
     align-items: center;
-    .logo{
+    .logoBox{
         img{
             height: 80%;
-            // filter: invert(1);
+            filter: var(--filter);
         }
         span{
             >*{
@@ -96,13 +117,9 @@ export default {
     }
 }
 .el-button{
-    // padding: 0 !important;
     span{
         width: 100%;
         height: 100%; 
     }
-}
-.flex-grow {
-    flex-grow: 1;
 }
 </style>
