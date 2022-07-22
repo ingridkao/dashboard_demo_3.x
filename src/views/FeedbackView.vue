@@ -1,5 +1,4 @@
 <template>
-    <div class="about">
-      	<h1>This is an Feedback page</h1>
-    </div>
+	<div id="feedbackContainer" class="">		
+	</div>
 </template>

@@ -1,10 +1,30 @@
+<script setup>
+	import { topicList } from '@/assets/datas/topicList.js'
+	import { ref, defineProps, defineEmits } from 'vue'    
+    const topics = ref(topicList)
+    const props = defineProps({
+        isCollapse: { 
+            type: Boolean,
+            default: false
+        },
+        menuActive: { 
+            type: String,
+            default: ''
+        }
+    })
+    const emit = defineEmits(['collapse', 'update'])
+	const updateCollapse = () => {
+        emit("collapse", !props.isCollapse)
+	}
+	const handleSelect = (e) => {
+        emit("update", e)
+	}
+</script>
 <template>
     <el-menu
         id="cityAsideMenu"
-        :collapse="isCollapse"
-        :default-active="menuActive"
-        @open="handleOpen"
-        @close="handleClose"
+        :collapse="props.isCollapse"
+        :default-active="props.menuActive"
         @select="handleSelect"
     >
         <el-menu-item 
@@ -20,37 +40,24 @@
                 {{item.title}}
             </template>
         </el-menu-item>
+        <el-button 
+            id="collapseBtn"
+            size="large"
+            text 
+            @click="updateCollapse"
+        >
+            <el-icon>
+                <DArrowRight v-if="props.isCollapse"/>
+                <DArrowLeft v-else/>
+            </el-icon>
+        </el-button>
     </el-menu>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            menuActive: "1",
-            isCollapse: false,
-            topics:[
-                { index: "1", icon:"ChatDotRound", title: "民情熱議", disabled: false},
-                { index: "2", icon:"Van", title: "城市交通", disabled: false},
-                { index: "3", icon:"OfficeBuilding", title: "城市建設", disabled: false},
-                { index: "4", icon:"Aim", title: "城市安防", disabled: false}
-            ]
-        }
-    },
-    methods:{
-        handleOpen(key="", keyPath=[]){
-        },
-        handleClose(key="", keyPath=[]){
-        },
-        handleSelect(key="", keyPath=[]){
-            
-        }
-    }
-
-}
-</script>
-
 <style lang="scss">
+#collapseBtn{
+    padding-left: 1.5rem;
+}
 #cityAsideMenu{
     background-color: var(--el-bg-color-page);
     &:not(.el-menu--collapse) {

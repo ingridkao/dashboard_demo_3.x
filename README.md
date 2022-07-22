@@ -47,9 +47,10 @@ Element+暗黑模式[官網說明](https://element-plus.org/zh-CN/guide/dark-mod
 
 
 ## FullScreen
-在UI上想在最右上方有一個按鈕，可以將內容全螢幕
-由於想要把整個容器一起全螢幕所以實作在App.vue中
-[實作參考](https://github.com/ingridkao/dashboard_demo_3.x/blob/main/src/App.vue)
+> 在UI上想在最右上方有一個按鈕，可以將內容全螢幕。
+
+由於想要把整個容器一起全螢幕所以實作在App.vue中，[實作參考](https://github.com/ingridkao/dashboard_demo_3.x/blob/main/src/App.vue)
+
 
 
 tags: `Vue` `element-plus` `vueuse` `composition api`

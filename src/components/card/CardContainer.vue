@@ -1,29 +1,24 @@
 <script setup>
-	import CardHeader from '@/components/card/CardHeader.vue'
-    const props = defineProps({
-        // type: { type: String, required: true },
-        // title: { type: String, required: false, default: '' },
-        // showReload: { type: Boolean, required: false, default: false },
-    })
-    // const { title } = toRefs(props)
+    import { defineProps } from 'vue'
+	import CardBody from '@/components/card/CardBody.vue'
+    import { Plus } from '@element-plus/icons-vue'
 
+    const props = defineProps({
+        data: { type: Object, required: true, default: ()=>{} }
+    })
 </script>
 
 <template>
-    <el-card class="card-container">
+    <el-card
+        :class="['card-container', data.overview_display]"
+    >
         <template #header>
-            <CardHeader
-                :class="['card-header']"
-                :title="12312323"
-            />
+            <h6>{{ data.name }}</h6>
+            <el-button class="hoverBtn" text :icon="Plus"/>
         </template>
-        <div 
-            v-for="o in 4" 
-            :key="o" 
-            class="text item"
-        >
-            {{ 'List item ' + o }}
-        </div>
+        <CardBody
+            :item="data.request_list"
+        />
     </el-card>
 </template>
 
@@ -33,6 +28,21 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        border-bottom-color: transparent;
+        h6{
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .hoverBtn{
+            width: 2rem;
+            height: 2rem;
+            border-radius: 2rem;
+            color: transparent;
+            &:hover{
+                color: var(--el-text-color); 
+            }
+        }
     }
 }
 </style>

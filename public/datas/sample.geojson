@@ -1,0 +1,7 @@
+{
+    "type": "FeatureCollection",
+    "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+    "features": [
+        { "type": "Feature", "properties": { "ogc_fid": 14661, "案件編號": "2020020600394", "案件guid": "4e7fbb1d-b741-465f-be10-c81b819ac737", "案件類型": "污染舉發", "案件狀態": "已結案", "成案時間": "2020-02-06T23:06:02.643Z", "結案時間": "2020-02-07T21:30:06.203Z", "案件內容": "店家油煙污染", "成案時間utc": "2020-02-06T15:06:02.643Z", "epoch_time": 1581030362.6429999 }, "geometry": { "type": "Point", "coordinates": [ 121.5289781, 25.0482418 ] } }
+    ]
+}    
