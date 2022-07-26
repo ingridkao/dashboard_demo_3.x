@@ -17,7 +17,9 @@
             <el-button class="hoverBtn" text :icon="Plus"/>
         </template>
         <CardBody
-            :item="data.request_list"
+            v-for="item in data.request_list"
+            :key="item.index"
+            :item="item"
         />
     </el-card>
 </template>
@@ -29,6 +31,7 @@
         justify-content: space-between;
         align-items: center;
         border-bottom-color: transparent;
+        padding-bottom: 0;
         h6{
             margin: 0;
             font-size: 1.25rem;
@@ -42,6 +45,14 @@
             &:hover{
                 color: var(--el-text-color); 
             }
+        }
+    }
+    .el-card__body{
+        padding-top: 0;
+        padding-bottom: 0;
+        height: calc(100% - 4rem);
+        .chartContainer{
+            height: 100%;
         }
     }
 }

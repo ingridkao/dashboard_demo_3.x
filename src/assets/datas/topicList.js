@@ -36,12 +36,34 @@ export const topicComponentList = [
                 index: 'hotnews',
                 name: '新聞熱議關鍵字',
                 source_from: '新聞知識系統',
-                overview_display: '' 
+                request_list: [{
+                    type: 'WordCloud',
+                    config: {
+                        title: "新聞熱議關鍵字",
+                        // series: [{
+                        //     name: "新聞熱議關鍵字"
+                        // }]    
+                    },
+                    data:[
+                        {name: "媒體", weight: 1, color: "hsl(210deg,80%,54%)"},
+                        {name: "記者會", weight: 1, color: "hsl(210deg,80%,54%)"},
+                        {name: "柯文哲", weight: 3, color: "hsl(210deg,80%,54%)"},
+                        {name: "疫情", weight: 3, color: "hsl(210deg,80%,54%)"},
+                        {name: "民進黨", weight: 2, color: "hsl(210deg,80%,54%)"},
+                        {name: "美國", weight: 5, color: "hsl(210deg,80%,54%)"},
+                        {name: "國民黨", weight: 2, color: "hsl(210deg,80%,54%)"},
+                        {name: "參選人", weight: 4, color: "hsl(210deg,80%,54%)"},
+                        {name: "投資", weight: 2, color: "hsl(210deg,80%,54%)"},
+                        {name: "協助", weight: 3, color: "hsl(210deg,80%,54%)"},
+                        {name: "新竹", weight: 1, color: "hsl(210deg,80%,54%)"},
+                        {name: "林智堅", weight: 1, color: "hsl(210deg,10%,54%)"}
+                    ]
+                }]
             },
             {
                 index: 'circular',
                 name: '單一陳情系統案件',
-                source_from: 'HelloTaipei',
+                source_from: 'HelloTaipei陳情系統',
                 overview_display: 'wide',
                 calculation_config:{
                     table: "sentiment_hello_taipei_109",
@@ -72,9 +94,25 @@ export const topicComponentList = [
                 name: "1999話務案件局處",
                 source_from: "1999話務系統",
                 overview_display: '',
+                calculation_config: {
+                    fields: "SUM(daily_count::float)::int AS count",
+                    table: "app_calcu_daily_sentiment_voice1999_109"
+                },
+                request_list: [{
+                    config: {
+                        bar: {index: "value"}, 
+                        pie: {display: "累積件數", show_top: true}
+                    }
+                }]
+            },
+            {
+                index: "4d9f2794",
+                name: "派工案件",
+                source_from: "派工系統",
+                overview_display: 'tall',
                 calculation_config: {fields: "SUM(daily_count::float)::int AS count", table: "app_calcu_daily_sentiment_voice1999_109"},
                 request_list: [{
-                    color: null, 
+                    type: "CountChart",
                     config: {
                         bar: {index: "value"}, 
                         pie: {display: "累積件數", show_top: true}

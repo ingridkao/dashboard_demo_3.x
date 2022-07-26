@@ -13,7 +13,7 @@ disqus: hackmd
 * [Element plus](#element-plus)
 * [Dark mode](#dark-mode-toggle)
 * [FullScreen](#fullScreen)
-
+* [Highcharts](#highcharts)
 
 
 ## Element plus
@@ -51,6 +51,12 @@ Element+暗黑模式[官網說明](https://element-plus.org/zh-CN/guide/dark-mod
 
 由於想要把整個容器一起全螢幕所以實作在App.vue中，[實作參考](https://github.com/ingridkao/dashboard_demo_3.x/blob/main/src/App.vue)
 
+
+
+## Highcharts
+> `npm install highcharts highcharts-vue`
+
+1. 
 
 
 tags: `Vue` `element-plus` `vueuse` `composition api`
