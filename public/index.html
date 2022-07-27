@@ -1,17 +1,31 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <meta property="og:type"        content="website"/>
+        <meta property="og:title"       content="城市運營聯合儀表板DEMO"/>
+        <meta name="twitter:title"      content="城市運營聯合儀表板DEMO" />
+        <meta property="og:description" content="介接市政各單位關鍵資料建構資料模組，呈現資料包括時間、空間向度資訊，作為跨域資料應用的討論平台。"/>
+        <meta property="og:url"         content="<%= VUE_APP_SHARE %>"/>
+        <meta property="og:image"       content="https://tuic.gov.taipei/img/pages/work/urban/carousel.jpg"/>
+        <meta name="twitter:card"       content="summary" />
+        <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+        <title>城市運營聯合儀表板DEMO</title>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=<%= VUE_APP_GOOGLE_ANALYTICS %>"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '<%= VUE_APP_GOOGLE_ANALYTICS %>');
+        </script>
+    </head>
+    <body>
+        <noscript>
+        <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+        </noscript>
+        <div id="app"></div>
+        <!-- built files will be auto injected -->
+    </body>
 </html>

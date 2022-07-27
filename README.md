@@ -7,12 +7,38 @@ disqus: hackmd
 這個版本除了將Vue從2.x升級成3.X，也將原本使用的ElementUI升級成新的ElementPlus，建議使用vueuse來做一些動態切換。
 在這邊紀錄一些建置過程中花比較多時間的問題：
 
+[Demo](https://ingridkao.github.io/dashboard_demo_3.x/)
+
 
 
 # Table of Contents
+* [Deploy](#deploy)
 * [Element plus](#element-plus)
 * [Dark mode](#dark-mode-toggle)
 * [FullScreen](#fullScreen)
+
+
+
+## Deploy
+### 1.Project setup
+For dependency warning for @mapbox/mapbox-gl-traffic
+```
+npm install --force
+```
+### 2. .env
+1. 新增.env
+    `vi .env`
+2. 編輯.env
+    ```
+    VUE_APP_GOOGLE_ANALYTICS=G-XXXXXXXXX
+    VUE_APP_SHARE=https://ingridkao.github.io/dashboard_demo/
+    VUE_APP_MAPBOXTOKEN=pk.?????????
+    ```
+### 3. Deploy
+1. 編輯deploy.sh
+ - Line.13 ： commit msg
+ - Line.16 ： 相關字串確認
+2. 於專案目錄執行`sh deploy.sh`
 
 
 
@@ -50,6 +76,7 @@ Element+暗黑模式[官網說明](https://element-plus.org/zh-CN/guide/dark-mod
 > 在UI上想在最右上方有一個按鈕，可以將內容全螢幕。
 
 由於想要把整個容器一起全螢幕所以實作在App.vue中，[實作參考](https://github.com/ingridkao/dashboard_demo_3.x/blob/main/src/App.vue)
+
 
 
 

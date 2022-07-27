@@ -10,7 +10,13 @@
 
 <template>
     <el-card
-        :class="['card-container', data.overview_display]"
+        :class="[
+            'card-container',
+            data.overview_display
+        ]"
+        :style="{
+            order: data.order
+        }"
     >
         <template #header>
             <h6>{{ data.name }}</h6>

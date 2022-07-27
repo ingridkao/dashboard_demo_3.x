@@ -25,6 +25,51 @@ export const topicList = [
     }
 ]
 
+export const basicMapLayer = [
+    {
+        index: '',
+        name: '警察相關設施',
+        source_from: '',
+        request_list: []
+    },
+    {
+        index: '',
+        name: '消防應變設施',
+        source_from: '',
+        request_list: []
+    },
+    {
+        index: '',
+        name: '都市計畫用地類型',
+        source_from: '',
+        request_list: []
+    },
+    {
+        index: '',
+        name: '公有土地',
+        source_from: '',
+        request_list: []
+    },
+    {
+        index: '',
+        name: '活動人口推估',
+        source_from: '遠傳電信',
+        request_list: []
+    },
+    {
+        index: '',
+        name: '居職人口推估',
+        source_from: '遠傳電信',
+        request_list: []
+    },
+    {
+        index: '',
+        name: '水災風險',
+        source_from: '',
+        request_list: []
+    }
+]
+
 /**
  * overview_display: default(1X1)| wide(2X1) |tall(1X2) | large(2X2)
  */
@@ -35,14 +80,42 @@ export const topicComponentList = [
             {
                 index: 'hotnews',
                 name: '新聞熱議關鍵字',
+                overview_display: '',
+                order: 1,
+                sample_data: '',
                 source_from: '新聞知識系統',
-                overview_display: '' 
+            },
+            {
+                index: "hello_taipei",
+                name: "1999話務案件局處",
+                overview_display: '',
+                order: 2,
+                sample_data: '',
+                source_from: "1999話務系統",
+                calculation_config: {fields: "SUM(daily_count::float)::int AS count", table: "app_calcu_daily_sentiment_voice1999_109"},
+                request_list: [{
+                    color: null, 
+                    config: {
+                        bar: {index: "value"}, 
+                        pie: {display: "累積件數", show_top: true}
+                    }
+                }]
+            },
+            {
+                index: 'dispatching',
+                name: '派工案件',
+                overview_display: 'tall', 
+                order: 3,
+                sample_data: '',
+                source_from: '',
             },
             {
                 index: 'circular',
                 name: '單一陳情系統案件',
-                source_from: 'HelloTaipei',
                 overview_display: 'wide',
+                order: 4,
+                sample_data: '',
+                source_from: 'HelloTaipei',
                 calculation_config:{
                     table: "sentiment_hello_taipei_109",
                     time_field: "受理日期utc"
@@ -66,20 +139,6 @@ export const topicComponentList = [
                         }
                     }
                 ]
-            },
-            {
-                index: "hello_taipei",
-                name: "1999話務案件局處",
-                source_from: "1999話務系統",
-                overview_display: '',
-                calculation_config: {fields: "SUM(daily_count::float)::int AS count", table: "app_calcu_daily_sentiment_voice1999_109"},
-                request_list: [{
-                    color: null, 
-                    config: {
-                        bar: {index: "value"}, 
-                        pie: {display: "累積件數", show_top: true}
-                    }
-                }]
             }
         ]
     },
@@ -89,6 +148,9 @@ export const topicComponentList = [
             {
                 index: 'designate',
                 name: '避難收容地點',
+                overview_display: '',
+                order: 1,
+                sample_data: '',
                 source_from: '消防局',
                 request_list: [
                     {
@@ -135,6 +197,8 @@ export const topicComponentList = [
             {
                 index: 'flood_risk',
                 name: '水災風險地區',
+                overview_display: '',
+                order: 2,
                 source_from: '消防局',
                 request_list: [
                     {
@@ -232,6 +296,8 @@ export const topicComponentList = [
             {
                 index: 'slope_area_risk',
                 name: '山坡地風險地點',
+                overview_display: '',
+                order: 4,
                 source_from: '工務局',
                 request_list: [
                     {
@@ -305,15 +371,153 @@ export const topicComponentList = [
                         }
                     }
                 ]
+            },
+            {
+                index: '',
+                name: '水位監測',
+                overview_display: '',
+                order: 3,
+                sample_data: '',
+                source_from: '',
+                request_list: []
+            },
+            {
+                index: '',
+                name: '抽水站狀態',
+                overview_display: '',
+                order: 5,
+                sample_data: '',
+                source_from: '',
+                request_list: []
+            },
+            {
+                index: '',
+                name: '刑事統計',
+                overview_display: '',
+                order: 6,
+                source_from: '',
+                sample_data: '',
+                request_list: []
             }
+
         ]
     },
     {
         index: 'Traffic',
-        components: []
+        components: [
+            {
+                index: 'traffic_accident',
+                name: '交通事故統計',
+                overview_display: '',
+                order: 1,
+                source_from: '警察局',
+                sample_data: '2021-02-28',
+                request_list: []
+            },
+            {
+                index: 'traffic_live',
+                name: '交通路況',
+                overview_display: 'wide',
+                order: 4,
+                source_from: '交通局',
+                sample_data: '',
+                request_list: []
+            },
+            {
+                index: 'traffic_todaywork',
+                name: '道路施工',
+                overview_display: 'wide',
+                order: 6,
+                source_from: '工務局',
+                sample_data: '',
+                request_list: []
+            },
+            {
+                index: 'traffic_mrt',
+                name: '捷運人流趨勢',
+                overview_display: '',
+                order: 2,
+                source_from: '捷運公司',
+                sample_data: '',
+                request_list: []
+            },
+            {
+                index: '',
+                name: '板南線車廂擁擠程度',
+                overview_display: 'tall',
+                order: 3,
+                source_from: '',
+                sample_data: '',
+                request_list: []
+            },
+            {
+                index: '',
+                name: 'Youbike空位數量',
+                overview_display: '',
+                order: 5,
+                source_from: '',
+                sample_data: '',
+                request_list: []
+            },
+            {
+                index: '',
+                name: '公車行駛狀態',
+                overview_display: '',
+                order: 7,
+                source_from: '',
+                sample_data: '',
+                request_list: []
+            }
+        ]
     },
     {
         index: 'Construction',
-        components: []
+        components: [
+            {
+                index: 'building_renew',
+                name: '都市更新案件',
+                overview_display: '',
+                order: 4,
+                source_from: '都市更新處',
+                sample_data: '',
+                request_list: []
+            },
+            {
+                index: 'social_house',
+                name: '社會住宅建設進度',
+                overview_display: '',
+                order: 5,
+                source_from: '都發局',
+                sample_data: '',
+                request_list: []
+            },
+            {
+                index: 'building_age',
+                name: '全市屋齡分布',
+                overview_display: 'wide',
+                order: 2,
+                source_from: '建管處',
+                sample_data: '',
+                request_list: []
+            },
+            {
+                index: '',
+                name: '建管處發照量',
+                overview_display: '',
+                order: 1,
+                source_from: '建管處',
+                sample_data: '',
+                request_list: []
+            },
+            {
+                index: '',
+                name: 'TPMO智慧城市專案',
+                overview_display: '',
+                order: 3,
+                source_from: '建管處',
+                sample_data: '',
+                request_list: []
+            }
+        ]
     }
 ]
