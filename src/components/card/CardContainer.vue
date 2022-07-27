@@ -1,10 +1,11 @@
 <script setup>
     import { defineProps } from 'vue'
+    import LoadingComponent from '@/components/highcharts/LoadingComponent.vue'
 	import CardBody from '@/components/card/CardBody.vue'
     import { Plus } from '@element-plus/icons-vue'
 
     const props = defineProps({
-        data: { type: Object, required: true, default: ()=>{} }
+        data: { type: Object, default: ()=>{} }
     })
 </script>
 
@@ -22,8 +23,14 @@
             <h6>{{ data.name }}</h6>
             <el-button class="hoverBtn" text :icon="Plus"/>
         </template>
+        <LoadingComponent
+            v-if="!data.request_list[0]"
+        />
         <CardBody
-            :item="data.request_list"
+            v-for="item in data.request_list"
+            :key="item.index"
+            :request="item"
+            class="cardComponent"
         />
     </el-card>
 </template>
@@ -35,6 +42,7 @@
         justify-content: space-between;
         align-items: center;
         border-bottom-color: transparent;
+        padding-bottom: 0;
         h6{
             margin: 0;
             font-size: 1.25rem;
@@ -48,6 +56,14 @@
             &:hover{
                 color: var(--el-text-color); 
             }
+        }
+    }
+    .el-card__body{
+        padding-top: 0;
+        padding-bottom: 0;
+        height: calc(100% - 4rem);
+        .chartContainer{
+            height: 100%;
         }
     }
 }

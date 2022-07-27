@@ -5,8 +5,6 @@
 </script>
 
 <template>
-    
-<!-- {{information}} -->
     <span v-if="information.source_from">{{information.source_from}}</span>
     <el-skeleton v-else/>
     <span v-if="information.sample_data">{{information.sample_data}}</span>

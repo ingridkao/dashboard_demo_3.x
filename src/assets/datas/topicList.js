@@ -84,6 +84,29 @@ export const topicComponentList = [
                 order: 1,
                 sample_data: '',
                 source_from: '新聞知識系統',
+                request_list: [{
+                    type: 'WordCloud',
+                    config: {
+                        title: "新聞熱議關鍵字",
+                        // series: [{
+                        //     name: "新聞熱議關鍵字"
+                        // }]    
+                    },
+                    data:[
+                        {name: "媒體", weight: 1, color: "hsl(210deg,80%,54%)"},
+                        {name: "記者會", weight: 1, color: "hsl(210deg,80%,54%)"},
+                        {name: "柯文哲", weight: 3, color: "hsl(210deg,80%,54%)"},
+                        {name: "疫情", weight: 3, color: "hsl(210deg,80%,54%)"},
+                        {name: "民進黨", weight: 2, color: "hsl(210deg,80%,54%)"},
+                        {name: "美國", weight: 5, color: "hsl(210deg,80%,54%)"},
+                        {name: "國民黨", weight: 2, color: "hsl(210deg,80%,54%)"},
+                        {name: "參選人", weight: 4, color: "hsl(210deg,80%,54%)"},
+                        {name: "投資", weight: 2, color: "hsl(210deg,80%,54%)"},
+                        {name: "協助", weight: 3, color: "hsl(210deg,80%,54%)"},
+                        {name: "新竹", weight: 1, color: "hsl(210deg,80%,54%)"},
+                        {name: "林智堅", weight: 1, color: "hsl(210deg,10%,54%)"}
+                    ]
+                }]
             },
             {
                 index: "hello_taipei",
@@ -92,14 +115,7 @@ export const topicComponentList = [
                 order: 2,
                 sample_data: '',
                 source_from: "1999話務系統",
-                calculation_config: {fields: "SUM(daily_count::float)::int AS count", table: "app_calcu_daily_sentiment_voice1999_109"},
-                request_list: [{
-                    color: null, 
-                    config: {
-                        bar: {index: "value"}, 
-                        pie: {display: "累積件數", show_top: true}
-                    }
-                }]
+                request_list: []
             },
             {
                 index: 'dispatching',
@@ -108,36 +124,35 @@ export const topicComponentList = [
                 order: 3,
                 sample_data: '',
                 source_from: '',
+                request_list: []
             },
             {
                 index: 'circular',
                 name: '單一陳情系統案件',
+                source_from: 'HelloTaipei陳情系統',
                 overview_display: 'wide',
                 order: 4,
                 sample_data: '',
                 source_from: 'HelloTaipei',
-                calculation_config:{
-                    table: "sentiment_hello_taipei_109",
-                    time_field: "受理日期utc"
-                },
                 request_list: [
-                    {
-                        type: 'AlarmBar',
-                        name: '累計件數',
-                        color: ['#27d5d7'],
-                        config:{
-                            total: {
-                                title: '累積件數(本週)',
-                                formula: 'sum'
-                            }
-                        },
-                        path:'/sentiment/component/hellotaipei',
-                        form_data: {
-                            column: '案件主類',
-                            start: "2020-12-25T00:00:00+08:00",
-                            end: "2020-12-31T23:59:59+08:00"
-                        }
-                    }
+                    // {
+                    //     type: 'AlarmBar',
+                    //     name: '累計件數',
+                    //     color: ['#27d5d7'],
+                    //     config:{
+                    //         total: {
+                    //             title: '累積件數(本週)',
+                    //             formula: 'sum'
+                    //         }
+                    //     },
+                    //     path:'/sentiment/component/hellotaipei',
+                    //     form_data: {
+                    //         column: '案件主類',
+                    //         start: "2020-12-25T00:00:00+08:00",
+                    //         end: "2020-12-31T23:59:59+08:00"
+                    //     },
+                    //     data: []
+                    // }
                 ]
             }
         ]
@@ -153,21 +168,21 @@ export const topicComponentList = [
                 sample_data: '',
                 source_from: '消防局',
                 request_list: [
-                    {
-                        type: 'MapDisplay',
-                        path: '/patrol/component/patroldesignateplace',
-                        config: {
-                            mapLabels:[
-                                {
-                                    select_array: '避難場所',
-                                    symbol: 'circle_stroke',
-                                    color: '#FDD79B',
-                                    unit: '處'
-                                }
-                            ],
-                            statistic: true
-                        } 
-                    }
+                    // {
+                    //     type: 'MapDisplay',
+                    //     path: '/patrol/component/patroldesignateplace',
+                    //     config: {
+                    //         mapLabels:[
+                    //             {
+                    //                 select_array: '避難場所',
+                    //                 symbol: 'circle_stroke',
+                    //                 color: '#FDD79B',
+                    //                 unit: '處'
+                    //             }
+                    //         ],
+                    //         statistic: true
+                    //     } 
+                    // }
                 ],
                 map_config:[
                     {
@@ -201,31 +216,31 @@ export const topicComponentList = [
                 order: 2,
                 source_from: '消防局',
                 request_list: [
-                    {
-                        type: 'MapDisplay',
-                        config: {
-                            mapLabels:[
-                                {
-                                    select_array: '高風險地區',
-                                    symbol: 'Area',
-                                    unit: 'km²',
-                                    color: '#baf4f5'
-                                },
-                                {
-                                    select_array: '低風險地區',
-                                    symbol: 'Area',
-                                    unit: 'km²',
-                                    color: '#009ff4'
-                                },
-                                {
-                                    select_array: '中風險地區',
-                                    symbol: 'Area',
-                                    unit: 'km²',
-                                    color: '#352ad1'
-                                }
-                            ]
-                        }
-                    }
+                    // {
+                    //     type: 'MapDisplay',
+                    //     config: {
+                    //         mapLabels:[
+                    //             {
+                    //                 select_array: '高風險地區',
+                    //                 symbol: 'Area',
+                    //                 unit: 'km²',
+                    //                 color: '#baf4f5'
+                    //             },
+                    //             {
+                    //                 select_array: '低風險地區',
+                    //                 symbol: 'Area',
+                    //                 unit: 'km²',
+                    //                 color: '#009ff4'
+                    //             },
+                    //             {
+                    //                 select_array: '中風險地區',
+                    //                 symbol: 'Area',
+                    //                 unit: 'km²',
+                    //                 color: '#352ad1'
+                    //             }
+                    //         ]
+                    //     }
+                    // }
                 ],
                 map_config:[
                     {
@@ -300,38 +315,38 @@ export const topicComponentList = [
                 order: 4,
                 source_from: '工務局',
                 request_list: [
-                    {
-                        type: 'MapDisplay',
-                        path:'/patrol/component/patroldebris',
-                        config: {
-                            mapLabels: [
-                                {
-                                    select_array: '土石流潛勢溪流',
-                                    symbol: 'line',
-                                    unit: '處',
-                                    color: '#d7c500',
-                                },
-                                {
-                                    select_array: '土石流影響範圍',
-                                    symbol: 'Area',
-                                    unit: '處',
-                                    color: '#958f00',
-                                },
-                                {
-                                    select_array: '列管邊坡',
-                                    symbol: 'line',
-                                    unit: '處',
-                                    color: '#ff9800',
-                                },
-                                {
-                                    select_array: '老舊聚落',
-                                    symbol: 'Area',
-                                    unit: '處',
-                                    color: '#9e7b5c',
-                                }
-                            ]
-                        }
-                    }
+                    // {
+                    //     type: 'MapDisplay',
+                    //     path:'/patrol/component/patroldebris',
+                    //     config: {
+                    //         mapLabels: [
+                    //             {
+                    //                 select_array: '土石流潛勢溪流',
+                    //                 symbol: 'line',
+                    //                 unit: '處',
+                    //                 color: '#d7c500',
+                    //             },
+                    //             {
+                    //                 select_array: '土石流影響範圍',
+                    //                 symbol: 'Area',
+                    //                 unit: '處',
+                    //                 color: '#958f00',
+                    //             },
+                    //             {
+                    //                 select_array: '列管邊坡',
+                    //                 symbol: 'line',
+                    //                 unit: '處',
+                    //                 color: '#ff9800',
+                    //             },
+                    //             {
+                    //                 select_array: '老舊聚落',
+                    //                 symbol: 'Area',
+                    //                 unit: '處',
+                    //                 color: '#9e7b5c',
+                    //             }
+                    //         ]
+                    //     }
+                    // }
                 ],
                 map_config:[
                     {

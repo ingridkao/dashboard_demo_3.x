@@ -16,7 +16,8 @@ disqus: hackmd
 * [Element plus](#element-plus)
 * [Dark mode](#dark-mode-toggle)
 * [FullScreen](#fullScreen)
-
+* [Highcharts](#highcharts)
+* [動態組件Async Components](#async-components)
 
 
 ## Deploy
@@ -78,6 +79,41 @@ Element+暗黑模式[官網說明](https://element-plus.org/zh-CN/guide/dark-mod
 由於想要把整個容器一起全螢幕所以實作在App.vue中，[實作參考](https://github.com/ingridkao/dashboard_demo_3.x/blob/main/src/App.vue)
 
 
+
+## Highcharts
+> `npm install highcharts highcharts-vue`
+1. 
+
+
+
+## Async Components
+之前使用`<component :is="Foo" />`來寫動態組件，如[說明](https://vuejs.org/api/sfc-script-setup.html#using-components)，主要是傳圖表類型，在呈現不同圖表。
+
+但使用vue3的時候好像對於字串轉參數較嚴格，撞了一個小時牆後來使用[defineAsyncComponent](https://vuejs.org/guide/components/async.html)就成功了＾＾
+
+```
+<script setup>
+	import LoadingComponent from '@/components/highcharts/LoadingComponent.vue'
+	import errorComponent from '@/components/highcharts/errorComponent.vue'
+    import { defineAsyncComponent } from 'vue'
+    const props = defineProps({
+        request: { 
+            type: Object || null
+        }
+    })
+    const AsyncComp = defineAsyncComponent({
+        loader: () => import(`../highcharts/${props.request.type}.vue`),
+        loadingComponent: LoadingComponent,
+        delay: 200,
+        //   errorComponent: ErrorComponent,
+        timeout: 3000
+    })
+</script>
+
+<template>
+    <AsyncComp/>
+</template>
+```
 
 
 tags: `Vue` `element-plus` `vueuse` `composition api`

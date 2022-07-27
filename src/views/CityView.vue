@@ -87,7 +87,14 @@
 }
 #cityMainContainer{
 	width: 100%;
+	--el-main-padding: 16px;
 	.el-main{
+		margin: 0 auto;
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+		grid-auto-rows: 360px;
+
 		max-width: 1300px;
 		&.fullscreen{
 			max-width: 1500px;
@@ -98,14 +105,7 @@
 				max-width: 1800px;
 			}
 		}
-		margin: 0 auto;
-		display: grid;
-		gap: 1rem;
-		grid-auto-rows: 22.5rem;
-		grid-template-columns: repeat(3, minmax(18rem, 1fr));
-		@media screen and (max-width: 1200px) {
-			grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-		}
+
 		.card-container{
 			width: 100%;
 			height: 100%;
