@@ -1,0 +1,54 @@
+.highcharts{
+    &-background {
+        fill: var(--el-fill-color-blank);
+    }
+    &-grid-line {
+        stroke: var(--el-text-color-regular);
+        stroke-opacity: 0.2;
+    }
+    &-button-box{
+        fill: var(--el-bg-color-page);
+        path{
+            fill: var(--el-text-color-regular);
+        }
+    }
+    &-column-series {
+        rect.highcharts-point {
+            stroke: var(--el-menu-hover-bg-color);
+        }
+    }
+    &-exporting-group{
+        transform: translate(-5px, 2.5px);
+    }
+    &-data-table{
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: var(--el-bg-color-page);
+        max-height: 15rem;
+        overflow: scroll;
+        box-shadow: var(--el-box-shadow-light);
+        .highcharts-table-caption{
+            display: none;
+        }
+        thead th {
+            color: var(--el-text-color-secondary);
+        }
+    }
+}
+.highcharts-subtitle,
+.highcharts-credits,
+.highcharts-axis-title {
+    fill-opacity: 0.8;
+}
+
+.chartContainer{
+    &.treeMap {
+        .highcharts-container{
+            background: rgba(50, 50, 50, 0.5);
+        }
+        svg{
+            opacity: 0.6;
+        }
+    }
+}

@@ -14,19 +14,21 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'  // For icon
 
 import HighchartsVue from 'highcharts-vue'
 import Highcharts from 'highcharts'
+import accessibilityInit from "highcharts/modules/accessibility"
 import exportingInit from "highcharts/modules/exporting"
+import exportData from "highcharts/modules/export-data"
 import loadWordcloud from 'highcharts/modules/wordcloud'
+import loadTreemap from 'highcharts/modules/treemap'
 
-// import offlineExporting from "highcharts/modules/offline-exporting"
-// import stockInit from 'highcharts/modules/stock'
 // import mapInit from 'highcharts/modules/map'
 // import addWorldMap from './js/worldmap'
-// stockInit(Highcharts)
 // mapInit(Highcharts)
 // addWorldMap(Highcharts)
+loadTreemap(Highcharts)
+accessibilityInit(Highcharts)
 exportingInit(Highcharts)
+exportData(Highcharts)
 loadWordcloud(Highcharts)
-// offlineExporting(Highcharts)
 
 
 

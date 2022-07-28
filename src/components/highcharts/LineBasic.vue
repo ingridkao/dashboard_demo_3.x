@@ -7,10 +7,6 @@
 </template>
 
 <script>
-/* TODO: Implement basic line chart
- * 
- */
-// import Highcharts from "highcharts"
 export default {
 	name: 'LineBasic',
 	props: {

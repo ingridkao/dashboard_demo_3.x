@@ -2,29 +2,19 @@
 	import { topicList, topicComponentList} from '@/assets/datas/topicList.js'
 	import AsideBar from '@/components/city/AsideBar.vue'
 	import CardContainer from '@/components/card/CardContainer.vue'
-	import CardInformation from '@/components/card/CardInformation.vue'
 
 	import { ref, computed, watch } from 'vue'
 	import { useWindowSize, useFullscreen } from '@vueuse/core'
 	const { width, height } = useWindowSize()
 	const { isFullscreen } = useFullscreen()
 	const isCollapse = ref(false)
-	const topicData = ref(topicComponentList)
 	const menuActive = ref(topicList[0]['index'])
-	const dialogVisible = ref(false)
-	const dialogInformation = ref({})
-
 	const targetTopic = computed(()=>{
 		return topicComponentList.find(item => item.index === menuActive.value)
 	})
 	const handleCollapse = () => {
 		isCollapse.value = !isCollapse.value
 	}
-	const handleDialog = (info) => {
-		dialogVisible.value = true
-		dialogInformation.value = info
-	}
-
 	watch(isFullscreen, (state) => {
 		if(state) isCollapse.value = true
 	})
@@ -59,20 +49,9 @@
 				v-for="item in targetTopic.components"
 				:key="item.index"
 				:data="item"
-				@click="handleDialog(item)"
 			/>
 		</el-main>
 	</el-scrollbar>
-
-	<el-dialog 
-		v-model="dialogVisible" 
-		:title="dialogInformation.name? dialogInformation.name: null" 
-		width="50%" 
-		draggable
-		destroy-on-close
-	>
-		<CardInformation :information="dialogInformation"/>
-	</el-dialog>
 </template>
 
 <style lang="scss">

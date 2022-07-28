@@ -1,18 +1,21 @@
 <template>
 	<highcharts 
-		id="WordCloudContainer"
-		class="chartContainer"
+		class="chartContainer wordCloud"
 		:options="chartOptions" 
 	/>
 </template>
-
 <script>
-/* TODO: Implement basic line chart
+/* 
  * https://www.highcharts.com/docs/chart-and-series-types/word-cloud-series
  */
+import {Options} from '@/assets/js/hightchartConfig.js'
 export default {
 	name: 'WordCloud',
 	props: {
+		name: {
+			type: String,
+			default: ""
+		},
 		config: {
 			type: Object,
 			default: () => {}
@@ -25,9 +28,7 @@ export default {
   	data(){
 		return {
 			chartOptions: {
-				title:{
-					text: null
-				},
+				...Options,
 				plotOptions:{
 					series: {
 						// general options for all series
@@ -44,17 +45,11 @@ export default {
 						// specific options for this series instance
 						type: 'wordcloud',
 						data: this.dataset,
-						name: this.config? this.config.title: null
+						name: this.config.label? this.config.label: this.name
 					}
-				],
-				credits: {
-					enabled: false
-				}
+				]
 			}
 		}
 	}
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

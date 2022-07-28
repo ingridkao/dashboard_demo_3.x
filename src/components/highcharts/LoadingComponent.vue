@@ -17,13 +17,13 @@
     width: 100%;
     .el-skeleton__rect{
         width: 100%;
-        height: 10rem;
+        height: 15rem;
     }
     svg{
         position: absolute;
         width: 100%;
         height: 5rem;
-        top: 2.5rem;
+        top: 5rem;
         opacity: 0.5;
     }
 }
