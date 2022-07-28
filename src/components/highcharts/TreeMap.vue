@@ -10,19 +10,23 @@
  */
 import {Options} from '@/assets/js/hightchartConfig.js'
 export default {
-	name: 'WordCloud',
 	props: {
 		name: {
 			type: String,
 			default: ""
 		},
-		config: {
+		request: {
 			type: Object,
 			default: () => {}
 		},
 		dataset: {
 			type: Array,
 			default: () => []
+		}
+	},
+	computed:{
+		config(){
+			return this.request.config
 		}
 	},
   	data(){
@@ -32,7 +36,7 @@ export default {
 				series: [
 					{
 						type: 'treemap',
-						name: this.config.label? this.config.label: this.name,
+						name: this.config && this.config.label? this.config.label: this.name,
 						data: this.dataset,
 						tooltip: {
 							valueSuffix: this.config.suffix? this.config.suffix:'km²'

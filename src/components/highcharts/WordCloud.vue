@@ -10,19 +10,23 @@
  */
 import {Options} from '@/assets/js/hightchartConfig.js'
 export default {
-	name: 'WordCloud',
 	props: {
 		name: {
 			type: String,
 			default: ""
 		},
-		config: {
+		request: {
 			type: Object,
 			default: () => {}
 		},
 		dataset: {
 			type: Array,
 			default: () => []
+		}
+	},
+	computed:{
+		config(){
+			return this.request.config
 		}
 	},
   	data(){
@@ -45,7 +49,7 @@ export default {
 						// specific options for this series instance
 						type: 'wordcloud',
 						data: this.dataset,
-						name: this.config.label? this.config.label: this.name
+						name: this.config && this.config.label? this.config.label: this.name
 					}
 				]
 			}

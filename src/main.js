@@ -14,6 +14,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'  // For icon
 
 import HighchartsVue from 'highcharts-vue'
 import Highcharts from 'highcharts'
+import highchartsMore from 'highcharts/highcharts-more'
 import accessibilityInit from "highcharts/modules/accessibility"
 import exportingInit from "highcharts/modules/exporting"
 import exportData from "highcharts/modules/export-data"
@@ -24,6 +25,7 @@ import loadTreemap from 'highcharts/modules/treemap'
 // import addWorldMap from './js/worldmap'
 // mapInit(Highcharts)
 // addWorldMap(Highcharts)
+highchartsMore(Highcharts)
 loadTreemap(Highcharts)
 accessibilityInit(Highcharts)
 exportingInit(Highcharts)

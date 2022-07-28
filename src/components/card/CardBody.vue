@@ -31,7 +31,7 @@
 <template>
     <AsyncComp
         :name="name"
-        :config="request.config"
+        :request="request"
         :dataset="request.data? request.data: []"
     />
 

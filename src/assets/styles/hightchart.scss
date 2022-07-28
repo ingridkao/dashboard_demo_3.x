@@ -43,6 +43,8 @@
 }
 
 .chartContainer{
+    height: 100%;
+    padding: 0;
     &.treeMap {
         .highcharts-container{
             background: rgba(50, 50, 50, 0.5);
@@ -50,5 +52,8 @@
         svg{
             opacity: 0.6;
         }
+    }
+    &.column{
+        height: calc(100% - 1.5rem);
     }
 }

@@ -33,11 +33,11 @@ export const topicList = [
 
 export const basicMapLayer = [
     {
-        index: '',
+        index: 'building_publand',
         name: '公有土地',
         order: 1,
         overview_display: 'large',
-        source_from: '',
+        source_from: '地政局',
         request_list: [{
             type: 'TreeMap',
             config: {},
@@ -67,11 +67,11 @@ export const basicMapLayer = [
         request_list: []
     },
     {
-        index: '',
+        index: 'building_landuse',
         name: '都市計畫用地類型',
         order: 4,
         overview_display: 'large',
-        source_from: '',
+        source_from: '都發局',
         request_list: [{
             type: 'TreeMap',
             config: {},
@@ -587,13 +587,18 @@ export const topicComponentList = [
                 request_list: []
             },
             {
-                index: '',
+                index: 'tpmo',
                 name: 'TPMO智慧城市專案',
                 overview_display: '',
                 order: 3,
-                source_from: '建管處',
-                sample_data: '',
-                request_list: []
+                source_from: 'TPMO',
+                sample_data: '2022-07-24',
+                request_list: [{
+                    type: 'Column',
+                    config: {},
+                    categories:["智慧經濟", "智慧安防", "智慧教育", "智慧建築", "智慧交通", "智慧健康", "智慧環境", "智慧政府", "其他"],
+                    data:[47,23,25,31,59,63,39,53,11]
+                }]
             }
         ]
     },

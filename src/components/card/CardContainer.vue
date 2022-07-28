@@ -85,10 +85,6 @@
         padding-top: 0;
         padding-bottom: 0;
         height: calc(100% - 4rem);
-        .chartContainer{
-            padding: 0;
-            height: 100%;
-        }
     }
 }
 </style>
