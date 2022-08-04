@@ -32,13 +32,7 @@
     <AsyncComp
         :name="name"
         :request="request"
-        :dataset="request.data? request.data: []"
     />
-
-    <!-- <el-empty 
-        v-if="!request.data[0]"
-        description="No data"
-    /> -->
 </template>
 
 <style lang="scss">

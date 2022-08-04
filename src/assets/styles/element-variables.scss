@@ -24,10 +24,10 @@ body{
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-family: "微軟正黑體", 'Microsoft JhengHei', 'Droid Sans', 'Open Sans', 'Helvetica';
-    font-size: 14px;
+    font-size: 16px;
     //Dashboard
     @media all and (min-width: 1920px){
-        font-size: 16px;
+        font-size: 12px;
     }
     @media screen and (max-width: 1919px) and (min-width: 1281px) {
         font-size: 14px;

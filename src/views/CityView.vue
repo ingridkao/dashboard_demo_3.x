@@ -71,20 +71,18 @@
 		margin: 0 auto;
 		display: grid;
 		gap: 1rem;
-		grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-		grid-auto-rows: 360px;
-
-		max-width: 1300px;
+		grid-template-columns: repeat(auto-fit, minmax(22.5rem, 1fr));
+		grid-auto-rows: 25rem;
+		max-width: 100rem;
 		&.fullscreen{
-			max-width: 1500px;
+			max-width: 120rem;
 		}
 		@media all and (min-width: 1920px){
-			max-width: 1600px;
+			max-width: 95rem;
 			&.fullscreen{
-				max-width: 1800px;
+				max-width: 115rem;
 			}
 		}
-
 		.card-container{
 			width: 100%;
 			height: 100%;

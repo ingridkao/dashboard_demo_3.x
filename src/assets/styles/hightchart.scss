@@ -2,10 +2,10 @@
     &-background {
         fill: var(--el-fill-color-blank);
     }
-    &-grid-line {
-        stroke: var(--el-text-color-regular);
-        stroke-opacity: 0.2;
-    }
+    // &-grid-line {
+    //     stroke: var(--el-text-color-regular);
+    //     stroke-opacity: 0.2;
+    // }
     &-button-box{
         fill: var(--el-bg-color-page);
         path{
@@ -17,13 +17,10 @@
             stroke: var(--el-menu-hover-bg-color);
         }
     }
-    &-exporting-group{
-        transform: translate(-5px, 2.5px);
-    }
     &-data-table{
         position: absolute;
         top: 0;
-        left: 0;
+        left: 20px;
         background: var(--el-bg-color-page);
         max-height: 15rem;
         overflow: scroll;
@@ -31,9 +28,34 @@
         .highcharts-table-caption{
             display: none;
         }
-        thead th {
+        thead th{
+            color: var(--el-text-color-regular);
+        }
+        tbody th {
             color: var(--el-text-color-secondary);
         }
+        thead th,
+        tbody th,
+        tr th:first-child{
+            text-align: left;
+        }
+        tbody td,
+        tr td:last-child{
+            text-align: right;
+        }
+    }
+    &-menu{
+        padding-top: 0 !important;
+    }
+    &-exporting-group{
+        opacity: 0.1;
+        transform: translate(-5px, 5px);
+        &:hover{
+            opacity: 0.8;
+        }
+    }
+    &-contextmenu{
+        top: 0 !important;
     }
 }
 .highcharts-subtitle,
@@ -46,14 +68,12 @@
     height: 100%;
     padding: 0;
     &.treeMap {
-        .highcharts-container{
-            background: rgba(50, 50, 50, 0.5);
-        }
-        svg{
-            opacity: 0.6;
+        .highcharts-series-group{
+            opacity: 0.5;
         }
     }
     &.column{
         height: calc(100% - 1.5rem);
+        min-height: 18rem;
     }
 }

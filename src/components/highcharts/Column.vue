@@ -13,7 +13,7 @@
 /* 
  * https://www.highcharts.com/docs/chart-and-series-types/treemap
  */
-import {Options} from '@/assets/js/hightchartConfig.js'
+import {Options, LineXAxis, LineYAxis} from '@/assets/js/hightchartConfig.js'
 export default {
 	props: {
 		name: {
@@ -23,37 +23,49 @@ export default {
 		request: {
 			type: Object,
 			default: () => {}
-		},
-		dataset: {
-			type: Array,
-			default: () => []
 		}
+	},
+    watch: {
+        request: {
+            deep: true,
+            immediate: true,
+            handler: function(newObj, oldObj){
+				const { config, data, categories } = newObj
+				this.chartOptions.chart.inverted = config.inverted? config.inverted: false
+				this.chartOptions.series = data
+				if(categories){
+					this.chartOptions.xAxis.categories = categories
+				}
+				if(config && config.plotOptions){
+					this.chartOptions.plotOptions = {
+						...this.chartOptions.plotOptions,
+						...config.plotOptions
+					}
+				}
+            }
+        }
 	},
   	data(){
 		return {
 			chartOptions: {
 				...Options,
 				chart: {
+					type: 'column',
+					showInLegend: false,
 					inverted: false,
 					polar: false
 				},
 				xAxis: {
-					categories: this.request? this.request.categories: []
+					...LineXAxis
 				},
 				yAxis: {
-					title: {
-						text: null
-					}
+					...LineYAxis
 				},
-				series: [
-					{
-						type: 'column',
-						// colorByPoint: true,
-						showInLegend: false,
-						name: this.name,
-						data: this.dataset
-					}
-				]
+				legend:{
+					align: 'left',
+					verticalAlign: 'top'
+				},
+				series: []
 			}
 		}
 	},
@@ -65,3 +77,22 @@ export default {
 	}
 }
 </script>
+<style lang="scss">
+.chartContainer.column{
+	height: 90%;
+	.highcharts-column-series text{
+		fill: var(--el-menu-text-color) !important;
+	}
+	// .highcharts-title{
+	// 	fill: var(--el-text-color-secondary) !important;
+	// }
+	// .highcharts-data-label{
+	// 	text{
+	// 		fill: var(--el-menu-text-color) !important;
+	// 	}
+	// 	.highcharts-text-outline{
+	// 		stroke: transparent;
+	// 	}
+	// }
+}
+</style>

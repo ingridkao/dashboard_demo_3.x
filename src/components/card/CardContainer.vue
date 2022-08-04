@@ -82,9 +82,8 @@
     }
     .el-card__body{
         position: relative;
-        padding-top: 0;
-        padding-bottom: 0;
-        height: calc(100% - 4rem);
+        --el-card-padding: 0 .6rem;
+        height: calc(100% - 3rem);
     }
 }
 </style>

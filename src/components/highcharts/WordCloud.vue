@@ -18,21 +18,29 @@ export default {
 		request: {
 			type: Object,
 			default: () => {}
-		},
-		dataset: {
-			type: Array,
-			default: () => []
 		}
 	},
-	computed:{
-		config(){
-			return this.request.config
-		}
+    watch: {
+        request: {
+            deep: true,
+            immediate: true,
+            handler: function(newObj, oldObj){
+				const { config, data } = newObj
+				this.chartOptions.series[0] = {
+					data: data,
+					name: config.label? config.label: this.name
+				}
+            }
+        }
 	},
   	data(){
 		return {
 			chartOptions: {
 				...Options,
+				chart: {
+					type: 'wordcloud'
+				},
+
 				plotOptions:{
 					series: {
 						// general options for all series
@@ -44,14 +52,7 @@ export default {
 						}
 					}
 				},
-				series: [
-					{
-						// specific options for this series instance
-						type: 'wordcloud',
-						data: this.dataset,
-						name: this.config && this.config.label? this.config.label: this.name
-					}
-				]
+				series: []
 			}
 		}
 	}
