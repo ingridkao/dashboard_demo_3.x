@@ -1,13 +1,45 @@
+<script setup>
+import { User, Moon, Sunny, FullScreen, Close } from '@element-plus/icons-vue'
+import { ref, defineEmits, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { useColorMode } from '@vueuse/core'
+
+const Router = useRoute()
+const mode = useColorMode({
+    class: 'theme'
+})
+const activeIndex = ref("city")
+const nav = ref([
+    {index: "dashboard", title: "我的儀表板", disabled: false},
+    {index: "city", title: "城市洞察", disabled: false},
+    {index: "feedback", title: "許願池", disabled: true}
+])
+const fullScreen = ref(false)
+const emit = defineEmits(['full'])
+const handlefull = (e) => {
+    fullScreen.value = !fullScreen.value
+    emit("full", fullScreen.value)
+}
+const handleSelect = () => {}
+watch(
+    Router,
+    (to, from) => {
+        activeIndex.value = (from && to.name !== "home")? to.name: "city"
+    }
+)
+</script>
+
 <template>
     <el-menu
-        :default-active="activeIndex"
         id="MainHeaderBox"
-        :class="{fullScreen}"
         mode="horizontal"
+        :default-active="activeIndex"
+        :class="{fullScreen}"
         :ellipsis="false"
+        :router="true"
         @select="handleSelect"
     >
-        <el-menu-item index="0" class="logoBox">
+        <el-menu-item index="/" class="logoBox">
             <img 
                 src="../assets/img/TUIC.svg"
                 alt="城市運營聯合儀表板logo" 
@@ -46,54 +78,6 @@
         </div>
     </el-menu>
 </template>
-
-<script setup>
-import { User, Moon, Sunny, FullScreen, Close } from '@element-plus/icons-vue'
-import { useColorMode } from '@vueuse/core'
-const mode = useColorMode({
-    class: 'theme'
-})
-</script>
-
-<script>
-export default {
-    data(){
-        return {
-            fullScreen :false,
-            activeIndex: "2",
-            nav:[
-                {index: "1", title: "我的儀表板", disabled: true},
-                {index: "2", title: "城市洞察", disabled: false},
-                {index: "3", title: "許願池", disabled: true}
-            ]
-        }
-    },
-    methods:{
-        handleSelect(key="", keyPath=[]){
-            switch (key) {
-                case "0":
-                    this.$router.push({ 
-                        path: '/',
-                    //     query: { plan: 'private' } 
-                    })         
-                    break;
-                case "2":
-                    this.$router.push({ 
-                        path: '/city',
-                    //     query: { plan: 'private' } 
-                    })
-                    break;
-                default:
-                    break;
-            }
-        },
-        handlefull(){
-            this.fullScreen = !this.fullScreen
-            this.$emit('full', this.fullScreen)
-        }
-    }
-}
-</script>
 
 <style lang="scss">
 #MainHeaderBox{

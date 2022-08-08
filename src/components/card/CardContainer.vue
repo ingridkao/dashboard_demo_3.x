@@ -1,10 +1,11 @@
 <script setup>
     import { ref, defineProps } from 'vue'
-    import LoadingComponent from '@/components/highcharts/LoadingComponent.vue'
+    import LockComponent from '@/components/highcharts/LockComponent.vue'
     import CardInformation from '@/components/card/CardInformation.vue'
+    import AddCommonlyBtn from '@/components/action/AddCommonlyBtn.vue'
 
 	import CardBody from '@/components/card/CardBody.vue'
-    import { Plus } from '@element-plus/icons-vue'
+    import { Close } from '@element-plus/icons-vue'
 
 	const dialogVisible = ref(false)
 	const dialogInformation = ref({})
@@ -12,12 +13,10 @@
         data: { type: Object, default: ()=>{} }
     })
     const handleDialog = (info) => {
-
 		dialogVisible.value = true
 		dialogInformation.value = info
 	}
 </script>
-
 <template>
     <el-card
         :class="[
@@ -32,27 +31,39 @@
             <h6 @click="handleDialog(data)">
                 {{ data.name }}
             </h6>
-            <el-button class="hoverBtn" text :icon="Plus"/>
+            <AddCommonlyBtn :text="true"/>
         </template>
-
-        <LoadingComponent v-if="!data.request_list[0]"/>
+        <LockComponent v-if="!data.request_list[0]"/>
         <CardBody v-else
             v-for="item in data.request_list"
             :key="item.index"
-            :name="data.name"
+            :components="data"
             :request="item"
-            class="cardComponent"
         />
     </el-card>
 
     <el-dialog 
 		v-model="dialogVisible" 
-		:title="dialogInformation.name? dialogInformation.name: null" 
-		width="50%" 
-		draggable
+		width="80%" 
+        :show-close="false"
 		destroy-on-close
 	>
-		<CardInformation :information="dialogInformation"/>
+        <template #header="{ close, titleId, titleClass }">
+            <el-row 
+                justify="space-between"
+                align="middle"
+                class="dialog-header"
+            >
+                <h6 :id="titleId" :class="titleClass" align="middle">
+                    {{dialogInformation.name? dialogInformation.name: null}}
+                    <AddCommonlyBtn :text="false"/>
+                </h6>
+                <el-button text circle :icon="Close" @click="close"/>
+            </el-row>
+        </template>
+		<CardInformation 
+            :information="dialogInformation"
+        />
 	</el-dialog>
 </template>
 
@@ -69,15 +80,6 @@
             font-size: 1.25rem;
             font-weight: bold;
             cursor: pointer;
-        }
-        .hoverBtn{
-            width: 2rem;
-            height: 2rem;
-            border-radius: 2rem;
-            color: transparent;
-            &:hover{
-                color: var(--el-text-color); 
-            }
         }
     }
     .el-card__body{

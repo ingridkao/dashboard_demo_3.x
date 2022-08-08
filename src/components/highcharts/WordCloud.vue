@@ -8,7 +8,7 @@
 /* 
  * https://www.highcharts.com/docs/chart-and-series-types/word-cloud-series
  */
-import {Options} from '@/assets/js/hightchartConfig.js'
+import {Options, ChartConfig} from '@/assets/js/hightchartConfig.js'
 export default {
 	props: {
 		name: {
@@ -38,9 +38,9 @@ export default {
 			chartOptions: {
 				...Options,
 				chart: {
-					type: 'wordcloud'
+					type: 'wordcloud',
+					...ChartConfig
 				},
-
 				plotOptions:{
 					series: {
 						// general options for all series

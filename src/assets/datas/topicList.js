@@ -136,12 +136,106 @@ export const basicMapLayer = [
         ]
     },
     {
-        index: '',
-        name: '水災風險',
-        source_from: '',
-        order: 7,
-        request_list: []
-    }
+        index: 'flood_risk',
+        name: '水災風險地區',
+        overview_display: '',
+        order: 2,
+        source_from: '消防局',
+        request_list: [
+            {
+                type: 'MapIconDisplay',
+            //     config: {
+            //         mapLabels:[
+            //             {
+            //                 select_array: '高風險地區',
+            //                 symbol: 'Area',
+            //                 unit: 'km²',
+            //                 color: '#baf4f5'
+            //             },
+            //             {
+            //                 select_array: '低風險地區',
+            //                 symbol: 'Area',
+            //                 unit: 'km²',
+            //                 color: '#009ff4'
+            //             },
+            //             {
+            //                 select_array: '中風險地區',
+            //                 symbol: 'Area',
+            //                 unit: 'km²',
+            //                 color: '#352ad1'
+            //             }
+            //         ]
+            //     }
+            }
+        ],
+        map_config:[
+            {
+                raster:{
+                    index: 'patrol_flood_100',
+                    title: '水災風險地區',
+                    symbol: 'fill',
+                    paint: {
+                        'fill-color':[
+                            'match',
+                            ['get', 'name'],
+                            '1.0 m ~ 2.0 m',
+                            '#0a85f4',
+                            '0.30 m ~ 1.0 m',
+                            '#68ccf8',
+                            '0.15 m ~ 0.30 m',
+                            '#205CE6',
+                            '#ccc'
+                        ]
+                    },
+                    property: ['name']
+                }
+            },
+            {
+                raster:{
+                    index: 'patrol_flood_78_8',
+                    title: '水災風險地區',
+                    symbol: 'fill',
+                    paint: {
+                        'fill-color':[
+                            'match',
+                            ['get', 'name'],
+                            '1.0 m ~ 2.0 m',
+                            '#0a85f4',
+                            '0.30 m ~ 1.0 m',
+                            '#68ccf8',
+                            '0.15 m ~ 0.30 m',
+                            '#205CE6',
+                            '#ccc'
+                        ]
+                    },
+                    property: ['name']
+                }
+            },
+            {
+                raster:{
+                    index: 'patrol_flood_130',
+                    title: '水災風險地區',
+                    symbol: 'fill',
+                    paint: {
+                        'fill-color':[
+                            'match',
+                            ['get', 'name'],
+                            '1.0 m ~ 2.0 m',
+                            '#0a85f4',
+                            '0.30 m ~ 1.0 m',
+                            '#68ccf8',
+                            '0.15 m ~ 0.30 m',
+                            '#205CE6',
+                            '#ccc'
+                        ]
+                    },
+                    property: ['name']
+                }
+            }
+        ]
+    },
+
+
 ]
 
 /**
@@ -420,107 +514,7 @@ export const topicComponentList = [
                                     50000,
                                     100
                                 ]
-                            },
-                            property: ['名稱', '道路門牌', '水災', '震災', '土石流', '海嘯', '是否設置無障礙設施', '室內', '室外', '服務里別','容納人數']
-                        }
-                    }
-                ]
-            },
-            {
-                index: 'flood_risk',
-                name: '水災風險地區',
-                overview_display: '',
-                order: 2,
-                source_from: '消防局',
-                request_list: [
-                    {
-                        type: 'MapIconDisplay',
-                    //     config: {
-                    //         mapLabels:[
-                    //             {
-                    //                 select_array: '高風險地區',
-                    //                 symbol: 'Area',
-                    //                 unit: 'km²',
-                    //                 color: '#baf4f5'
-                    //             },
-                    //             {
-                    //                 select_array: '低風險地區',
-                    //                 symbol: 'Area',
-                    //                 unit: 'km²',
-                    //                 color: '#009ff4'
-                    //             },
-                    //             {
-                    //                 select_array: '中風險地區',
-                    //                 symbol: 'Area',
-                    //                 unit: 'km²',
-                    //                 color: '#352ad1'
-                    //             }
-                    //         ]
-                    //     }
-                    }
-                ],
-                map_config:[
-                    {
-                        raster:{
-                            index: 'patrol_flood_100',
-                            title: '水災風險地區',
-                            symbol: 'fill',
-                            paint: {
-                                'fill-color':[
-                                    'match',
-                                    ['get', 'name'],
-                                    '1.0 m ~ 2.0 m',
-                                    '#0a85f4',
-                                    '0.30 m ~ 1.0 m',
-                                    '#68ccf8',
-                                    '0.15 m ~ 0.30 m',
-                                    '#205CE6',
-                                    '#ccc'
-                                ]
-                            },
-                            property: ['name']
-                        }
-                    },
-                    {
-                        raster:{
-                            index: 'patrol_flood_78_8',
-                            title: '水災風險地區',
-                            symbol: 'fill',
-                            paint: {
-                                'fill-color':[
-                                    'match',
-                                    ['get', 'name'],
-                                    '1.0 m ~ 2.0 m',
-                                    '#0a85f4',
-                                    '0.30 m ~ 1.0 m',
-                                    '#68ccf8',
-                                    '0.15 m ~ 0.30 m',
-                                    '#205CE6',
-                                    '#ccc'
-                                ]
-                            },
-                            property: ['name']
-                        }
-                    },
-                    {
-                        raster:{
-                            index: 'patrol_flood_130',
-                            title: '水災風險地區',
-                            symbol: 'fill',
-                            paint: {
-                                'fill-color':[
-                                    'match',
-                                    ['get', 'name'],
-                                    '1.0 m ~ 2.0 m',
-                                    '#0a85f4',
-                                    '0.30 m ~ 1.0 m',
-                                    '#68ccf8',
-                                    '0.15 m ~ 0.30 m',
-                                    '#205CE6',
-                                    '#ccc'
-                                ]
-                            },
-                            property: ['name']
+                            }
                         }
                     }
                 ]
@@ -572,7 +566,7 @@ export const topicComponentList = [
                             title: '土石流潛勢溪流',
                             symbol: 'line',
                             color:  '#d7c500',
-                            property: ['mark','risk','stra_1','stra_2','basin','sub_basin','date','year']
+                            property: []
                         }
                     },
                     {
@@ -581,7 +575,7 @@ export const topicComponentList = [
                             title: '土石流影響範圍',
                             symbol: 'fill',
                             color: '#958f00',
-                            property: ['total_res','risk']
+                            property: []
                         }
                     },
                     {
@@ -590,7 +584,7 @@ export const topicComponentList = [
                             title: '列管邊坡',
                             symbol: 'line',
                             color: '#ff9800',
-                            property: ['level']
+                            property: []
                         }
                     },
                     {
@@ -599,7 +593,7 @@ export const topicComponentList = [
                             title: '老舊聚落',
                             symbol: 'fill',
                             color: '#9e7b5c',
-                            property: ['name']
+                            property: []
                         }
                     }
                 ]

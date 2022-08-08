@@ -1,10 +1,9 @@
 <template>
     <el-skeleton 
-        class="lockComponent" 
+        class="loadingComponent" 
         animated
     >
-        <template #template>
-            <Lock />
+        <template #template v-loading="loading">
             <el-skeleton-item variant="rect"/>
             <el-skeleton-item variant="caption" />
             <el-skeleton-item variant="text" />
@@ -12,7 +11,7 @@
     </el-skeleton>
 </template>
 <style lang="scss">
-.lockComponent{
+.loadingComponent{
     position: relative;
     width: 100%;
     .el-skeleton__rect{

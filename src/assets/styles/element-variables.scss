@@ -76,11 +76,36 @@ h6{
 
 }
 
+.el-main{
+    --el-main-padding: 1.75rem !important;
+}
+
 .el-button{
+	&.is-round{
+        padding: .25rem .5rem !important;
+        --el-border-width: 2px;
+        --el-button-border-color: var(--el-text-color-regular);
+        --el-border: var(--el-border-width) var(--el-border-style) var(--el-text-color-primary);
+        --el-font-size-base: 0.75rem;
+    }
 	&.is-link{
 		[class*=el-icon]{
 			font-weight: bold;
 			font-size: 1.25rem;
 		}
 	}
+}
+
+.el-dialog__body{
+    padding-top: 0 !important;
+    p{
+        margin: 0;
+        line-height: 1.8;
+    }
+}
+
+.el-input__wrapper{
+    border-radius: 1rem !important;
+    --el-input-border-color: var(--el-text-color-regular);
+    box-shadow: 0 0 0 2px var(--el-input-border-color,var(--el-border-color)) inset !important;
 }

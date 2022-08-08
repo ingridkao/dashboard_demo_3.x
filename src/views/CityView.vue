@@ -66,7 +66,6 @@
 }
 #cityMainContainer{
 	width: 100%;
-	--el-main-padding: 16px;
 	.el-main{
 		margin: 0 auto;
 		display: grid;

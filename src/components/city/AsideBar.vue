@@ -1,6 +1,8 @@
 <script setup>
 	import { topicList } from '@/assets/datas/topicList.js'
-	import { ref, defineProps, defineEmits } from 'vue'    
+	import { ref, defineProps, defineEmits } from 'vue'
+    import { useFullscreen } from '@vueuse/core'
+    const { isFullscreen } = useFullscreen()
     const topics = ref(topicList)
     const props = defineProps({
         isCollapse: { 
@@ -20,6 +22,7 @@
         emit("update", e)
 	}
 </script>
+
 <template>
     <el-menu
         id="cityAsideMenu"
@@ -41,6 +44,7 @@
             </template>
         </el-menu-item>
         <el-button 
+            v-if="!isFullscreen"
             id="collapseBtn"
             size="large"
             text 

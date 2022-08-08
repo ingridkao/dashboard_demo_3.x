@@ -2,8 +2,8 @@
 	import LoadingComponent from '@/components/highcharts/LoadingComponent.vue'
     import { defineAsyncComponent } from 'vue'
     const props = defineProps({
-        name: { 
-            type: String, default: ""
+        components: { 
+            type: Object || null
         },
         request: { 
             type: Object || null
@@ -30,8 +30,9 @@
 
 <template>
     <AsyncComp
-        :name="name"
+        :name="components && components.name? components.name: ''"
         :request="request"
+        :components="components"
     />
 </template>
 

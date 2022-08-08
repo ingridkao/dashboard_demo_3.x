@@ -10,6 +10,11 @@ export const Options = {
     }
 }
 
+export const ChartConfig = {
+    marginTop: -10,
+    spacingTop: -10,
+}
+
 export const LineXAxis = {
     // lineWidth: null,
     lineColor: "rgba(200,200,200,0.2)",

@@ -2,9 +2,8 @@
 	import { ref } from 'vue'
 	import { useFullscreen } from '@vueuse/core'
 	import HeaderNav from '@/components/HeaderNav.vue'
-
 	const MainContainer = ref(null)
-	const { toggle, isFullscreen } = useFullscreen(MainContainer)
+	const { toggle } = useFullscreen(MainContainer)
 </script>
 
 <template>
@@ -13,10 +12,7 @@
 		id="MainContainer"
 	>
 		<el-header id="MainHeader">
-			<HeaderNav
-				@full="toggle"
-			/>
-			{{isFullscreen}}
+			<HeaderNav @full="toggle"/>
 		</el-header>	
 		<el-container id="PageContainer">
 			<router-view/>

@@ -21,7 +21,7 @@
  * https://www.highcharts.com/docs/chart-and-series-types/treemap
  * https://www.highcharts.com/demo/pie-semi-circle
  */
-import {Options} from '@/assets/js/hightchartConfig.js'
+import {Options, ChartConfig} from '@/assets/js/hightchartConfig.js'
 export default {
 	props: {
 		name: {
@@ -63,9 +63,10 @@ export default {
 				...Options,
 				chart: {
 					type: 'pie',
+					...ChartConfig,
 					plotBackgroundColor: null,
 					plotBorderWidth: null,
-					plotShadow: false,
+					plotShadow: false
 				},
 				title: {
 					align: 'center',

@@ -32,7 +32,11 @@ export default {
             immediate: true,
             handler: function(newObj, oldObj){
 				const { config, data } = newObj
+				const label = config.label? config.label: this.name
+				const layoutAlgorithm = config.layoutAlgorithm? config.layoutAlgorithm: "strip"
+				this.chartOptions.series[0]['name'] = label
 				this.chartOptions.series[0]['data'] = data
+				this.chartOptions.series[0]['layoutAlgorithm'] = layoutAlgorithm
             }
         }
 	},
@@ -41,38 +45,35 @@ export default {
 			suffix,
 			chartOptions: {
 				...Options,
-				series: [
-					{
-						type: 'treemap',
-						name: this.request.config && this.request.config.label? this.request.config.label: this.name,
-						data: [],
-						tooltip: {
-							valueDecimals: 2,
-							valueSuffix: this.request.config && this.request.config.suffix? this.request.config.suffix: suffix
-						},
-						layoutAlgorithm: this.request.config && this.request.config.layoutAlgorithm? this.request.config.layoutAlgorithm: "strip",
-						dataLabels: {
-							enabled: true,
-							formatter: function() {
-								const {key, point, series} = this
-								const valueSuffix = series.userOptions.tooltip? series.userOptions.tooltip.valueSuffix: ''
-								const Value = point.value.toFixed(2)
-								return `${key}<br> ${Value}${valueSuffix}`
-							}
+				chart: {
+					type: 'treemap'
+				},
+				tooltip: {
+					valueDecimals: 2,
+					valueSuffix: this.request.config && this.request.config.suffix? this.request.config.suffix: suffix
+				},
+				series: [{
+					name: '',
+					data: [],
+					dataLabels: {
+						enabled: true,
+						formatter: function() {
+							const {key, point, series} = this
+							const valueSuffix = series.tooltipOptions? series.tooltipOptions.valueSuffix: ''
+							const valueDecimals = series.tooltipOptions? series.tooltipOptions.valueDecimals: ''
+							const Value = point.value.toFixed(valueDecimals)
+							return `${key}<br> ${Value}${valueSuffix}`
 						}
 					}
-				]
+				}]
 			}
 		}
 	}
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .treeMapContainer{
 	height: 100%;
-	.chartContainer{
-        height: calc(100% - 1.5rem);
-	}
 	.desc{
 		display: flex;
 		justify-content: flex-end;
@@ -80,6 +81,17 @@ export default {
 			font-size: 0.8rem;
 			margin: 0 0.5rem;
 			line-height: 1.5;
+		}
+	}
+	.chartContainer.treeMap{
+		height: calc(100% - 2rem);
+		.highcharts-data-label{
+			text{
+				fill: var(--el-menu-text-color) !important;
+			}
+			.highcharts-text-outline{
+				stroke: transparent;
+			}
 		}
 	}
 }

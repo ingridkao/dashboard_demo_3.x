@@ -18,6 +18,7 @@ disqus: hackmd
 * [FullScreen](#fullScreen)
 * [Highcharts](#highcharts)
 * [動態組件Async Components](#async-components)
+* [解決:換掉favicon.ico不生效](#favicon)
 
 
 ## Deploy
@@ -113,6 +114,42 @@ Element+暗黑模式[官網說明](https://element-plus.org/zh-CN/guide/dark-mod
 <template>
     <AsyncComp/>
 </template>
+```
+
+
+## favicon
+當項目使用@vue/cli-plugin-pwa這個插件，會更改網頁圖標路自動生成public/img/icons的路徑
+> [pwa.iconPaths](https://github.com/vuejs/vue-cli/tree/dev/packages/@vue/cli-plugin-pwa#readme)
+> 在`vue.config.js`中補上設置
+> @vue/cli-plugin-pwa v4.3.0後可以補上`null`並重啟
+
+```
+    pwa: {
+        iconPaths: {
+            faviconSVG: null,
+            favicon32: null,
+            favicon16: null,
+            appleTouchIcon: null,
+            maskIcon: null,
+            msTileImage: null
+        }
+    }
+```
+加完重新`npm run serve`後icon就會出現，但會出現error: /android-chrome-192x192.png Not Found
+這邊讓他讀取到原本的icon list變成空陣列
+
+```
+    pwa: {
+        ...
+        manifestOptions: {
+            name: "城市運營聯合儀表板",
+            short_name: "城市運營儀表板",
+            start_url: "index.html",
+            display: "standalone",
+            theme_color: "#080403",
+            icons: []
+        }
+    }
 ```
 
 
