@@ -55,13 +55,49 @@ export const basicMapLayer = [
         }]
     },
     {
-        index: '',
+        index: 'police_facility',
         name: '警察相關設施',
         order: 2,
-        source_from: '',
+        source_from: '警察局',
+        sample_data: '樣本數據',
         request_list: [
             {
-                type: 'MapIconDisplay'
+                type: 'MapIconDisplay',
+                mapLabel: [
+                    {
+                        index: 'police_station',
+                        title: '警察局',
+                        symbol: 'triangle_white'
+                    },
+                    {
+                        index: 'patrol_district',
+                        title: '警局轄區',
+                        symbol: 'dasharray',
+                        color: '#009688'
+                    }
+                ]
+            }
+        ],
+        map_config: [
+            {
+                index: 'police_station',
+                type: "geojson",
+                property: [
+                    {key: "OFFICE_NAME", name: "所屬分局"},
+                    {key: "STATION_NAME", name: "名稱"}
+                ],
+                interactive: {
+                    resultset: ["station", "precinct"], 
+                    target: "patrol_district",
+                    trigger: "STATION_NAME"
+                }
+            },
+            {
+                index: 'patrol_district',
+                type: "geojson",
+                interactive: {
+                    affected: "police_station"
+                }
             }
         ]
     },
@@ -69,10 +105,41 @@ export const basicMapLayer = [
         index: '',
         name: '消防應變設施',
         order: 3,
-        source_from: '',
+        source_from: '消防局',
+        sample_data: '樣本數據',
         request_list: [
             {
-                type: 'MapIconDisplay'
+                type: 'MapIconDisplay',
+                mapLabel: [
+                    {
+                        index: 'patrol_fire_brigade',
+                        title: '消防隊',
+                        symbol: 'triangle_green'
+                    },
+                    {
+                        index: 'fire_hydrant_location',
+                        title: '消防栓',
+                        symbol: 'circle',
+                        color: '#3f51b5'
+                    }
+                ]
+            }
+        ],
+        map_config: [
+            {
+                index: 'patrol_fire_brigade',
+                type: "geojson",
+                property: [
+                    {key: "name", name: "名稱"}
+                ]
+            },
+            {
+                index: 'fire_hydrant_location',
+                type: "geojson",
+                property: [
+                    {key: "type", name: "類型"},
+                    {key: "location", name: "位置"}
+                ]
             }
         ]
     },
@@ -115,127 +182,143 @@ export const basicMapLayer = [
     },
     {
         index: '',
-        name: '活動人口推估',
+        name: '電信推估活動人口',
         source_from: '遠傳電信',
+        sample_data: '2020-06-16',
         order: 5,
         request_list: [
             {
-                type: 'MapIconDisplay'
+                type: 'FetDisplay',
+                config: {
+                    sumHide: true,
+                    plotOptions:{
+                        pointInterval: 60 * 60 * 1000,
+                        pointStart: Date.UTC(2020,6,15,0,0,0,0)
+                    },
+                    xAxis:{
+                        type: 'datetime',
+                        dateTimeLabelFormats: {
+                            hour: '%H:%M',
+                        }
+                    }
+                },
+                data:[{
+                    name: '人口數量',
+                    data: [2424143, 2424433, 2408941, 2401391, 2398867, 2419733, 2488692, 2679432, 2901084, 2981665, 3034451, 3086497, 3185502, 3175144, 3133531, 3053310, 3118477, 3142913, 3095452, 2940427, 2827133, 2737657, 2601668, 2461531],
+                    color: "#75a6db"
+                }]
+            }
+        ],
+        map_config: [
+            {
+                index: 'tp_fet_age_hr',
+                type: "geojson",
+                symbol: 'fill-extrusion',
+                property: [
+                    {key: "hr", name: "推估時間"},
+                    {key: "pop_all", name: "推估人口"},
+                    {key: "15_17", name: "15-17歲"},
+                    {key: "18_21", name: "18-21歲"},
+                    {key: "22_29", name: "22-29歲"},
+                    {key: "30_39", name: "30-39歲"},
+                    {key: "40_49", name: "40-49歲"},
+                    {key: "50_59", name: "50-59歲"},
+                    {key: "60_64", name: "60-64歲"},
+                    {key: "over65", name: "超過65歲"}
+                ],
+                paint:{
+                    "fill-extrusion-color": [
+                      "interpolate",
+                      ["linear"],
+                      ["get","pop_all"],
+                      0,"hsl(0, 0%, 3%)",
+                      15842,"#77A9DF"
+                    ],
+                    "fill-extrusion-height": [
+                      "interpolate",
+                      ["linear"],
+                      ["get","pop_all"],
+                      0,0,
+                      15842,900
+                    ],
+                    "fill-extrusion-opacity": 0.5
+                }
             }
         ]
     },
     {
-        index: '',
+        index: 'work_live',
         name: '居職人口推估',
         source_from: '遠傳電信',
+        sample_data: '2020-06-16',
         order: 6,
         request_list: [
             {
-                type: 'MapIconDisplay'
+                type: 'MapIconDisplay',
+                config: {
+                    col: true
+                },
+                mapLabel: [
+                    {
+                        index: 'pop_live',
+                        title: '居住推估人數',
+                        symbol: 'fill',
+                        color: '#d76c29',
+                        data: 2350032
+                    },
+                    {
+                        index: 'pop_work',
+                        title: '工作推估人數',
+                        symbol: 'fill',
+                        color: '#77dddf',
+                        data: 2759779
+                    }
+                ]
+            }
+        ],
+        map_config: [
+            {
+                index: 'tp_fet_work_live',
+                type: "geojson",
+                symbol: 'fill-extrusion',
+                property: [
+                    {key: "pop_live", name: "居住推估人數"},
+                    {key: "pop_work", name: "工作推估人數"}
+                ],
+                paint:{
+                    "fill-extrusion-color": [
+                        "interpolate",
+                        ["linear"],
+                        ["get","work_l_w"],
+                        -11533,"#77dddf",
+                        -4,"#000000",
+                        8,"#000000",
+                        2551,"#d76c29"
+                    ],
+                    "fill-extrusion-height": [
+                        "interpolate",
+                        ["linear"],
+                        ["get","work_l+w"],
+                        0,0,
+                        19895,1000
+                    ],
+                    "fill-extrusion-opacity": 0.5
+                }
             }
         ]
     },
     {
         index: 'flood_risk',
-        name: '水災風險地區',
+        name: '水災風險區域分佈',
         overview_display: '',
         order: 2,
-        source_from: '消防局',
+        source_from: ['臺北市淹水潛勢模擬圖：工務局水利工程處'],
         request_list: [
             {
-                type: 'MapIconDisplay',
-            //     config: {
-            //         mapLabels:[
-            //             {
-            //                 select_array: '高風險地區',
-            //                 symbol: 'Area',
-            //                 unit: 'km²',
-            //                 color: '#baf4f5'
-            //             },
-            //             {
-            //                 select_array: '低風險地區',
-            //                 symbol: 'Area',
-            //                 unit: 'km²',
-            //                 color: '#009ff4'
-            //             },
-            //             {
-            //                 select_array: '中風險地區',
-            //                 symbol: 'Area',
-            //                 unit: 'km²',
-            //                 color: '#352ad1'
-            //             }
-            //         ]
-            //     }
-            }
-        ],
-        map_config:[
-            {
-                raster:{
-                    index: 'patrol_flood_100',
-                    title: '水災風險地區',
-                    symbol: 'fill',
-                    paint: {
-                        'fill-color':[
-                            'match',
-                            ['get', 'name'],
-                            '1.0 m ~ 2.0 m',
-                            '#0a85f4',
-                            '0.30 m ~ 1.0 m',
-                            '#68ccf8',
-                            '0.15 m ~ 0.30 m',
-                            '#205CE6',
-                            '#ccc'
-                        ]
-                    },
-                    property: ['name']
-                }
-            },
-            {
-                raster:{
-                    index: 'patrol_flood_78_8',
-                    title: '水災風險地區',
-                    symbol: 'fill',
-                    paint: {
-                        'fill-color':[
-                            'match',
-                            ['get', 'name'],
-                            '1.0 m ~ 2.0 m',
-                            '#0a85f4',
-                            '0.30 m ~ 1.0 m',
-                            '#68ccf8',
-                            '0.15 m ~ 0.30 m',
-                            '#205CE6',
-                            '#ccc'
-                        ]
-                    },
-                    property: ['name']
-                }
-            },
-            {
-                raster:{
-                    index: 'patrol_flood_130',
-                    title: '水災風險地區',
-                    symbol: 'fill',
-                    paint: {
-                        'fill-color':[
-                            'match',
-                            ['get', 'name'],
-                            '1.0 m ~ 2.0 m',
-                            '#0a85f4',
-                            '0.30 m ~ 1.0 m',
-                            '#68ccf8',
-                            '0.15 m ~ 0.30 m',
-                            '#205CE6',
-                            '#ccc'
-                        ]
-                    },
-                    property: ['name']
-                }
+                type: 'RainDisplay'
             }
         ]
-    },
-
-
+    }
 ]
 
 /**
@@ -477,31 +560,27 @@ export const topicComponentList = [
                 name: '避難收容地點',
                 overview_display: '',
                 order: 1,
-                sample_data: '',
+                sample_data: '2022-08-08',
                 source_from: '消防局',
                 request_list: [
                     {
                         type: 'MapIconDisplay',
-                    //     config: {
-                    //         mapLabels:[
-                    //             {
-                    //                 select_array: '避難場所',
-                    //                 symbol: 'circle_stroke',
-                    //                 color: '#FDD79B',
-                    //                 unit: '處'
-                    //             }
-                    //         ],
-                    //         statistic: true
-                    //     } 
+                        mapLabel:[
+                            {
+                                index: 'patrol_designate_place',
+                                title: '避難場所',
+                                symbol: 'circle_stroke',
+                                color: '#FDD79B',
+                                data: 289
+                            }
+                        ]
                     }
                 ],
                 map_config:[
                     {
-                        raster:{
+                        geojson:{
                             index: 'patrol_designate_place',
-                            title: '避難場所',
                             symbol: 'circle',
-                            color: '#4cd9c1',
                             paint: {
                                 "circle-opacity": 0,
                                 "circle-stroke-width": 1,
@@ -528,102 +607,98 @@ export const topicComponentList = [
                 request_list: [
                     {
                         type: 'MapIconDisplay',
-                    //     path:'/patrol/component/patroldebris',
-                    //     config: {
-                    //         mapLabels: [
-                    //             {
-                    //                 select_array: '土石流潛勢溪流',
-                    //                 symbol: 'line',
-                    //                 unit: '處',
-                    //                 color: '#d7c500',
-                    //             },
-                    //             {
-                    //                 select_array: '土石流影響範圍',
-                    //                 symbol: 'Area',
-                    //                 unit: '處',
-                    //                 color: '#958f00',
-                    //             },
-                    //             {
-                    //                 select_array: '列管邊坡',
-                    //                 symbol: 'line',
-                    //                 unit: '處',
-                    //                 color: '#ff9800',
-                    //             },
-                    //             {
-                    //                 select_array: '老舊聚落',
-                    //                 symbol: 'Area',
-                    //                 unit: '處',
-                    //                 color: '#9e7b5c',
-                    //             }
-                    //         ]
-                    //     }
+                        config: {
+                            col: true
+                        },
+                        mapLabel: [
+                            {
+                                index: 'patrol_debris',
+                                title: '土石流潛勢溪流',
+                                symbol: 'line',
+                                color: '#d7c500',
+                                data: 50,
+                                unit: '處'
+                            },
+                            {
+                                index: 'patrol_debrisarea',
+                                title: '土石流影響範圍',
+                                symbol: 'fill',
+                                color: '#958f00',
+                                data: 163,
+                                unit: '戶'
+                            },
+                            {
+                                index: 'patrol_artificial_slope',
+                                title: '列管邊坡',
+                                symbol: 'line',
+                                color: '#ff9800',
+                                data: 34897,
+                                unit: '處'
+                            },
+                            {
+                                index: 'patrol_old_settlement',
+                                title: '老舊聚落',
+                                symbol: 'fill',
+                                color: '#9e7b5c',
+                                data: 34,
+                                unit: '處'
+                            }
+                        ]
                     }
                 ],
                 map_config:[
                     {
-                        raster:{
+                        geojson:{
                             index: 'patrol_debris',
-                            title: '土石流潛勢溪流',
-                            symbol: 'line',
-                            color:  '#d7c500',
                             property: []
                         }
                     },
                     {
-                        raster:{
+                        geojson:{
                             index: 'patrol_debrisarea',
-                            title: '土石流影響範圍',
-                            symbol: 'fill',
-                            color: '#958f00',
                             property: []
                         }
                     },
                     {
-                        raster:{
+                        geojson:{
                             index: 'patrol_artificial_slope',
-                            title: '列管邊坡',
-                            symbol: 'line',
-                            color: '#ff9800',
                             property: []
                         }
                     },
                     {
-                        raster:{
+                        geojson:{
                             index: 'patrol_old_settlement',
-                            title: '老舊聚落',
-                            symbol: 'fill',
-                            color: '#9e7b5c',
                             property: []
                         }
                     }
                 ]
             },
-            {
-                index: '',
-                name: '水位監測',
-                overview_display: '',
-                order: 3,
-                sample_data: '',
-                source_from: '',
-                request_list: [
-                    {
-                        type: 'MapIconDisplay'
-                    }
-                ]
-            },
-            {
-                index: '',
-                name: '抽水站狀態',
-                overview_display: '',
-                order: 5,
-                sample_data: '',
-                source_from: '',
-                request_list: [
-                    {
-                        type: 'MapIconDisplay'
-                    }
-                ]
-            },
+            // {
+            //     index: '',
+            //     name: '水位監測',
+            //     overview_display: '',
+            //     order: 3,
+            //     sample_data: '',
+            //     source_from: '',
+            //     request_list: [
+            //         {
+            //             type: 'MapIconDisplay'
+            //         }
+            //     ]
+            // },
+            // {
+            //     index: '',
+            //     name: '抽水站狀態',
+            //     overview_display: '',
+            //     order: 5,
+            //     sample_data: '',
+            //     source_from: '',
+            //     request_list: [
+            //         {
+            //             type: 'MapIconDisplay'
+            //         }
+            //     ]
+            // },
             {
                 index: 'criminalcase',
                 name: '刑事統計',

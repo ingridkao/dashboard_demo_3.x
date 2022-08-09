@@ -31,10 +31,6 @@
 import {Options, LineXAxis, LineYAxis } from '@/assets/js/hightchartConfig.js'
 export default {
 	props: {
-		name: {
-			type: String,
-			default: ""
-		},
 		request: {
 			type: Object,
 			deep: true,
@@ -46,15 +42,18 @@ export default {
             deep: true,
             immediate: true,
             handler: function(newObj, oldObj){
-				const { config, data, categories } = newObj
+				const { config, data, categories, keyratio } = newObj
 				const title = config && config.title? config.title: ""
 				this.chartOptions.series = data
-				this.sum = data.map(item => {
-					return {
-						label: `${item.name}${this.keyratioName}`,
-						value: item.data.reduce((a,b) => a+b, 0)
-					}
-				})
+				if(!config.sumHide){
+					const keyratioName = keyratio && keyratio.name? keyratio.name: ''
+					this.sum = data.map(item => {
+						return {
+							label: `${item.name}${keyratioName}`,
+							value: item.data.reduce((a,b) => a+b, 0)
+						}
+					})
+				}
 				if(categories){
 					this.chartOptions.xAxis.categories = categories
 				}
@@ -74,9 +73,6 @@ export default {
         }
 	},
 	computed:{
-		keyratioName(){
-			return this.request.keyratio && this.request.keyratio.name? this.request.keyratio.name: ''
-		},
 		keyratioInfo(){
 			return this.request.keyratio && this.request.keyratio.info? this.request.keyratio.info: []
 		}
