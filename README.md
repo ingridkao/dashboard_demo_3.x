@@ -19,6 +19,8 @@ disqus: hackmd
 * [Highcharts](#highcharts)
 * [動態組件Async Components](#async-components)
 * [解決:換掉favicon.ico不生效](#favicon)
+* [使用Mapbox](#mapbox)
+* [.env被github 讀取](#github)
 
 
 ## Deploy
@@ -166,5 +168,9 @@ Element+暗黑模式[官網說明](https://element-plus.org/zh-CN/guide/dark-mod
 [Changelog](https://github.com/mapbox/mapbox-gl-js/blob/main/CHANGELOG.md)
 
 
+
+## github
+1. `.github/workflows/node.js.yml`要增加env設置
+2. Github需要設置，Repository/Settings/Secrets，點擊`New repository secret`新增環境設置
 
 tags: `Vue` `element-plus` `vueuse` `composition api` `mapbox`

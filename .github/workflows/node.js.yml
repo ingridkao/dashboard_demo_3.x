@@ -11,7 +11,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -29,7 +28,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies 👨🏻‍💻
-      run: yarn
+      run: |
+        yarn
+        yarn build
+      env:
+        VUE_APP_GOOGLE_ANALYTICS: ${{ secrets.VUE_APP_GOOGLE_ANALYTICS }}
+        VUE_APP_MAPBOXTOKEN: ${{ secrets.VUE_APP_MAPBOXTOKEN }}
 
-    - name: Deploy
-      run: yarn build
