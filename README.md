@@ -33,7 +33,6 @@ npm install --force
 2. 編輯.env
     ```
     VUE_APP_GOOGLE_ANALYTICS=G-XXXXXXXXX
-    VUE_APP_SHARE=https://ingridkao.github.io/dashboard_demo/
     VUE_APP_MAPBOXTOKEN=pk.?????????
     ```
 ### 3. Deploy
