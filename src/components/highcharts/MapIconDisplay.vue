@@ -17,7 +17,7 @@
 					:style="translateStyle(contentItem, contentIndex)"
 				/>
 				<span>
-					{{contentItem.title}}
+					{{contentItem.name}}
 				</span>
 			</div>
 			<div v-if="contentItem.data" class="mapData" >
@@ -109,6 +109,7 @@ $borderWidth: $iconWidth/10;
 	.el-col,
 	.el-col > div{
 		display: inline-flex;
+		flex-wrap: wrap;
 		align-items: center;
 		justify-content: space-between;
 	}

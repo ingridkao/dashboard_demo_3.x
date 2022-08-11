@@ -40,13 +40,13 @@ export default {
             immediate: true,
             handler: function(newObj, oldObj){
 				const { config, data } = newObj
-				const title = config && config.title? config.title: "累積案件"
+				const name = config && config.name? config.name: "累積案件"
 				const label = config && config.label? config.label: this.name
 				const dataset = data? data.reduce((a,b) => {
 					if(Array.isArray(b)) return a+b[1]
 					return a+b.y
 				}, 0): []
-				this.chartOptions.title.text = `<b>${title}</b><br/>${dataset}`
+				this.chartOptions.name.text = `<b>${name}</b><br/>${dataset}`
 				this.chartOptions.series[0].name = label
 				this.chartOptions.series[0].data = data
             }
@@ -68,7 +68,7 @@ export default {
 					plotBorderWidth: null,
 					plotShadow: false
 				},
-				title: {
+				name: {
 					align: 'center',
 					verticalAlign: 'middle',
 					y: 15,

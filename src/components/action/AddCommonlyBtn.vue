@@ -1,21 +1,42 @@
 <script setup>
-    import { ref, defineProps } from 'vue'
+    import { ref, defineProps, onMounted } from 'vue'
     import { ElMessage } from 'element-plus'
 	import { Plus } from '@element-plus/icons-vue'
-	import { CommonlyList } from '@/assets/datas/commonlyList.js'
+	import { GetCommonlyList, GetCustomComponent, SetCustomComponent } from '@/assets/datas/commonlyList.js'
 
-    const CheckedOption = ref(CommonlyList.map(item => item.title))
-    const CommonlyValue = ref([])
+	const CommonlyList = GetCommonlyList()
+	const CustomComponent = GetCustomComponent()
+
     const props = defineProps({
-        text: { type: Boolean, default: false }
+        text: { type: Boolean, default: false },
+        component: { type: Object, default: () => {} }
+    })
+    const componentIndex = props.component.index
+    const checkboxs = ref({
+        option: CommonlyList.map(item => item.name),
+        select: []
     })
     const addCommonly = () => {
-        if(CommonlyValue.value.length === 0) return
-        ElMessage({
-            type: 'success',
-            message: '加入成功'
-        })
+        if(!props.component) return
+        const likeArray = checkboxs.value.select
+        if(likeArray.length === 0) return
+        console.log(CustomComponent);
+        // SetCustomComponent(CommonlyList, CustomComponent, componentIndex)
+        // ElMessage({
+        //     type: 'success',
+        //     message: '加入成功'
+        // })
 	}
+    onMounted(() => {
+        //Check checkbox option 
+        Object.keys(CustomComponent).map(item => {   
+            const componentArray = CustomComponent[item]
+            if(componentArray.includes(componentIndex)){
+                const targetTopic = CommonlyList.find(CommonItem => CommonItem.id === item)
+                checkboxs.value.select.push(targetTopic.name)
+            }
+        })
+    })
 </script>
 <template>
     <el-popover 
@@ -32,12 +53,12 @@
             />
         </template>
         <el-checkbox-group 
-            v-model="CommonlyValue" 
+            v-model="checkboxs.select" 
             size="small"
             class="commonlyList"
         >
             <el-checkbox 
-                v-for="item in CheckedOption"
+                v-for="item in checkboxs.option"
                 :key="item"
                 :label="item" 
             />

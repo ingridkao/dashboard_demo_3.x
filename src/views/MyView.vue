@@ -1,44 +1,28 @@
 <script setup>
-	import { CommonlyList } from '@/assets/datas/commonlyList.js'
-	import { topicList, topicComponentList} from '@/assets/datas/topicList.js'
-
+	import { reactive, computed } from 'vue'
+	import Header from '@/components/myview/Header.vue'
 	import CardContainer from '@/components/card/CardContainer.vue'
-
-	import { ref, computed } from 'vue'
+	import { GetCommonlyList, ParseCommonlyComponent } from '@/assets/datas/commonlyList.js'
 	import { useFullscreen } from '@vueuse/core'
-	import { Plus } from '@element-plus/icons-vue'
+
 	const { isFullscreen } = useFullscreen()
-
-	const tabs = ref(CommonlyList)
-	const tabActive = ref('traff')
-
-	// const isCollapse = ref(false)
-	const menuActive = ref(topicList[0]['index'])
-	const targetTopic = computed(()=>{
-		return topicComponentList.find(item => item.index === menuActive.value)
+	const CommonlyList = GetCommonlyList()
+	const topicComponentList = ParseCommonlyComponent()
+	const state = reactive({
+		list: CommonlyList,
+		active: CommonlyList[0]['id']
 	})
-	const activeName = ref('first')
-	const handleTabClick = (e) => {
-		// console.log(e)
-	}
-	const TopicAction = ref(false)
-	const TopicName = ref('')
-	const createTopic = (e) => {
-		TopicAction.value = true
-	}
-	const editTopic = (e) => {
-		TopicAction.value = true
-		const Active = CommonlyList.find(item => item.index === tabActive.value)
-		TopicName.value = Active? Active.title: ''
-	}
-	const cancleAction = (e) => {
-		TopicAction.value = false
-		TopicName.value = ""
-	}
-	const sendAction = (e) => {
-		TopicAction.value = false
-	}
 
+	const targetTopic = computed(()=>{
+		const target = topicComponentList.find(item => item.index === state.active)
+		return target? target.components: []
+	})
+	const updateComponent = (obj, init) => {
+		state.list = obj
+		if(init){
+			state.active = CommonlyList[0]['id']
+		}
+	}
 </script>
 
 <template>
@@ -48,43 +32,23 @@
 			fullscreen: isFullscreen
 		}"
 	>	
-		<el-row justify="space-between" align="middle">
-			<div >
-				<div v-if="TopicAction">
-					<el-input
-						v-model="TopicName"
-						type="text"
-						maxlength="10"
-						placeholder="請輸入儀表板名稱"
-						show-word-limit
-					/>
-				</div>
-			</div>
-			<div>
-				<div v-if="TopicAction">
-					<el-button round size="default" @click="cancleAction">取消</el-button>
-					<el-button round size="default" @click="sendAction">完成</el-button>
-				</div>
-				<div v-if="!TopicAction">
-					<el-button round size="default" circle :icon="Plus" @click="createTopic"/>
-					<el-button round size="default" @click="editTopic">編輯</el-button>
-				</div>
-			</div>
-		</el-row>
-
+		<Header 
+			:tabs="state"
+			@update="updateComponent"
+		/>
 		<el-tabs 
-			v-model="tabActive" 
+			v-model="state.active" 
 			@tab-click="handleTabClick" 
 		>
 			<el-tab-pane
-				v-for="item in tabs"
-				:key="item.index"
-				:label="item.title"
-				:name="item.index"
+				v-for="item in state.list"
+				:key="item.id"
+				:label="item.name"
+				:name="item.id"
 				class="cardScrollbarBox el-scrollbar"
 			>
 				<CardContainer
-					v-for="item in targetTopic.components"
+					v-for="item in targetTopic"
 					:key="item.index"
 					:data="item"
 				/>
@@ -95,7 +59,6 @@
 
 <style lang="scss">
 #myViewContainer{
-
 	margin: 0 auto;
 	max-width: 80rem;
 	&.fullscreen{

@@ -19,7 +19,7 @@
 	</el-row>
 	<highcharts 
 		class="chartContainer area"
-		:style="{height: (sum.length > 0 || keyratioInfo.length > 0)? 'calc(100% - 3rem)': '100%'}"
+		:style="chartContainerHeight"
 		:options="chartOptions" 
 		:updateArgs="[true, false]" 
 	/>
@@ -43,7 +43,7 @@ export default {
             immediate: true,
             handler: function(newObj, oldObj){
 				const { config, data, categories, keyratio } = newObj
-				const title = config && config.title? config.title: ""
+				const name = config && config.name? config.name: ""
 				this.chartOptions.series = data
 				if(!config.sumHide){
 					const keyratioName = keyratio && keyratio.name? keyratio.name: ''
@@ -75,6 +75,15 @@ export default {
 	computed:{
 		keyratioInfo(){
 			return this.request.keyratio && this.request.keyratio.info? this.request.keyratio.info: []
+		},
+		chartContainerHeight(){
+			const sumLength = this.sum.length
+			const keyratioInfoLength = this.keyratioInfo.length
+			if((sumLength > 0 || keyratioInfoLength > 0)){
+				return {height: `calc(100% - ${(sumLength+keyratioInfoLength)*1.5}rem)`}
+			}else{
+				return {height: '100%'}
+			}
 		}
 	},
   	data(){
@@ -125,9 +134,9 @@ export default {
 }
 .keyratio{
 	.el-col{
-		padding: 0 0 0 0.75rem;
+		padding: 0 0.75rem 0.25rem 0;
 		div:first-child{
-			font-size: 0.75rem;
+			font-size: 0.6rem;
 		}
 		div:last-child{
 			font-size: 0.9rem;

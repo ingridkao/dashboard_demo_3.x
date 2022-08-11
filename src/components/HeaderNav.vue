@@ -1,24 +1,24 @@
 <script setup>
 import { User, Moon, Sunny, FullScreen, Close } from '@element-plus/icons-vue'
-import { ref, defineEmits, watch } from 'vue'
+import { ref, defineProps, defineEmits, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useColorMode } from '@vueuse/core'
+import { Navigation } from '../router'
 
 const Router = useRoute()
-const mode = useColorMode({
-    class: 'theme'
-})
-const activeIndex = ref("city")
-const nav = ref([
-    {index: "dashboard", title: "我的儀表板", disabled: false},
-    {index: "city", title: "城市洞察", disabled: false},
-    {index: "feedback", title: "許願池", disabled: true}
-])
+const nav = ref(Navigation)
+
 const fullScreen = ref(false)
-const emit = defineEmits(['full'])
+const activeIndex = ref("city")
+const props = defineProps({
+    mode: { type: String }
+})
+const emit = defineEmits(['full', 'color'])
 const handlefull = (e) => {
     fullScreen.value = !fullScreen.value
     emit("full", fullScreen.value)
+}
+const handleColor = () => {
+    emit("color", props.mode)
 }
 const handleSelect = () => {}
 watch(
@@ -58,7 +58,7 @@ watch(
             :index="item.index"
             :disabled="item.disabled"
         >
-            <span>{{item.title}}</span>
+            <span>{{item.name}}</span>
         </el-menu-item>
 
         <div class="flex-grow" />
@@ -70,7 +70,7 @@ watch(
                 link
             />
             <el-button 
-                @click="mode = mode === 'dark' ? 'light' : 'dark'"
+                @click="handleColor"
                 :icon="mode === 'dark' ? Moon : Sunny" 
                 link
             />

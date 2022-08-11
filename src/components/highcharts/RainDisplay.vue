@@ -1,21 +1,24 @@
 <template>
 	<div class="rainFilterContainer">
 		<el-row align="middle">
-			<label>近一小時降雨量</label>	
-			<el-select 
-				v-model="rainValue" 
-				placeholder="請選擇"
-			>
-				<el-option
-					v-for="item in rainOptions"
-					:key="item.value"
-					:label="item.label"
-					:value="item.value">
-				</el-option>
-			</el-select>
+			<el-col class="label">近一小時降雨量</el-col>
+			<el-col>
+				<el-select 
+					v-model="rainValue" 
+					placeholder="請選擇"
+				>
+					<el-option
+						v-for="item in rainOptions"
+						:key="item.value"
+						:label="item.label"
+						:value="item.value">
+					</el-option>
+				</el-select>
+				<label>可能積水範圍</label>	
+			</el-col>
 		</el-row>
 		<el-row class="mapIconRow">
-			<el-col :span="24">
+			<el-col :span="24" class="label">
 				可能積水深度
 			</el-col>
 			<el-col 
@@ -29,7 +32,7 @@
 						:style="translateStyle(contentItem, contentIndex)"
 					/>
 					<span>
-						{{contentItem.title}}
+						{{contentItem.name}}
 					</span>
 				</div>
 			</el-col>
@@ -66,33 +69,33 @@ export default {
 			mapLabel: [
 				{
 					index: '15-30',
-					title: '0.15m-0.30m',
+					name: '0.15m-0.30m',
 					symbol: 'fill',
 					color: '#baf4f5'
 				},
 				{
 					index: '30-100',
-					title: '0.30m-1.0m',
+					name: '0.30m-1.0m',
 					symbol: 'fill',
-					color: '#6abdf7'
+					color: '#70b5c8'
 				},
 				{
 					index: '100-200',
-					title: '1.0m-2.0m',
+					name: '1.0m-2.0m',
 					symbol: 'fill',
-					color: '#726ae0'
+					color: '#4d9bd1'
 				}
 			],
 			rainValue: '',
 			rainOptions: [{
-					value: '78.8',
-					label: '78.8mm可能積水範圍'
-				}, {
-					value: '100',
-					label: '100mm可能積水範圍'
-				}, {
-					value: '130',
-					label: '130mm可能積水範圍'
+				value: '78.8',
+				label: '78.8mm'
+			}, {
+				value: '100',
+				label: '100mm'
+			}, {
+				value: '130',
+				label: '130mm'
 			}]
 		}
 	}
@@ -102,25 +105,31 @@ export default {
 $iconWidth:1rem;
 $borderWidth: $iconWidth/10;
 .rainFilterContainer{
-	padding: 2rem;
+	padding: 1rem;
+	.el-col{
+		margin-left: 1rem;
+		&.label{
+			margin: 0 0 .5rem 0;
+		}
+	}
 	label{
-		margin-right: 1rem;
+		margin-left: .5rem;
 	}
-}
-.mapIconRow{
-    height: 8rem;
-	margin-top: 1rem;
-	.el-col,
-	.el-col > div{
-		display: inline-flex;
-		align-items: center;
-		justify-content: space-between;
+	.mapIconRow{
+		height: 8rem;
+		margin-top: 1rem;
+		.el-col,
+		.el-col > div{
+			display: inline-flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+		.mapIcon{
+			display: inline-flex;
+			width: $iconWidth;
+			height: $iconWidth;
+			margin-right: $iconWidth/2;
+		}
 	}
-}
-.mapIcon{
-	display: inline-flex;
-	width: $iconWidth;
-	height: $iconWidth;
-	margin-right: $iconWidth/2;
 }
 </style>

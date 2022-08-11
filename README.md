@@ -153,4 +153,19 @@ Element+暗黑模式[官網說明](https://element-plus.org/zh-CN/guide/dark-mod
 ```
 
 
-tags: `Vue` `element-plus` `vueuse` `composition api`
+
+## mapbox
+目前使用過的地圖框架，大概有三四個，如果想要開源免費的版本會優先挑選Leaflet，
+如果需要商家即時資訊的話googleMap還是較具優勢，
+而MapboxGL具有幾項優勢像是採取webGL可以透過內建的function來開發3D或是其他視覺，並且在資料filter等功能很齊全。
+
+缺點有兩個一個是比較少人使用，但是官方文件和範例寫的非常仔細，完全可以彌補這個缺點；
+另外是有可能計費，但目前測試如果不是應用在擁有大量使用者的網頁，應該不至於被收費。
+
+可以參考下列網址
+[快速上手](https://docs.mapbox.com/mapbox-gl-js/guides/install/#quickstart)
+[Changelog](https://github.com/mapbox/mapbox-gl-js/blob/main/CHANGELOG.md)
+
+
+
+tags: `Vue` `element-plus` `vueuse` `composition api` `mapbox`

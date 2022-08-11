@@ -40,7 +40,7 @@
                 <component v-bind:is="item.icon"/>
             </el-icon>
             <template #title>
-                {{item.title}}
+                {{item.name}}
             </template>
         </el-menu-item>
         <el-button 
@@ -59,9 +59,6 @@
 </template>
 
 <style lang="scss">
-#collapseBtn{
-    padding-left: 1.5rem;
-}
 #cityAsideMenu{
     background-color: var(--el-bg-color-page);
     &:not(.el-menu--collapse) {
@@ -81,6 +78,9 @@
                 font-weight: bold;
             }
         }
+    }
+    #collapseBtn{
+        padding-left: 1.5rem;
     }
 }
 </style>

@@ -31,7 +31,7 @@
             <h6 @click="handleDialog(data)">
                 {{ data.name }}
             </h6>
-            <AddCommonlyBtn :text="true"/>
+            <AddCommonlyBtn :text="true" :component="data"/>
         </template>
         <LockComponent v-if="!data.request_list[0]"/>
         <CardBody v-else
@@ -56,7 +56,7 @@
             >
                 <h6 :id="titleId" :class="titleClass" align="middle">
                     {{dialogInformation.name? dialogInformation.name: null}}
-                    <AddCommonlyBtn :text="false"/>
+                    <AddCommonlyBtn :text="false" :component="data"/>
                 </h6>
                 <el-button text circle :icon="Close" @click="close"/>
             </el-row>
@@ -84,7 +84,7 @@
     }
     .el-card__body{
         position: relative;
-        --el-card-padding: 0 .6rem;
+        padding: 0 var(--el-card-padding);
         height: calc(100% - 3rem);
     }
 }

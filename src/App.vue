@@ -1,9 +1,15 @@
 <script setup>
 	import { ref } from 'vue'
-	import { useFullscreen } from '@vueuse/core'
+	import { useFullscreen, useColorMode } from '@vueuse/core'
 	import HeaderNav from '@/components/HeaderNav.vue'
 	const MainContainer = ref(null)
 	const { toggle } = useFullscreen(MainContainer)
+	const mode = useColorMode({
+		emitAuto: true
+	})
+	const handleColor = (value) => {
+		mode.value = value === 'dark' ? 'light' : 'dark'
+	}
 </script>
 
 <template>
@@ -12,10 +18,14 @@
 		id="MainContainer"
 	>
 		<el-header id="MainHeader">
-			<HeaderNav @full="toggle"/>
+			<HeaderNav 
+				:mode="mode"
+				@color="handleColor"
+				@full="toggle" 
+			/>
 		</el-header>	
 		<el-container id="PageContainer">
-			<router-view/>
+			<router-view :mode="mode"/>
 		</el-container>
 	</el-container>
 </template>

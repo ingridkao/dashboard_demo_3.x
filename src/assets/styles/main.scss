@@ -1,3 +1,13 @@
 .flex-grow {
     flex-grow: 1;
 }
+
+.asideContainer{
+    width: 4.5rem;
+	&.expand{
+		width: 12.5rem;
+	}
+	&.fullscreen{
+		width: 4.5rem;
+	} 
+}

@@ -32,6 +32,12 @@ const routes = [
     }
 ]
 
+export const Navigation = [
+    {index: "dashboard", name: "我的儀表板", disabled: false},
+    {index: "city", name: "城市洞察", disabled: false},
+    {index: "feedback", name: "許願池", disabled: true}
+]
+
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes

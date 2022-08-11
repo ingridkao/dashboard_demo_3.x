@@ -22,7 +22,7 @@
 
 <template>
 	<el-aside 
-		id="cityAsideContainer" 
+		class="asideContainer"
 		:class="{
 			expand: !isCollapse,
 			fullscreen: isFullscreen
@@ -55,15 +55,6 @@
 </template>
 
 <style lang="scss">
-#cityAsideContainer{
-	width: 4.5rem;
-	&.expand{
-		width: 12.5rem;
-	}
-	&.fullscreen{
-		width: 4.5rem;
-	}
-}
 #cityMainContainer{
 	width: 100%;
 	.el-main{
