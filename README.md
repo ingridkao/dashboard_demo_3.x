@@ -172,5 +172,6 @@ Element+暗黑模式[官網說明](https://element-plus.org/zh-CN/guide/dark-mod
 ## github
 1. `.github/workflows/node.js.yml`要增加env設置
 2. Github需要設置，Repository/Settings/Secrets，點擊`New repository secret`新增環境設置
+> [參考](https://stackoverflow.com/questions/53648652/how-to-use-environment-variables-in-github-page)
 
 tags: `Vue` `element-plus` `vueuse` `composition api` `mapbox`

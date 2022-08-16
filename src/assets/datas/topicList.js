@@ -1,4 +1,4 @@
-export const topicList = [
+export const TopicList = [
     {
         index: 'Sentiment',
         icon: "ChatDotRound",
@@ -56,12 +56,21 @@ export const basicMapLayer = [
                 {name:"臺北市有、國有及其他政府機關共有",value: 0.5184777100000001 ,color:"#3975b7"},
                 {name:"臺北市有及非國有政府機關共有",value: 0.05869149 ,color:"#223477"}
             ]
-        }]
+        }],
+        // map_config: [
+        //     {
+        //         index: 'building_publand',
+        //         // property: [
+        //         //     {key: "OFFICE_NAME", name: "所屬分局"},
+        //         //     {key: "STATION_NAME", name: "名稱"}
+        //         // ]
+        //     }
+        // ]
     },
     {
         index: 'police_facility',
         name: '警察相關設施',
-        order: 2,
+        order: 5,
         source_from: '警察局',
         sample_data: '樣本數據',
         request_list: [
@@ -85,7 +94,7 @@ export const basicMapLayer = [
         map_config: [
             {
                 index: 'police_station',
-                type: "geojson",
+                // type: "geojson",
                 property: [
                     {key: "OFFICE_NAME", name: "所屬分局"},
                     {key: "STATION_NAME", name: "名稱"}
@@ -98,7 +107,7 @@ export const basicMapLayer = [
             },
             {
                 index: 'patrol_district',
-                type: "geojson",
+                // type: "geojson",
                 interactive: {
                     affected: "police_station"
                 }
@@ -106,9 +115,9 @@ export const basicMapLayer = [
         ]
     },
     {
-        index: '',
+        index: 'fire_brigade',
         name: '消防應變設施',
-        order: 3,
+        order: 6,
         source_from: '消防局',
         sample_data: '樣本數據',
         request_list: [
@@ -129,23 +138,23 @@ export const basicMapLayer = [
                 ]
             }
         ],
-        map_config: [
-            {
-                index: 'patrol_fire_brigade',
-                type: "geojson",
-                property: [
-                    {key: "name", name: "名稱"}
-                ]
-            },
-            {
-                index: 'fire_hydrant_location',
-                type: "geojson",
-                property: [
-                    {key: "type", name: "類型"},
-                    {key: "location", name: "位置"}
-                ]
-            }
-        ]
+        // map_config: [
+        //     {
+        //         index: 'patrol_fire_brigade',
+        //         // type: "geojson",
+        //         property: [
+        //             {key: "name", name: "名稱"}
+        //         ]
+        //     },
+        //     {
+        //         index: 'fire_hydrant_location',
+        //         // type: "geojson",
+        //         property: [
+        //             {key: "type", name: "類型"},
+        //             {key: "location", name: "位置"}
+        //         ]
+        //     }
+        // ]
     },
     {
         index: 'building_landuse',
@@ -186,11 +195,11 @@ export const basicMapLayer = [
         }]
     },
     {
-        index: '',
+        index: 'fet_age',
         name: '電信推估活動人口',
         source_from: '遠傳電信',
         sample_data: '2020-06-16',
-        order: 5,
+        order: 2,
         request_list: [
             {
                 type: 'FetDisplay',
@@ -217,7 +226,6 @@ export const basicMapLayer = [
         map_config: [
             {
                 index: 'tp_fet_age_hr',
-                type: "geojson",
                 symbol: 'fill-extrusion',
                 property: [
                     {key: "hr", name: "推估時間"},
@@ -256,7 +264,7 @@ export const basicMapLayer = [
         name: '居職人口推估',
         source_from: '遠傳電信',
         sample_data: '2020-06-16',
-        order: 6,
+        order: 3,
         request_list: [
             {
                 type: 'MapIconDisplay',
@@ -284,7 +292,6 @@ export const basicMapLayer = [
         map_config: [
             {
                 index: 'tp_fet_work_live',
-                type: "geojson",
                 symbol: 'fill-extrusion',
                 property: [
                     {key: "pop_live", name: "居住推估人數"},
@@ -316,7 +323,7 @@ export const basicMapLayer = [
         index: 'flood_risk',
         name: '水災風險區域分佈',
         overview_display: '',
-        order: 2,
+        order: 7,
         source_from: ['臺北市淹水潛勢模擬圖：工務局水利工程處'],
         request_list: [
             {
@@ -575,22 +582,21 @@ export const PatrolMapLayer = [
         ],
         map_config:[
             {
-                geojson:{
-                    index: 'patrol_designate_place',
-                    symbol: 'circle',
-                    paint: {
-                        "circle-opacity": 0,
-                        "circle-stroke-width": 1,
-                        'circle-stroke-color': '#FDD79B',
-                        'circle-radius': [
-                            'interpolate', ['cubic-bezier', 0, 0.5, 1, 1],
-                            ["to-number", ["get", "容納人數"]],
-                            50,
-                            1,
-                            50000,
-                            100
-                        ]
-                    }
+                index: 'patrol_designate_place',
+                // type: "geojson",
+                symbol: 'circle',
+                paint: {
+                    "circle-opacity": 0,
+                    "circle-stroke-width": 1,
+                    'circle-stroke-color': '#FDD79B',
+                    'circle-radius': [
+                        'interpolate', ['cubic-bezier', 0, 0.5, 1, 1],
+                        ["to-number", ["get", "容納人數"]],
+                        50,
+                        1,
+                        50000,
+                        100
+                    ]
                 }
             }
         ]
@@ -645,28 +651,24 @@ export const PatrolMapLayer = [
         ],
         map_config:[
             {
-                geojson:{
-                    index: 'patrol_debris',
-                    property: []
-                }
+                index: 'patrol_debris',
+                // type: "geojson",
+                property: []
             },
             {
-                geojson:{
-                    index: 'patrol_debrisarea',
-                    property: []
-                }
+                index: 'patrol_debrisarea',
+                // type: "geojson",
+                property: []
             },
             {
-                geojson:{
-                    index: 'patrol_artificial_slope',
-                    property: []
-                }
+                index: 'patrol_artificial_slope',
+                // type: "geojson",
+                property: []
             },
             {
-                geojson:{
-                    index: 'patrol_old_settlement',
-                    property: []
-                }
+                index: 'patrol_old_settlement',
+                // type: "geojson",
+                property: []
             }
         ]
     },
@@ -879,7 +881,23 @@ export const TrafficMapLayer = [
                 ],
                 color: "#229cc6"
             }]
-        }]
+        }],
+        map_config: [
+            {
+                index: 'traffic_metro_station',
+                symbol: 'metro',
+                paint: {
+                    'text-halo-color': [
+                        'match',
+                        ['get', 'Countdown'],
+                        '列車進站',
+                        '#68ccf8',
+                        "hsla(240, 0%, 100%, 0)"
+                    ]
+                }
+            }
+        ]
+
     },
     {
         index: 'traffic_mrt_bl',
@@ -931,7 +949,24 @@ export const ConstructionMapLayer = [
                 {name: "公劃更新地區",y: 194,color: "#9b976c"},
                 {name: "都市計畫劃定更新地區",y: 60,color: "#c0ccad"}
             ]
-        }]
+        }],
+        map_config: [
+            {
+                index: 'building_renewunit_12',
+                symbol: 'line',
+                color: '#e0e08c'
+            },
+            {
+                index: 'building_renewunit_20',
+                symbol: 'line',
+                color: '#f8ea21'
+            },
+            {
+                index: 'building_renewunit_30',
+                symbol: 'line',
+                color: '#f7ac3b'
+            }
+        ]
     },
     {
         index: 'social_house',
@@ -952,7 +987,31 @@ export const ConstructionMapLayer = [
                 {name: "招標中及待上網",y: 4,color: "#c2651c"},
                 {name: "都更聯開分回",y: 2,color: "#a65818"}
             ]
-        }]
+        }],
+        map_config: [
+            {
+                index: 'building_social_house',
+                symbol: 'circle',
+                paint: {
+                    'circle-radius': 5,
+                    'circle-color':[
+                        'match',
+                        ['get', 'progress'],
+                        '施工中及待開工',
+                        '#26d5d7',
+                        '已完工',
+                        '#7EE4D3',
+                        '都更連開分回',
+                        '#219A86',
+                        '規劃中',
+                        '#A5ECE0',
+                        '招標中及待上鋼',
+                        '#166759',
+                        '#ccc'
+                    ]
+                }
+            }
+        ]
     },
     {
         index: 'building_age',

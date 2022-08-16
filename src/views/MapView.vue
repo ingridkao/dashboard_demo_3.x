@@ -1,34 +1,36 @@
 <script setup>
 	import { ref } from 'vue'
 	import { useFullscreen } from '@vueuse/core'
-	const isCollapse = ref(false)
+
+	import CardContainer from '@/components/card/CardContainer.vue'
+	import MapTopicDrawer from '@/components/map/MapTopicDrawer.vue'
+	import MapBasicDrawer from '@/components/map/MapBasicDrawer.vue'
+
 	const MapContainer = ref(null)
 	const { isFullscreen, toggle } = useFullscreen(MapContainer)
-	const updateCollapse = () => {
-		isCollapse.value = !isCollapse.value
+
+	const ComponentListOpen = ref(false)
+	const ToggleComponentList = () => {
+		ComponentListOpen.value = !ComponentListOpen.value
+	}
+	const BasicListToggle = ref(false)
+	const ToggleBasicList = () => {
+		BasicListToggle.value = !BasicListToggle.value
 	}
 </script>
 
 <template>
 	<el-container ref="MapContainer">
-		<el-drawer
-			v-model="isCollapse"
-			direction="ltr"
-			:with-header="false"
-		>
-			<el-breadcrumb separator="/">
-				<el-breadcrumb-item :to="{ path: '/' }">
-					<el-icon><House /></el-icon>
-				</el-breadcrumb-item>
-				<el-breadcrumb-item>主題名稱</el-breadcrumb-item>
-			</el-breadcrumb>
-			<el-scrollbar>
-				<div>
-					<p>轉來轉去</p>
-					<p>component list(checkbox)</p>
-				</div>
-			</el-scrollbar>
-		</el-drawer>
+		<MapTopicDrawer
+			:TopicToggle="ComponentListOpen"
+			@update="updateTopicComponentToMap"
+		/>
+
+		<MapBasicDrawer
+			:BasicListToggle="BasicListToggle"
+			@update="updateBasicComponentToMap"
+		/>
+
 		<el-main 
 			id="mapboxContainer" 
 			:class="{
@@ -36,10 +38,13 @@
 			}"
 			v-loading="mapLoadong"
 		>
-			<div id="mapboxBox"/>
+			<div id="mapboxBox" style="text-align:right;"></div>
 			<div id="mapBtnBox">
-				<el-button type="info" circle @click="updateCollapse">
-					<el-icon><Tickets /></el-icon>
+				<el-button type="info" circle @click="ToggleBasicList">
+					<el-icon><Box /></el-icon>
+				</el-button>
+				<el-button type="info" circle @click="ToggleComponentList">
+					<el-icon><Collection /></el-icon>
 				</el-button>
 				<el-button type="info" circle @click="toggle">
 					<el-icon v-if="isFullscreen"><Close /></el-icon>
@@ -52,10 +57,17 @@
 
 <script>
 import mapboxgl from 'mapbox-gl'
+import MapboxLanguage from '@mapbox/mapbox-gl-language';
 import 'mapbox-gl/dist/mapbox-gl.css'
+
 const MAPBOXTOKEN = process.env.VUE_APP_MAPBOXTOKEN
+const BASE_URL = process.env.VUE_APP_BASE_URL
+
 import mapStyle from '@/assets/datas/mapStyle.js'
-import { MapObjectConfig, MapFogStyle } from '@/assets/datas/mapConfig.js'
+import { ParseLayer } from '@/assets/datas/mapFunction.js'
+import { basicMapLayer } from '@/assets/datas/topicList.js'
+import { MapObjectConfig, MapFogStyle, BuildingsIn3D, TaipeiTown, TaipeiVillage } from '@/assets/datas/mapConfig.js'
+
 const MapStyle = {
 	'light':'mapbox://styles/mapbox/light-v10',
 	'dark': mapStyle
@@ -67,9 +79,6 @@ export default {
 		}
 	},
 	computed:{
-		// config(){
-		// 	return this.request.config? this.request.config: null
-		// },
 	},
 	methods: {
 		// translateSymbol(contentSymbol){
@@ -78,58 +87,154 @@ export default {
 	},
 	watch: {
 		mode() {
-			this.MapBoxObject.setStyle(MapStyle[this.mode]);
+			this.mapBoxObject.setStyle(MapStyle[this.mode]);
 		}
 	},
 	methods: {
 		initMapBox() {
             mapboxgl.accessToken = MAPBOXTOKEN
-            this.MapBoxObject = new mapboxgl.Map({
+            this.mapBoxObject = new mapboxgl.Map({
 				...MapObjectConfig,
                 style: MapStyle[this.mode]
             })
-            this.MapBoxObject.addControl( new mapboxgl.NavigationControl() )
-            this.MapBoxObject.doubleClickZoom.disable()
-			this.MapBoxObject.scrollZoom.disable();
-            // Add language controls to the map.
-            // if (mapboxgl.getRTLTextPluginStatus() !== 'loaded') {
-            //     mapboxgl.setRTLTextPlugin('/js/mapbox-gl-rtl-text.js') 
-            // }
-            // this.MapBoxObject.addControl(new MapboxLanguage({
-            //     defaultLanguage: 'zh-Hant'
-            // }))
-            // this.mapDrawInitialized()
-            if (this.MapBoxObject.loaded()) {
-                this.mapLoadLayer()
-            } else {
-                this.MapBoxObject.on('load', () => this.mapLoadLayer())
-            }
-			this.MapBoxObject.on('style.load', () => {
+            this.mapBoxObject.addControl( new mapboxgl.NavigationControl() )
+			this.mapBoxObject.addControl(new MapboxLanguage({defaultLanguage: 'zh-Hant'}))
+            this.mapBoxObject.doubleClickZoom.disable()
+
+			this.mapBoxObject.on('style.load', () => { //1
 				this.mapLoadong = true
-				this.MapBoxObject.setFog(MapFogStyle[this.mode])
-			}).on('idle', () => {
-                this.mapLoadong = false
-            }).on('error', (e) => {
-                console.log('A error event occurred:'+ e)
+				this.mapBoxObject.setFog(MapFogStyle[this.mode])
+				this.initMapBasicLayer()
+
+			}).on('load', (e) => { //2
+
+			}).on('idle', () => { //3
+				this.mapLoadong = false
+
+			}).on('error', (e) => {
+				console.log('A error event occurred:'+ e.error)
+
+			}).on("click", (event) => {
+				console.log( this.mapBoxObject.getZoom())
             })
         },
-		mapLoadLayer(){
-			// console.log('load');
+		initMapBasicLayer(){
+			const layers = this.mapBoxObject.getStyle().layers
+			const checkLayer = layers.find(layer => layer.type === 'symbol' && layer.layout['text-field'])
+            this.mapBoxObject.addLayer(BuildingsIn3D(this.mode), checkLayer.id)
+
+            fetch(`${BASE_URL}/datas/taipei_town.geojson`).then((response) => (response.json())).then(data => {
+				this.mapBoxObject.addSource('taipei_town', { type: 'geojson', data: data }).addLayer(TaipeiTown(this.mode))
+			})
+            fetch(`${BASE_URL}/datas/taipei_village.geojson`).then((response) => (response.json())).then(data => {
+				this.mapBoxObject.addSource('taipei_village', { type: 'geojson', data: data }).addLayer(TaipeiVillage(this.mode))
+			})
+			/**
+			    fetch('http://localhost:8888/posts')
+				.then(res => res.json())
+				.then(data => (this.posts = data))
+			*/
+		},
+		updateTopicComponentToMap(updateData){
+			// Replace active list
+			this.activeTopicComponent = updateData.active
+			this.cleanActiveComponent(updateData.topicLayer.value)
+		},
+		updateBasicComponentToMap(layers){
+			// Replace active list
+			this.activeBasicComponent = layers
+			this.cleanActiveComponent(basicMapLayer)
+		},
+		cleanActiveComponent(MapLayers = []){
+			const DrawerActiveComponent = this.activeBasicComponent.concat(this.activeTopicComponent)
+			// Clean active component
+            DrawerActiveComponent.map(componentIndex => {
+				const target = MapLayers.find(item => item.index === componentIndex)
+				if(!target)return
+				this.cleanDrawerSelect(target)
+            })
+
+			Object.keys(this.existComponent).filter(item => {
+				this.existComponent[item] = DrawerActiveComponent.includes(item)
+			})
+
+			// Check exist layers - Show or Hide map layer from cache
+			if(Object.keys(this.existCacheMapLayer).length === 0) return
+			Object.keys(this.existCacheMapLayer).map(layerIndex => {
+				if(!this.mapBoxObject.getLayer(layerIndex)) return
+				const TargertComponent = this.existCacheMapLayer[layerIndex]
+				// const LayerVisible = this.mapBoxObject.getLayoutProperty(layerIndex, 'visibility')
+				this.mapBoxObject.setLayoutProperty(layerIndex, 'visibility', (this.existComponent[TargertComponent])?'visible': 'none')
+			})
+		},
+		cleanDrawerSelect(target){
+			// Layer settings are loaded only once
+			const { index, map_config, request_list } = target
+			if(!(map_config && request_list))return
+
+			const targetRequest = request_list.find(list => list.type === 'MapIconDisplay')
+			map_config.map(configItem => {
+				if(!Object.keys(this.existCacheMapLayer).includes(configItem.index)){
+					this.fetchDataset(target.index, configItem, targetRequest)
+				}
+			})
+		},
+		fetchDataset(componentIndex, mapConfigItem, targetRequest = {}){
+			// First laod
+			const MapLayerIndex = mapConfigItem.index
+			this.existComponent[componentIndex] = true
+			fetch(`${BASE_URL}/datas/${MapLayerIndex}.geojson`)
+			.catch(error => console.error('Error:', error.message))
+			.then((response) => {
+				if(response.status === 200) return response.json()
+				if(response.status === 404){
+					console.log(response.statusText)
+				}
+			})
+			.then(data => {
+				if(!data) return
+				const MapLabel = targetRequest.mapLabel? targetRequest.mapLabel: []
+				const targetMapLabel = MapLabel.find(list => list.index === MapLayerIndex)
+				const LayerConfig = ParseLayer(mapConfigItem, targetMapLabel)
+
+				if(LayerConfig.loadImage !== '' && !this.mapBoxObject.hasImage(LayerConfig.loadImage)){
+					const PngUrl = require(`@/assets/img/mapbox/${LayerConfig.loadImage}.png`)
+					this.mapBoxObject.loadImage(PngUrl, (error, image) => {
+						if (error) throw error
+						this.mapBoxObject.addImage(LayerConfig.loadImage, image)
+					})
+				}
+				this.mapBoxObject.addSource(`${MapLayerIndex}_source`, { type: 'geojson', data: data }).addLayer(LayerConfig.main)
+
+				/**
+				 * existCacheMapLayer :
+				 * 	key: Layer index
+				 * 	value: Component index
+				 */
+				this.existCacheMapLayer[LayerConfig.main.id] = componentIndex
+
+				if(LayerConfig.extra && LayerConfig.extra.id){
+					this.mapBoxObject.addLayer(LayerConfig.extra)
+					this.existCacheMapLayer[LayerConfig.extra.id] = componentIndex
+				}
+			})
 		}
 	},
   	data(){
 		return {
 			mapLoadong: false,
-			MapBoxObject: null,
+			mapBoxObject: null,
+			existComponent: [],
+			existCacheMapLayer: {},
+			activeBasicComponent: [],
+			activeTopicComponent: []
 		}
 	},
     mounted() {
         this.initMapBox()
     },
     destroyed() {
-		if(this.MapBoxObject){
-			this.MapBoxObject.remove()
-		}
+		if(this.mapBoxObject) this.mapBoxObject.remove()
     }
 }
 </script>
@@ -152,43 +257,6 @@ export default {
 		position: absolute;
 		top: 2.5rem;
 		left: 2.5rem;
-	}
-	.el-main{
-		// margin: 0 auto;
-		// display: grid;
-		// gap: 1rem;
-		// grid-template-columns: repeat(auto-fit, minmax(22.5rem, 1fr));
-		// grid-auto-rows: 25rem;
-		// max-width: 100rem;
-		// &.fullscreen{
-		// 	max-width: 120rem;
-		// }
-		// @media all and (min-width: 1920px){
-		// 	max-width: 95rem;
-		// 	&.fullscreen{
-		// 		max-width: 115rem;
-		// 	}
-		// }
-		// .card-container{
-		// 	width: 100%;
-		// 	height: 100%;
-		// 	display: flex;
-		// 	flex-direction: column;
-		// 	transition: all 500ms;
-		// 	overflow: hidden;
-		// 	@media screen and (min-width: 600px) {
-		// 		&.tall {
-		// 			grid-row: span 2 / auto;
-		// 		}
-		// 		&.wide {
-		// 			grid-column: span 2 / auto;
-		// 		}
-		// 		&.large {
-		// 			grid-row: span 2 / auto;
-		// 			grid-column: span 2 / auto;
-		// 		}
-		// 	}
-		// }
 	}
 }
 </style>

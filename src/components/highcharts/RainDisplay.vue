@@ -131,5 +131,8 @@ $borderWidth: $iconWidth/10;
 			margin-right: $iconWidth/2;
 		}
 	}
+	.el-select{
+		max-width: 8rem;
+	}
 }
 </style>

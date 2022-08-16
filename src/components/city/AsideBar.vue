@@ -1,18 +1,12 @@
 <script setup>
-	import { topicList } from '@/assets/datas/topicList.js'
+	import { TopicList } from '@/assets/datas/topicList.js'
 	import { ref, defineProps, defineEmits } from 'vue'
     import { useFullscreen } from '@vueuse/core'
     const { isFullscreen } = useFullscreen()
-    const topics = ref(topicList)
+    const topics = ref(TopicList)
     const props = defineProps({
-        isCollapse: { 
-            type: Boolean,
-            default: false
-        },
-        menuActive: { 
-            type: String,
-            default: ''
-        }
+        isCollapse: { type: Boolean, default: false},
+        menuActive: { type: String, default: ''}
     })
     const emit = defineEmits(['collapse', 'update'])
 	const updateCollapse = () => {

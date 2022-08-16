@@ -1,15 +1,16 @@
 <script setup>
     import { ref, defineProps } from 'vue'
     import LockComponent from '@/components/highcharts/LockComponent.vue'
-    import CardInformation from '@/components/card/CardInformation.vue'
+    import CardDialog from '@/components/card/CardDialog.vue'
     import AddCommonlyBtn from '@/components/action/AddCommonlyBtn.vue'
 
 	import CardBody from '@/components/card/CardBody.vue'
-    import { Close } from '@element-plus/icons-vue'
 
 	const dialogVisible = ref(false)
 	const dialogInformation = ref({})
     const props = defineProps({
+        menuActive: { type: String, default: ''},
+        titleShow: { type: Boolean, default: true },
         data: { type: Object, default: ()=>{} }
     })
     const handleDialog = (info) => {
@@ -27,7 +28,7 @@
             order: data.order
         }"
     >
-        <template #header>
+        <template #header v-if="titleShow">
             <h6 @click="handleDialog(data)">
                 {{ data.name }}
             </h6>
@@ -40,35 +41,28 @@
             :components="data"
             :request="item"
         />
+        <el-button 
+            v-if="!titleShow" 
+            text 
+            size="small"
+            class="infoTextBtn"
+            @click="handleDialog(data)"
+        >
+            更多資訊
+        </el-button>
     </el-card>
 
-    <el-dialog 
-		v-model="dialogVisible" 
-		width="80%" 
-        :show-close="false"
-		destroy-on-close
-	>
-        <template #header="{ close, titleId, titleClass }">
-            <el-row 
-                justify="space-between"
-                align="middle"
-                class="dialog-header"
-            >
-                <h6 :id="titleId" :class="titleClass" align="middle">
-                    {{dialogInformation.name? dialogInformation.name: null}}
-                    <AddCommonlyBtn :text="false" :component="data"/>
-                </h6>
-                <el-button text circle :icon="Close" @click="close"/>
-            </el-row>
-        </template>
-		<CardInformation 
-            :information="dialogInformation"
-        />
-	</el-dialog>
+    <CardDialog
+        :menuActive="menuActive"
+        :data="data"
+        :dialogVisible="dialogVisible"
+        :dialogInformation="dialogInformation"
+    />
 </template>
 
 <style lang="scss">
 .card-container{
+    position: relative;
     .el-card__header{
         display: flex;
         justify-content: space-between;
@@ -86,6 +80,15 @@
         position: relative;
         padding: 0 var(--el-card-padding);
         height: calc(100% - 3rem);
+    }
+}
+.infoTextBtn{
+    position: absolute;
+    right: 0;
+    bottom: -1rem;
+    opacity: 0.25;
+    &:hover{
+        opacity: 0.5;
     }
 }
 </style>

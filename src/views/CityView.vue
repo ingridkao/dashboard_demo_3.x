@@ -1,5 +1,5 @@
 <script setup>
-	import { topicList, topicComponentList} from '@/assets/datas/topicList.js'
+	import { TopicList, topicComponentList} from '@/assets/datas/topicList.js'
 	import AsideBar from '@/components/city/AsideBar.vue'
 	import CardContainer from '@/components/card/CardContainer.vue'
 
@@ -8,12 +8,15 @@
 	const { width, height } = useWindowSize()
 	const { isFullscreen } = useFullscreen()
 	const isCollapse = ref(false)
-	const menuActive = ref(topicList[0]['index'])
+	const menuActive = ref(TopicList[0]['index'])
 	const targetTopic = computed(()=>{
 		return topicComponentList.find(item => item.index === menuActive.value)
 	})
 	const handleCollapse = () => {
 		isCollapse.value = !isCollapse.value
+	}
+	const handleSelect = (e) => {
+        menuActive.value = e
 	}
 	watch(isFullscreen, (state) => {
 		if(state) isCollapse.value = true
@@ -33,7 +36,7 @@
 				:isCollapse="isCollapse"
 				:menuActive="menuActive"
 				@collapse="handleCollapse"
-				@update="(e)=> menuActive = e"
+				@update="handleSelect"
 			/>
 		</el-scrollbar>
 	</el-aside>
@@ -49,6 +52,7 @@
 				v-for="item in targetTopic.components"
 				:key="item.index"
 				:data="item"
+				:menuActive="menuActive"
 			/>
 		</el-main>
 	</el-scrollbar>

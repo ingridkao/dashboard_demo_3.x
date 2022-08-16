@@ -35,8 +35,8 @@
 import bike from '@/assets/img/mapbox/bike.png'
 import bus from '@/assets/img/mapbox/bus.png'
 import metro from '@/assets/img/mapbox/metro.png'
-import cross1 from '@/assets/img/mapbox/cross_1.png'
-import cross2 from '@/assets/img/mapbox/cross_2.png'
+import cross1 from '@/assets/img/mapbox/cross_normal.png'
+import cross2 from '@/assets/img/mapbox/cross_bold.png'
 import triangleGreen from '@/assets/img/mapbox/triangle_green.png'
 import triangleWhite from '@/assets/img/mapbox/triangle_white.png'
 const MainColors = ["#26d5d7", "#7EE4D3", "#219A86", "#A5ECE0", "#166759"]

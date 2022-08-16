@@ -76,15 +76,14 @@ export default {
 	height: 100%;
 	.desc{
 		display: flex;
-		justify-content: flex-end;
+		justify-content: flex-start;
 		p{
 			font-size: 0.8rem;
-			margin: 0 0.5rem;
-			line-height: 1.5;
+			margin: 0.25rem 0.5rem;
 		}
 	}
 	.chartContainer.treeMap{
-		height: calc(100% - 2rem);
+		height: calc(100% - 1rem);
 		.highcharts-data-label{
 			text{
 				fill: var(--el-menu-text-color) !important;

@@ -20,7 +20,7 @@ const handlefull = (e) => {
 const handleColor = () => {
     emit("color", props.mode)
 }
-const handleSelect = () => {}
+const handleHeaderMenu = () => {}
 watch(
     Router,
     (to, from) => {
@@ -37,7 +37,7 @@ watch(
         :class="{fullScreen}"
         :ellipsis="false"
         :router="true"
-        @select="handleSelect"
+        @select="handleHeaderMenu"
     >
         <el-menu-item index="/" class="logoBox">
             <img 

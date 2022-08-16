@@ -4,6 +4,7 @@
     import { useRouter, useRoute } from 'vue-router'
 
     const props = defineProps({
+        menuActive: {type: String, default: ''},
         information: { type: Object, default: ()=>{} }
     })
     const Info = [
@@ -20,7 +21,8 @@
         router.push({
             name: 'mapview',
             query: {
-                ...route.query
+                ...route.query,
+                topic: props.menuActive
             }
         })
     }
@@ -50,7 +52,7 @@
                 </div>
             </div>
             <div>
-                <el-button v-if="information.map_config" type="info" size="small" @click="routeToMap()">地圖交叉查詢</el-button>
+                <el-button v-if="information.map_config" type="info" size="small" @click="routeToMap">地圖交叉查詢</el-button>
                 <el-button v-if="information.calculation_config" type="info" size="small">時間軸檢視</el-button>
             </div>
         </el-col>
