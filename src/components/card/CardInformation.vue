@@ -22,7 +22,8 @@
             name: 'mapview',
             query: {
                 ...route.query,
-                topic: props.menuActive
+                topic: props.menuActive,
+                component: props.information.index
             }
         })
     }

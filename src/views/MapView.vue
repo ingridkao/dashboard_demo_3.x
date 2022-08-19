@@ -7,6 +7,7 @@
 	import MapBasicDrawer from '@/components/map/MapBasicDrawer.vue'
 
 	const MapContainer = ref(null)
+	const TopicNames = ref([])
 	const { isFullscreen, toggle } = useFullscreen(MapContainer)
 
 	const ComponentListOpen = ref(false)
@@ -22,6 +23,7 @@
 <template>
 	<el-container ref="MapContainer">
 		<MapTopicDrawer
+			:ActiveNames="TopicNames"
 			:TopicToggle="ComponentListOpen"
 			@update="updateTopicComponentToMap"
 		/>
@@ -65,7 +67,7 @@ const BASE_URL = process.env.VUE_APP_BASE_URL
 
 import mapStyle from '@/assets/datas/mapStyle.js'
 import { ParseLayer } from '@/assets/datas/mapFunction.js'
-import { basicMapLayer } from '@/assets/datas/topicList.js'
+import { basicMapLayer, topicComponentList } from '@/assets/datas/topicList.js'
 import { MapObjectConfig, MapFogStyle, BuildingsIn3D, TaipeiTown, TaipeiVillage } from '@/assets/datas/mapConfig.js'
 
 const MapStyle = {
@@ -80,8 +82,6 @@ export default {
 		mode: {
 			type: String
 		}
-	},
-	computed:{
 	},
 	methods: {
 		// translateSymbol(contentSymbol){
@@ -110,6 +110,7 @@ export default {
 				this.initMapBasicLayer()
 
 			}).on('load', (e) => { //2
+				this.parseRouterQuery()
 
 			}).on('idle', () => { //3
 				this.mapLoadong = false
@@ -148,6 +149,16 @@ export default {
 			this.activeBasicComponent = layers
 			this.cleanActiveComponent(basicMapLayer)
 		},
+		parseRouterQuery(){
+			const {topic, component} = this.$route.query
+			if(!(topic && component)) return 
+			const TargetTopic = topicComponentList.find(item => item.index === topic)
+			if(!TargetTopic) return
+			const TargetComponent = TargetTopic.components.find(item => item.index === component)
+			this.TopicNames = component
+			this.activeTopicComponent = [component]
+			this.cleanActiveComponent(TargetTopic.components)
+		},
 		cleanActiveComponent(MapLayers = []){
 			const DrawerActiveComponent = this.activeBasicComponent.concat(this.activeTopicComponent)
 			// Clean active component
@@ -168,7 +179,6 @@ export default {
 				const TargertComponent = this.existCacheMapLayer[layerIndex]
 				// const LayerVisible = this.mapBoxObject.getLayoutProperty(layerIndex, 'visibility')
 				this.mapBoxObject.setLayoutProperty(layerIndex, 'visibility', (this.existComponent[TargertComponent])?'visible': 'none')
-				console.log(this.mapBoxObject.getLayer(layerIndex).paint);
 			})
 		},
 		cleanDrawerSelect(target){
@@ -231,6 +241,11 @@ export default {
 				})
 			}
 			this.mapBoxObject.addSource(`${MapLayerIndex}_source`, { type: 'geojson', data: data }).addLayer(main)
+
+			if(this.fromComponent === componentIndex){
+				this.mapBoxObject.setLayoutProperty(main.id, 'visibility', 'visible')
+			}
+
 			/** Exist cache mapLayer
 			 * 	 key: Layer index
 			 * 	 value: Component index
@@ -239,6 +254,9 @@ export default {
 			if(extra && extra.id){
 				this.mapBoxObject.addLayer(extra)
 				this.existCacheMapLayer[extra.id] = componentIndex
+				if(this.fromComponent === componentIndex){
+					this.mapBoxObject.setLayoutProperty(extra.id, 'visibility', 'visible')
+				}
 			}
 		}
 	},

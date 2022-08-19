@@ -60,8 +60,15 @@ export default {
 	}
 	.el-slider{
 		width: calc(100% - 6rem);
-		margin-top: 1rem;
+		margin-top: .5rem;
 		margin-left: 5rem;
+	}
+}
+.mapDrawerContainer{
+	.houerFilterContainer{
+		.chartContainer.area{
+			height: 10rem !important;
+		}
 	}
 }
 </style>

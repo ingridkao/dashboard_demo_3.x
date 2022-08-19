@@ -95,11 +95,11 @@ export default {
 $iconWidth:1rem;
 $borderWidth: $iconWidth/10;
 .mapIconRow{
-	width: calc(100% - 2rem);
+	width: calc(100% - 3rem);
     height: 100%;
-	margin: -1rem auto 0 auto;
+	margin: 0 auto;
 	&.col{
-		height: calc(100% - 2rem);
+		height: calc(100% - 3rem);
 		margin-top: 1rem;
 		align-content: start;
 		>*{

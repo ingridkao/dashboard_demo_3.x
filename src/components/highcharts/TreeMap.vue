@@ -2,6 +2,7 @@
 	<div class="treeMapContainer">
 		<highcharts 
 			class="chartContainer treeMap"
+			:style="chartContainerHeight"
 			:options="chartOptions" 
 		/>
 		<div class="desc">
@@ -39,6 +40,15 @@ export default {
 				this.chartOptions.series[0]['layoutAlgorithm'] = layoutAlgorithm
             }
         }
+	},
+	computed:{
+		chartContainerHeight(){
+			if(this.$route.name === 'mapview'){
+				return {height: '15rem'}
+			}else{
+				return {height: '100%'}
+			}
+		}
 	},
   	data(){
 		return {

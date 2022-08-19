@@ -87,7 +87,6 @@ export const ParseLayer = (MapConfig, MapLabel = {}) => {
             'visibility': 'visible'
         }
     }
-    console.log(mapLayerConfig);
     // if(MapConfig.filter && MapConfig.filter.target === 'hr'){
     //     const refer = dayjs().hour()
     //     mapLayerConfig.filter = ['==', ['get', 'hr'], refer]

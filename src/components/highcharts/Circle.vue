@@ -11,7 +11,7 @@
 	</el-row>
 	<highcharts 
 		class="chartContainer circle"
-		:style="{height: (keyratioInfo.length > 0)? 'calc(100% - 3rem)': '100%'}"
+		:style="chartContainerHeight"
 		:options="chartOptions" 
 		:updateArgs="[true, false]" 
 	/>
@@ -55,6 +55,18 @@ export default {
 	computed:{
 		keyratioInfo(){
 			return this.request.keyratio && this.request.keyratio.info? this.request.keyratio.info: []
+		},
+		chartContainerHeight(){
+			const keyratioInfoLength = this.keyratioInfo.length
+			if((keyratioInfoLength > 0)){
+				if(this.$route.name === 'mapview'){
+					return {height: '15rem'}
+				}else{
+					return {height: `calc(100% - 3rem)`}
+				}
+			}else{
+				return {height: '100%'}
+			}
 		}
 	},
   	data(){

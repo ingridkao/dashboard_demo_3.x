@@ -6,9 +6,9 @@
 	import { TopicList, topicComponentList } from '@/assets/datas/topicList.js'
 
     const props = defineProps({
-        TopicToggle: { type: Boolean, default: false }
+        TopicToggle: { type: Boolean, default: false },
+        ActiveNames: { type: Array, default: () => [] }
     })
-	const activeNames = ref([])
 	const emit = defineEmits(['update'])
 	const handleChange = (val) => {
 		emit("update", {
@@ -16,7 +16,7 @@
 			topicLayer: targetTopicComponent
 		})
 	}
-	const route = useRoute();
+	const route = useRoute()
 	const activeTopic = ref('')
 	const targetTopicComponent = computed(()=>{
 		if(!route.query.topic) return []
@@ -42,7 +42,7 @@
 		</el-breadcrumb>
 
 		<el-collapse 
-			v-model="activeNames" 
+			v-model="ActiveNames" 
 			@change="handleChange"
 			class="mapDrawerContainer"
 		>
@@ -62,6 +62,7 @@
 </template>
 <style lang="scss">
 .mapDrawerContainer{
+	margin-top: 1rem;
     .highcharts-contextbutton,
     .highcharts-exporting-group{
         display: block;
@@ -69,7 +70,7 @@
 	.card-container{
 		--el-card-padding: .25rem;
 		.mapIconRow{
-			margin: 1rem 0;
+			margin: 1rem 0 1rem 0.5rem;
 		}
 	}
 }

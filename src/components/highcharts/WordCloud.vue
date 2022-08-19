@@ -1,6 +1,7 @@
 <template>
 	<highcharts 
 		class="chartContainer wordCloud"
+		:style="chartContainerHeight"
 		:options="chartOptions" 
 	/>
 </template>
@@ -32,6 +33,15 @@ export default {
 				}
             }
         }
+	},
+	computed:{
+		chartContainerHeight(){
+			if(this.$route.name === 'mapview'){
+				return {height: '15rem'}
+			}else{
+				return {height: '100%'}
+			}
+		}
 	},
   	data(){
 		return {

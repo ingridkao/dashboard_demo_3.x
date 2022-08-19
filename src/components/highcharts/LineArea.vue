@@ -80,7 +80,11 @@ export default {
 			const sumLength = this.sum.length
 			const keyratioInfoLength = this.keyratioInfo.length
 			if((sumLength > 0 || keyratioInfoLength > 0)){
-				return {height: `calc(100% - ${(sumLength+keyratioInfoLength)*1.5}rem)`}
+				if(this.$route.name === 'mapview'){
+					return {height: '15rem'}
+				}else{
+					return {height: `calc(100% - ${(sumLength+keyratioInfoLength)*1.5}rem)`}
+				}
 			}else{
 				return {height: '100%'}
 			}

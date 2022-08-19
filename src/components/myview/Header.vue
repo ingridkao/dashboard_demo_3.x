@@ -35,7 +35,6 @@
 	}
 	const deleteTopic = () => {
 		const Active = fetchTopic()
-		console.log(Active);
 		const CommonlyArray = DeleteCommonlyList(props.tabs.list, Active)
 		emit("update", CommonlyArray, true)
 		cancleAction()

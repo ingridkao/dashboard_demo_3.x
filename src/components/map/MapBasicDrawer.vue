@@ -46,7 +46,7 @@
 	.card-container{
 		--el-card-padding: .25rem;
 		.mapIconRow{
-			margin: 1rem 0;
+			margin: 1rem 0 1rem 0.5rem;
 		}
 	}
 }

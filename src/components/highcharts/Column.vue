@@ -1,6 +1,7 @@
 <template>
 	<highcharts 
 		class="chartContainer column"
+		:style="chartContainerHeight"
 		:options="chartOptions" 
 	/>
 	<el-row justify="center">
@@ -23,6 +24,15 @@ export default {
 		request: {
 			type: Object,
 			default: () => {}
+		}
+	},
+	computed:{
+		chartContainerHeight(){
+			if(this.$route.name === 'mapview'){
+				return {height: '15rem'}
+			}else{
+				return {height: '100%'}
+			}
 		}
 	},
     watch: {
