@@ -6,7 +6,8 @@ import * as mapLayerStyle from '@/assets/datas/mapConfig.js'
 export const ParseLayer = (MapConfig, MapLabel = {}) => {
     if(!MapConfig) return
     const MapLayerIndex = MapConfig.index
-    const mapIconColor = (MapLabel && MapLabel.color)? MapLabel.color: '#ddd'
+    const mapIconColor = (MapLabel && MapLabel.color)? MapLabel.color: (MapConfig.color? MapConfig.color: "#ddd")
+
     let symbolType = MapLabel && MapLabel.symbol?  MapLabel.symbol: MapConfig.symbol
     let symbolPaint = {}
     let symbolLayout = {}
@@ -18,8 +19,12 @@ export const ParseLayer = (MapConfig, MapLabel = {}) => {
             symbolPaint = {...mapLayerStyle.circleCommonStyle, 'circle-color': mapIconColor}
             break;
 
-        case 'heatmap':
+        case 'circle_stroke':
             symbolType = 'circle'
+            symbolPaint = {...mapLayerStyle.circleCommonStyle, 'circle-color': mapIconColor}
+            break;
+
+        case 'heatmap':
             symbolPaint = {...mapLayerStyle.circleHeatmapStyle, 'circle-color': mapIconColor}
             break;
 
@@ -76,13 +81,13 @@ export const ParseLayer = (MapConfig, MapLabel = {}) => {
         id: MapLayerIndex,
         type: symbolType,
         source: `${MapLayerIndex}_source`,
+        paint: symbolPaint,
         layout: {
             ...symbolLayout,
             'visibility': 'visible'
-            // 'visibility': (dataToggle)? 'visible': 'none'
-        },
-        paint: symbolPaint
+        }
     }
+    console.log(mapLayerConfig);
     // if(MapConfig.filter && MapConfig.filter.target === 'hr'){
     //     const refer = dayjs().hour()
     //     mapLayerConfig.filter = ['==', ['get', 'hr'], refer]
@@ -114,6 +119,7 @@ export const ParseLayer = (MapConfig, MapLabel = {}) => {
                     ]
                 }
             }
+            mapLayerConfig.type = 'circle'
             break;
         case 'line':
             mapExtraLayer = {

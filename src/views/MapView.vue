@@ -72,6 +72,9 @@ const MapStyle = {
 	'light':'mapbox://styles/mapbox/light-v10',
 	'dark': mapStyle
 }
+
+const CalculationList = ['hour', 'day', 'month']
+
 export default {
 	props: {
 		mode: {
@@ -165,15 +168,19 @@ export default {
 				const TargertComponent = this.existCacheMapLayer[layerIndex]
 				// const LayerVisible = this.mapBoxObject.getLayoutProperty(layerIndex, 'visibility')
 				this.mapBoxObject.setLayoutProperty(layerIndex, 'visibility', (this.existComponent[TargertComponent])?'visible': 'none')
+				console.log(this.mapBoxObject.getLayer(layerIndex).paint);
 			})
 		},
 		cleanDrawerSelect(target){
 			// Layer settings are loaded only once
-			const { index, map_config, request_list } = target
+			const { map_config, request_list, calculation_config } = target
 			if(!(map_config && request_list))return
 
 			const targetRequest = request_list.find(list => list.type === 'MapIconDisplay')
 			map_config.map(configItem => {
+				// if(calculation_config){
+				// 	this.fetchHistoryDataset(target.index, configItem)
+				// }
 				if(!Object.keys(this.existCacheMapLayer).includes(configItem.index)){
 					this.fetchDataset(target.index, configItem, targetRequest)
 				}
@@ -186,38 +193,53 @@ export default {
 			fetch(`${BASE_URL}/datas/${MapLayerIndex}.geojson`)
 			.catch(error => console.error('Error:', error.message))
 			.then((response) => {
-				if(response.status === 200) return response.json()
+				if(response.status === 200 || response.status === 304) return response.json()
 				if(response.status === 404){
 					console.log(response.statusText)
 				}
 			})
 			.then(data => {
 				if(!data) return
-				const MapLabel = targetRequest.mapLabel? targetRequest.mapLabel: []
-				const targetMapLabel = MapLabel.find(list => list.index === MapLayerIndex)
-				const LayerConfig = ParseLayer(mapConfigItem, targetMapLabel)
-
-				if(LayerConfig.loadImage !== '' && !this.mapBoxObject.hasImage(LayerConfig.loadImage)){
-					const PngUrl = require(`@/assets/img/mapbox/${LayerConfig.loadImage}.png`)
-					this.mapBoxObject.loadImage(PngUrl, (error, image) => {
-						if (error) throw error
-						this.mapBoxObject.addImage(LayerConfig.loadImage, image)
-					})
-				}
-				this.mapBoxObject.addSource(`${MapLayerIndex}_source`, { type: 'geojson', data: data }).addLayer(LayerConfig.main)
-
-				/**
-				 * existCacheMapLayer :
-				 * 	key: Layer index
-				 * 	value: Component index
-				 */
-				this.existCacheMapLayer[LayerConfig.main.id] = componentIndex
-
-				if(LayerConfig.extra && LayerConfig.extra.id){
-					this.mapBoxObject.addLayer(LayerConfig.extra)
-					this.existCacheMapLayer[LayerConfig.extra.id] = componentIndex
-				}
+				this.addMapLayer(targetRequest, MapLayerIndex, mapConfigItem, data, componentIndex)
 			})
+		},
+		// fetchHistoryDataset(componentIndex, mapConfigItem){
+		// 	const MapLayerIndex = mapConfigItem.index
+		// 	CalculationList.map(calcItem => {
+		// 		this.existComponent[`${MapLayerIndex}_${calcItem}`] = (calcItem === 'day')
+		// 		fetch(`${BASE_URL}/datas/${calcItem}/${MapLayerIndex}.geojson`)
+		// 		.catch(error => console.error('Error:', error.message))
+		// 		.then((response) => {
+		// 			if(response.status === 200 || response.status === 304) return response.json()
+		// 			if(response.status === 404){ console.log(response.statusText)}
+		// 			this.addMapLayer({}, MapLayerIndex, mapConfigItem, data, componentIndex)
+		// 		})
+		// 		.then(data => {
+		// 			if(!data) return
+		// 		})
+		// 	})
+		// },
+		addMapLayer(TargetRequest, MapLayerIndex, mapConfigItem, data, componentIndex){
+			const MapLabel = TargetRequest.mapLabel? TargetRequest.mapLabel: []
+			const targetMapLabel = MapLabel.find(list => list.index === MapLayerIndex)
+			const { loadImage, main, extra } = ParseLayer(mapConfigItem, targetMapLabel)
+			if(loadImage !== '' && !this.mapBoxObject.hasImage(loadImage)){
+				const PngUrl = require(`@/assets/img/mapbox/${loadImage}.png`)
+				this.mapBoxObject.loadImage(PngUrl, (error, image) => {
+					if (error) throw error
+					this.mapBoxObject.addImage(loadImage, image)
+				})
+			}
+			this.mapBoxObject.addSource(`${MapLayerIndex}_source`, { type: 'geojson', data: data }).addLayer(main)
+			/** Exist cache mapLayer
+			 * 	 key: Layer index
+			 * 	 value: Component index
+			 */
+			this.existCacheMapLayer[main.id] = componentIndex
+			if(extra && extra.id){
+				this.mapBoxObject.addLayer(extra)
+				this.existCacheMapLayer[extra.id] = componentIndex
+			}
 		}
 	},
   	data(){

@@ -94,7 +94,6 @@ export const basicMapLayer = [
         map_config: [
             {
                 index: 'police_station',
-                // type: "geojson",
                 property: [
                     {key: "OFFICE_NAME", name: "所屬分局"},
                     {key: "STATION_NAME", name: "名稱"}
@@ -107,7 +106,6 @@ export const basicMapLayer = [
             },
             {
                 index: 'patrol_district',
-                // type: "geojson",
                 interactive: {
                     affected: "police_station"
                 }
@@ -141,14 +139,12 @@ export const basicMapLayer = [
         // map_config: [
         //     {
         //         index: 'patrol_fire_brigade',
-        //         // type: "geojson",
         //         property: [
         //             {key: "name", name: "名稱"}
         //         ]
         //     },
         //     {
         //         index: 'fire_hydrant_location',
-        //         // type: "geojson",
         //         property: [
         //             {key: "type", name: "類型"},
         //             {key: "location", name: "位置"}
@@ -229,28 +225,28 @@ export const basicMapLayer = [
                 symbol: 'fill-extrusion',
                 property: [
                     {key: "hr", name: "推估時間"},
-                    {key: "pop_all", name: "推估人口"},
-                    {key: "15_17", name: "15-17歲"},
-                    {key: "18_21", name: "18-21歲"},
-                    {key: "22_29", name: "22-29歲"},
-                    {key: "30_39", name: "30-39歲"},
-                    {key: "40_49", name: "40-49歲"},
-                    {key: "50_59", name: "50-59歲"},
-                    {key: "60_64", name: "60-64歲"},
+                    {key: "pop-all", name: "推估人口"},
+                    {key: "15-17", name: "15-17歲"},
+                    {key: "18-21", name: "18-21歲"},
+                    {key: "22-29", name: "22-29歲"},
+                    {key: "30-39", name: "30-39歲"},
+                    {key: "40-49", name: "40-49歲"},
+                    {key: "50-59", name: "50-59歲"},
+                    {key: "60-64", name: "60-64歲"},
                     {key: "over65", name: "超過65歲"}
                 ],
                 paint:{
                     "fill-extrusion-color": [
                       "interpolate",
                       ["linear"],
-                      ["get","pop_all"],
+                      ["get","pop-all"],
                       0,"hsl(0, 0%, 3%)",
                       15842,"#77A9DF"
                     ],
                     "fill-extrusion-height": [
                       "interpolate",
                       ["linear"],
-                      ["get","pop_all"],
+                      ["get","pop-all"],
                       0,0,
                       15842,900
                     ],
@@ -301,7 +297,7 @@ export const basicMapLayer = [
                     "fill-extrusion-color": [
                         "interpolate",
                         ["linear"],
-                        ["get","work_l_w"],
+                        ["get","work_L-W"],
                         -11533,"#77dddf",
                         -4,"#000000",
                         8,"#000000",
@@ -310,7 +306,7 @@ export const basicMapLayer = [
                     "fill-extrusion-height": [
                         "interpolate",
                         ["linear"],
-                        ["get","work_l+w"],
+                        ["get","work_L+W"],
                         0,0,
                         19895,1000
                     ],
@@ -433,9 +429,32 @@ export const SentimentMapLayer = [
         name: '派工案件',
         overview_display: 'tall', 
         order: 3,
-        sample_data: '',
-        source_from: '',
-        request_list: []
+        sample_data: '2020-12-31T00:00:00+08:00',
+        source_from: '派工系統',
+        request_list: [],
+        calculation_config:{
+            table: "sentiment_dispatching",
+            time_field: "成案時間utc"
+        },
+        map_config: [
+            {
+                index: "dispatchingpoint",
+                title: "派工類別",
+                symbol: "heatmap",
+                color: "#fc9f0b",
+                paint: {
+                    "circle-color":[
+                        "match",
+                        ["get", "案件類型"],
+                        "大型廢棄物清運聯繫","#fc9f0b",
+                        "場所與設施噪音舉發","#dac117",
+                        "污染舉發","#FDD79B",
+                        "路燈故障或設施損壞","#FDD79B",
+                        "#555"
+                    ]
+                }
+            }
+        ]
     },
     {
         index: 'circular',
@@ -583,7 +602,6 @@ export const PatrolMapLayer = [
         map_config:[
             {
                 index: 'patrol_designate_place',
-                // type: "geojson",
                 symbol: 'circle',
                 paint: {
                     "circle-opacity": 0,
@@ -653,51 +671,25 @@ export const PatrolMapLayer = [
             {
                 index: 'patrol_debris',
                 // type: "geojson",
-                property: []
+                property: {}
             },
             {
                 index: 'patrol_debrisarea',
                 // type: "geojson",
-                property: []
+                property: {}
             },
             {
                 index: 'patrol_artificial_slope',
                 // type: "geojson",
-                property: []
+                property: {}
             },
             {
                 index: 'patrol_old_settlement',
                 // type: "geojson",
-                property: []
+                property: {}
             }
         ]
     },
-    // {
-    //     index: '',
-    //     name: '水位監測',
-    //     overview_display: '',
-    //     order: 3,
-    //     sample_data: '',
-    //     source_from: '',
-    //     request_list: [
-    //         {
-    //             type: 'MapIconDisplay'
-    //         }
-    //     ]
-    // },
-    // {
-    //     index: '',
-    //     name: '抽水站狀態',
-    //     overview_display: '',
-    //     order: 5,
-    //     sample_data: '',
-    //     source_from: '',
-    //     request_list: [
-    //         {
-    //             type: 'MapIconDisplay'
-    //         }
-    //     ]
-    // },
     {
         index: 'criminalcase',
         name: '刑事統計',
@@ -756,17 +748,34 @@ export const TrafficMapLayer = [
                 {name: "A2",y: 1854,color: "#ff996c"},
                 {name: "A3",y: 1462,color: "#f8c3ac"}
             ]
-        }]
+        }],
+        map_config: [
+            {
+                index: 'traffic_accident_location_view',
+                title: '交通事故統計',
+                symbol: 'heatmap',
+                paint: {
+                    'circle-color': [
+                        'match',
+                        ['get', 'type'],
+                        '1','#CA0020',
+                        '2','#F8C3AC',
+                        '3','#D1D1D1',
+                        '#ccc'
+                    ]
+                }
+            }
+        ]
     },
-    {
-        index: 'traffic_live',
-        name: '交通路況',
-        overview_display: 'wide',
-        order: 4,
-        source_from: '交通局',
-        sample_data: '',
-        request_list: []
-    },
+    // {
+    //     index: 'traffic_live',
+    //     name: '交通路況',
+    //     overview_display: 'wide',
+    //     order: 4,
+    //     source_from: '交通局',
+    //     sample_data: '',
+    //     request_list: []
+    // },
     {
         index: 'traffic_todaywork',
         name: '道路施工',
@@ -774,7 +783,24 @@ export const TrafficMapLayer = [
         order: 6,
         source_from: '工務局',
         sample_data: '',
-        request_list: []
+        request_list: [
+            {
+                type: 'MapIconDisplay',
+                mapLabel: [
+                    {
+                        index: 'traffic_todaywork_view',
+                        name: '施工路段',
+                        symbol: 'triangle_green'
+                    }
+                ]
+            }
+        ],
+        map_config:[
+            {
+                index: 'traffic_todaywork_view',
+                property: {}
+            }
+        ]
     },
     {
         index: 'traffic_mrt',
@@ -885,6 +911,7 @@ export const TrafficMapLayer = [
         map_config: [
             {
                 index: 'traffic_metro_station',
+                title: '捷運站點',
                 symbol: 'metro',
                 paint: {
                     'text-halo-color': [
@@ -897,7 +924,6 @@ export const TrafficMapLayer = [
                 }
             }
         ]
-
     },
     {
         index: 'traffic_mrt_bl',
@@ -908,15 +934,15 @@ export const TrafficMapLayer = [
         sample_data: '',
         request_list: []
     },
-    {
-        index: 'youbike',
-        name: 'Youbike空位數量',
-        overview_display: '',
-        order: 5,
-        source_from: '',
-        sample_data: '',
-        request_list: []
-    },
+    // {
+    //     index: 'youbike',
+    //     name: 'Youbike空位數量',
+    //     overview_display: '',
+    //     order: 5,
+    //     source_from: '',
+    //     sample_data: '',
+    //     request_list: []
+    // },
     {
         index: 'bus',
         name: '公車行駛狀態',
@@ -930,88 +956,29 @@ export const TrafficMapLayer = [
 
 export const ConstructionMapLayer = [
     {
-        index: 'building_renew',
-        name: '都市更新案件',
+        index: 'building_license',
+        name: '建管處發照量',
         overview_display: '',
-        order: 4,
-        source_from: '都市更新處',
-        sample_data: '2022-08-03',
+        order: 1,
+        source_from: '建管處',
+        sample_data: '2022-06-30',
         request_list: [{
-            type: 'Circle',
-            config: {
-                name: "累積數量",
-                label: "案件數",
+            type: 'LineArea',
+            keyratio:{
+                name: "累積發放量"
             },
-            data:[
-                {name: "核准自劃單元",y: 64315,color: "#67baca"},
-                {name: "公劃地區內事業",y: 716,color: "#5a8965"},
-                {name: "公告自劃單元",y: 584,color: "#477653"},
-                {name: "公劃更新地區",y: 194,color: "#9b976c"},
-                {name: "都市計畫劃定更新地區",y: 60,color: "#c0ccad"}
-            ]
-        }],
-        map_config: [
-            {
-                index: 'building_renewunit_12',
-                symbol: 'line',
-                color: '#e0e08c'
-            },
-            {
-                index: 'building_renewunit_20',
-                symbol: 'line',
-                color: '#f8ea21'
-            },
-            {
-                index: 'building_renewunit_30',
-                symbol: 'line',
-                color: '#f7ac3b'
-            }
-        ]
-    },
-    {
-        index: 'social_house',
-        name: '社會住宅建設進度',
-        overview_display: '',
-        order: 5,
-        source_from: '都發局',
-        sample_data: '2022-08-03',
-        request_list: [{
-            type: 'Circle',
-            config: {
-                label: "總件數"
-            },
-            data:[
-                {name: "已完工",y: 30,color: "#f3d626"},
-                {name: "施工中及待開工",y: 24,color: "#ddb11f"},
-                {name: "規劃中",y: 7,color: "#e3863a"},
-                {name: "招標中及待上網",y: 4,color: "#c2651c"},
-                {name: "都更聯開分回",y: 2,color: "#a65818"}
-            ]
-        }],
-        map_config: [
-            {
-                index: 'building_social_house',
-                symbol: 'circle',
-                paint: {
-                    'circle-radius': 5,
-                    'circle-color':[
-                        'match',
-                        ['get', 'progress'],
-                        '施工中及待開工',
-                        '#26d5d7',
-                        '已完工',
-                        '#7EE4D3',
-                        '都更連開分回',
-                        '#219A86',
-                        '規劃中',
-                        '#A5ECE0',
-                        '招標中及待上鋼',
-                        '#166759',
-                        '#ccc'
-                    ]
-                }
-            }
-        ]
+            config: {},
+            categories:["2月", "3月", "4月", "5月", "6月"],
+            data:[{
+                name: '建照',
+                data: [169, 271, 275, 81, 116],
+                color: "#4dd97a"
+            },{
+                name: '使照',
+                data: [16, 171, 80, 52, 64],
+                color: "#0a85f4"
+            }]
+        }]
     },
     {
         index: 'building_age',
@@ -1064,31 +1031,6 @@ export const ConstructionMapLayer = [
         }]
     },
     {
-        index: 'building_license',
-        name: '建管處發照量',
-        overview_display: '',
-        order: 1,
-        source_from: '建管處',
-        sample_data: '2022-06-30',
-        request_list: [{
-            type: 'LineArea',
-            keyratio:{
-                name: "累積發放量"
-            },
-            config: {},
-            categories:["2月", "3月", "4月", "5月", "6月"],
-            data:[{
-                name: '建照',
-                data: [169, 271, 275, 81, 116],
-                color: "#4dd97a"
-            },{
-                name: '使照',
-                data: [16, 171, 80, 52, 64],
-                color: "#0a85f4"
-            }]
-        }]
-    },
-    {
         index: 'tpmo',
         name: 'TPMO智慧城市專案',
         overview_display: '',
@@ -1107,6 +1049,90 @@ export const ConstructionMapLayer = [
                 color: "#52b69a"
             }]
         }]
+    },
+    {
+        index: 'building_renew',
+        name: '都市更新案件',
+        overview_display: '',
+        order: 4,
+        source_from: '都市更新處',
+        sample_data: '2022-08-03',
+        request_list: [{
+            type: 'Circle',
+            config: {
+                name: "累積數量",
+                label: "案件數",
+            },
+            data:[
+                {name: "核准自劃單元",y: 64315,color: "#e0e08c"},
+                {name: "公劃地區內事業",y: 716,color: "#f8ea21"},
+                {name: "公告自劃單元",y: 584,color: "#f7ac3b"},
+                {name: "公劃更新地區",y: 194,color: "#f7773b"},
+                {name: "都市計畫劃定更新地區",y: 60,color: "#f74922"}
+            ]
+        }],
+        map_config: [
+            {
+                index: 'building_renewunit_12',
+                symbol: 'line',
+                color: '#e0e08c'
+            },
+            {
+                index: 'building_renewunit_20',
+                symbol: 'line',
+                color: '#f8ea21'
+            },
+            {
+                index: 'building_renewunit_30',
+                symbol: 'line',
+                color: '#f7ac3b'
+            }
+        ]
+    },
+    {
+        index: 'social_house',
+        name: '社會住宅建設進度',
+        overview_display: '',
+        order: 5,
+        source_from: '都發局',
+        sample_data: '2022-08-03',
+        request_list: [{
+            type: 'Circle',
+            config: {
+                label: "總件數"
+            },
+            data:[
+                {name: "已完工",y: 30,color: "#7EE4D3"},
+                {name: "施工中及待開工",y: 24,color: "#26d5d7"},
+                {name: "規劃中",y: 7,color: "#A5ECE0"},
+                {name: "招標中及待上網",y: 4,color: "#166759"},
+                {name: "都更聯開分回",y: 2,color: "#219A86"}
+            ]
+        }],
+        map_config: [
+            {
+                index: 'social_house',
+                symbol: 'circle',
+                paint: {
+                    'circle-radius': 5,
+                    'circle-color':[
+                        'match',
+                        ['get', 'progress'],
+                        '施工中及待開工',
+                        '#26d5d7',
+                        '已完工',
+                        '#7EE4D3',
+                        '都更連開分回',
+                        '#219A86',
+                        '規劃中',
+                        '#A5ECE0',
+                        '招標中及待上鋼',
+                        '#166759',
+                        '#ccc'
+                    ]
+                }
+            }
+        ]
     }
 ]
 
