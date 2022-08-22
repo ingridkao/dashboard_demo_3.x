@@ -32,6 +32,9 @@ export default {
 			type: Object,
 			deep: true,
 			default: () => {}
+		},
+		belong: {
+			type: String
 		}
 	},
     watch: {
@@ -57,15 +60,16 @@ export default {
 			return this.request.keyratio && this.request.keyratio.info? this.request.keyratio.info: []
 		},
 		chartContainerHeight(){
-			const keyratioInfoLength = this.keyratioInfo.length
-			if((keyratioInfoLength > 0)){
-				if(this.$route.name === 'mapview'){
-					return {height: '15rem'}
-				}else{
-					return {height: `calc(100% - 3rem)`}
-				}
+			if(this.belong === 'card_mapview'){
+				return {height: '14rem'}
 			}else{
-				return {height: '100%'}
+				const keyratioInfoLength = this.keyratioInfo.length
+				if((keyratioInfoLength > 0)){
+					return {height: `calc(100% - 3rem)`}
+				}else{
+					return {height: '100%'}
+
+				}
 			}
 		}
 	},
@@ -83,7 +87,7 @@ export default {
 				name: {
 					align: 'center',
 					verticalAlign: 'middle',
-					y: 15,
+					// y: 15,
 					style: {
 						fontSize: '16px'
 					}

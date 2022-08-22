@@ -35,6 +35,12 @@ export default {
 			type: Object,
 			deep: true,
 			default: () => {}
+		},
+		belong: {
+			type: String
+		},
+		belong: {
+			type: String
 		}
 	},
     watch: {
@@ -80,7 +86,7 @@ export default {
 			const sumLength = this.sum.length
 			const keyratioInfoLength = this.keyratioInfo.length
 			if((sumLength > 0 || keyratioInfoLength > 0)){
-				if(this.$route.name === 'mapview'){
+			if(this.belong === 'card_mapview'){
 					return {height: '15rem'}
 				}else{
 					return {height: `calc(100% - ${(sumLength+keyratioInfoLength)*1.5}rem)`}

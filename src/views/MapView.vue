@@ -42,15 +42,15 @@
 		>
 			<div id="mapboxBox" style="text-align:right;"></div>
 			<div id="mapBtnBox">
-				<el-button type="info" circle @click="ToggleBasicList">
-					<el-icon><Box /></el-icon>
+				<el-button type="info" circle @click="toggle">
+					<el-icon v-if="isFullscreen"><Close /></el-icon>
+					<el-icon v-else><FullScreen/></el-icon>
 				</el-button>
 				<el-button type="info" circle @click="ToggleComponentList">
 					<el-icon><Collection /></el-icon>
 				</el-button>
-				<el-button type="info" circle @click="toggle">
-					<el-icon v-if="isFullscreen"><Close /></el-icon>
-					<el-icon v-else><FullScreen/></el-icon>
+				<el-button type="info" circle @click="ToggleBasicList">
+					<el-icon><Box /></el-icon>
 				</el-button>
 			</div>
 		</el-main>
@@ -58,16 +58,18 @@
 </template>
 
 <script>
+import { createApp, defineComponent, nextTick } from 'vue'
 import mapboxgl from 'mapbox-gl'
-import MapboxLanguage from '@mapbox/mapbox-gl-language';
+import MapboxLanguage from '@mapbox/mapbox-gl-language'
 import 'mapbox-gl/dist/mapbox-gl.css'
+import MapboxPopup from '@/components/map/MapboxPopup.vue'
 
 const MAPBOXTOKEN = process.env.VUE_APP_MAPBOXTOKEN
 const BASE_URL = process.env.VUE_APP_BASE_URL
 
 import mapStyle from '@/assets/datas/mapStyle.js'
-import { ParseLayer } from '@/assets/datas/mapFunction.js'
-import { basicMapLayer, topicComponentList } from '@/assets/datas/topicList.js'
+import { ParseMapLayer } from '@/assets/datas/mapFunction.js'
+import { basicMapLayer, topicComponentList, RainOptions, RainPaintConfig } from '@/assets/datas/topicList.js'
 import { MapObjectConfig, MapFogStyle, BuildingsIn3D, TaipeiTown, TaipeiVillage } from '@/assets/datas/mapConfig.js'
 
 const MapStyle = {
@@ -76,7 +78,6 @@ const MapStyle = {
 }
 
 const CalculationList = ['hour', 'day', 'month']
-
 export default {
 	props: {
 		mode: {
@@ -90,7 +91,10 @@ export default {
 	},
 	watch: {
 		mode() {
-			this.mapBoxObject.setStyle(MapStyle[this.mode]);
+			this.mapBoxObject.setStyle(MapStyle[this.mode])
+		},
+		'$store.state.rainfallLayerShow'() {
+			this.updateRainLayer(true)
 		}
 	},
 	methods: {
@@ -119,7 +123,12 @@ export default {
 				console.log('A error event occurred:'+ e.error)
 
 			}).on("click", (event) => {
-				console.log( this.mapBoxObject.getZoom())
+				event.preventDefault()
+				this.mapBoxObject.getCanvas().style.cursor = 'pointer'
+				// console.log( this.mapBoxObject.getZoom())
+
+				if(this.mapBoxPopup)this.mapBoxPopup.remove()
+				this.mapboxPopupGetInfo(event)
             })
         },
 		initMapBasicLayer(){
@@ -133,21 +142,77 @@ export default {
             fetch(`${BASE_URL}/datas/taipei_village.geojson`).then((response) => (response.json())).then(data => {
 				this.mapBoxObject.addSource('taipei_village', { type: 'geojson', data: data }).addLayer(TaipeiVillage(this.mode))
 			})
-			/**
-			    fetch('http://localhost:8888/posts')
-				.then(res => res.json())
-				.then(data => (this.posts = data))
-			*/
 		},
+		fetchDataset(mapConfigItem){
+			return fetch(`${BASE_URL}/datas/${mapConfigItem.index}.geojson`)
+			.catch(error => console.error('Error:', error.message))
+			.then((response) => {
+				if(response.status === 200 || response.status === 304) return response.json()
+				if(response.status === 404) console.log(response.statusText)
+			})
+			.then(data => {
+				return data? data: null
+			})
+		},
+        mapboxPopupGetInfo(event){
+			this.clearMapboxPopup()
+			const clickFeatureDatas = this.mapBoxObject.queryRenderedFeatures(event.point, { layers: Object.keys(this.existCacheMapLayer) })
+			if(!(clickFeatureDatas && clickFeatureDatas.length>0))return
+            
+			const componentDatas = clickFeatureDatas.map(item => this.existComponentData[item.layer.id]? this.existComponentData[item.layer.id]: null)
+            this.mapBoxPopup = new mapboxgl.Popup().setLngLat(event.lngLat).setHTML('<div id="vue-popup-content"></div>').addTo(this.mapBoxObject)
+			
+			// https://v3-migration.vuejs.org/breaking-changes/props-data.html
+            const PopupComponent = defineComponent({
+				extends: MapboxPopup,
+				setup() {
+					return { 
+						featureDatas: clickFeatureDatas,
+						componentDatas
+					}
+				}
+			})
+			nextTick(() => {
+				createApp(PopupComponent).mount('#vue-popup-content')
+			})
+        },
+		clearMapboxPopup(){
+            if(this.mapBoxPopup)this.mapBoxPopup.remove()
+        },
+		updateAllDrawerSelect(target){
+			// First laod - Layer settings are loaded only once
+			const { name, map_config, request_list, calculation_config } = target
+			const ComponentIndex = target.index
+			if(!(map_config && request_list))return
+			const TargetRequest = request_list.find(list => list.type === 'MapIconDisplay')
+			map_config.map(mapConfigItem => {
+				const MapLayerIndex = mapConfigItem.index
+				if(!Object.keys(this.existCacheMapLayer).includes(MapLayerIndex)){
+					this.fetchDataset(mapConfigItem).then(data => {
+						if(!data) return
+						this.addMapLayer(TargetRequest, mapConfigItem, data, ComponentIndex, name)
+						this.existComponentDisplay[ComponentIndex] = true
+					})
+				}
+				// if(calculation_config){
+				// 	this.fetchHistoryDataset()
+				// }
+				// if(configItem.interactive){}
+			})
+		},
+		// fetchHistoryDataset(componentIndex, mapConfigItem){},
 		updateTopicComponentToMap(updateData){
 			// Replace active list
+			this.clearMapboxPopup()
 			this.activeTopicComponent = updateData.active
-			this.cleanActiveComponent(updateData.topicLayer.value)
+			this.updateActiveComponent(updateData.topicLayer.value)
 		},
 		updateBasicComponentToMap(layers){
 			// Replace active list
+			this.clearMapboxPopup()
 			this.activeBasicComponent = layers
-			this.cleanActiveComponent(basicMapLayer)
+			this.updateRainLayer(layers.includes('flood_risk'))
+			this.updateActiveComponent(basicMapLayer)
 		},
 		parseRouterQuery(){
 			const {topic, component} = this.$route.query
@@ -157,19 +222,19 @@ export default {
 			const TargetComponent = TargetTopic.components.find(item => item.index === component)
 			this.TopicNames = component
 			this.activeTopicComponent = [component]
-			this.cleanActiveComponent(TargetTopic.components)
+			this.updateActiveComponent(TargetTopic.components)
 		},
-		cleanActiveComponent(MapLayers = []){
+		updateActiveComponent(MapLayers = []){
 			const DrawerActiveComponent = this.activeBasicComponent.concat(this.activeTopicComponent)
 			// Clean active component
             DrawerActiveComponent.map(componentIndex => {
 				const target = MapLayers.find(item => item.index === componentIndex)
 				if(!target)return
-				this.cleanDrawerSelect(target)
+				this.updateAllDrawerSelect(target)
             })
 
-			Object.keys(this.existComponent).filter(item => {
-				this.existComponent[item] = DrawerActiveComponent.includes(item)
+			Object.keys(this.existComponentDisplay).filter(item => {
+				this.existComponentDisplay[item] = DrawerActiveComponent.includes(item)
 			})
 
 			// Check exist layers - Show or Hide map layer from cache
@@ -178,61 +243,16 @@ export default {
 				if(!this.mapBoxObject.getLayer(layerIndex)) return
 				const TargertComponent = this.existCacheMapLayer[layerIndex]
 				// const LayerVisible = this.mapBoxObject.getLayoutProperty(layerIndex, 'visibility')
-				this.mapBoxObject.setLayoutProperty(layerIndex, 'visibility', (this.existComponent[TargertComponent])?'visible': 'none')
-			})
-		},
-		cleanDrawerSelect(target){
-			// Layer settings are loaded only once
-			const { map_config, request_list, calculation_config } = target
-			if(!(map_config && request_list))return
-
-			const targetRequest = request_list.find(list => list.type === 'MapIconDisplay')
-			map_config.map(configItem => {
-				// if(calculation_config){
-				// 	this.fetchHistoryDataset(target.index, configItem)
-				// }
-				if(!Object.keys(this.existCacheMapLayer).includes(configItem.index)){
-					this.fetchDataset(target.index, configItem, targetRequest)
+				if(!this.affectedMapLayer[layerIndex]){
+					this.mapBoxObject.setLayoutProperty(layerIndex, 'visibility', (this.existComponentDisplay[TargertComponent])?'visible': 'none')
 				}
 			})
 		},
-		fetchDataset(componentIndex, mapConfigItem, targetRequest = {}){
-			// First laod
+		addMapLayer(TargetRequest, mapConfigItem, data, componentIndex, componentName){
 			const MapLayerIndex = mapConfigItem.index
-			this.existComponent[componentIndex] = true
-			fetch(`${BASE_URL}/datas/${MapLayerIndex}.geojson`)
-			.catch(error => console.error('Error:', error.message))
-			.then((response) => {
-				if(response.status === 200 || response.status === 304) return response.json()
-				if(response.status === 404){
-					console.log(response.statusText)
-				}
-			})
-			.then(data => {
-				if(!data) return
-				this.addMapLayer(targetRequest, MapLayerIndex, mapConfigItem, data, componentIndex)
-			})
-		},
-		// fetchHistoryDataset(componentIndex, mapConfigItem){
-		// 	const MapLayerIndex = mapConfigItem.index
-		// 	CalculationList.map(calcItem => {
-		// 		this.existComponent[`${MapLayerIndex}_${calcItem}`] = (calcItem === 'day')
-		// 		fetch(`${BASE_URL}/datas/${calcItem}/${MapLayerIndex}.geojson`)
-		// 		.catch(error => console.error('Error:', error.message))
-		// 		.then((response) => {
-		// 			if(response.status === 200 || response.status === 304) return response.json()
-		// 			if(response.status === 404){ console.log(response.statusText)}
-		// 			this.addMapLayer({}, MapLayerIndex, mapConfigItem, data, componentIndex)
-		// 		})
-		// 		.then(data => {
-		// 			if(!data) return
-		// 		})
-		// 	})
-		// },
-		addMapLayer(TargetRequest, MapLayerIndex, mapConfigItem, data, componentIndex){
-			const MapLabel = TargetRequest.mapLabel? TargetRequest.mapLabel: []
+			const MapLabel = TargetRequest && TargetRequest.mapLabel? TargetRequest.mapLabel: []
 			const targetMapLabel = MapLabel.find(list => list.index === MapLayerIndex)
-			const { loadImage, main, extra } = ParseLayer(mapConfigItem, targetMapLabel)
+			const { loadImage, main, extra, interactive } = ParseMapLayer(mapConfigItem, targetMapLabel)
 			if(loadImage !== '' && !this.mapBoxObject.hasImage(loadImage)){
 				const PngUrl = require(`@/assets/img/mapbox/${loadImage}.png`)
 				this.mapBoxObject.loadImage(PngUrl, (error, image) => {
@@ -240,10 +260,11 @@ export default {
 					this.mapBoxObject.addImage(loadImage, image)
 				})
 			}
-			this.mapBoxObject.addSource(`${MapLayerIndex}_source`, { type: 'geojson', data: data }).addLayer(main)
-
-			if(this.fromComponent === componentIndex){
-				this.mapBoxObject.setLayoutProperty(main.id, 'visibility', 'visible')
+			if(!this.mapBoxObject.getSource(`${MapLayerIndex}`)){
+				this.mapBoxObject.addSource(`${MapLayerIndex}_source`, { type: 'geojson', data: data })
+			}
+			if(!this.mapBoxObject.getLayer(main.id)){
+				this.mapBoxObject.addLayer(main)
 			}
 
 			/** Exist cache mapLayer
@@ -251,29 +272,87 @@ export default {
 			 * 	 value: Component index
 			 */
 			this.existCacheMapLayer[main.id] = componentIndex
+			/** Exist cache mapLayer data
+			 * 	 key: Layer index
+			 */
+			const ComponentDataValue = {
+				title: targetMapLabel && targetMapLabel.name? targetMapLabel.name: componentName,
+				property: mapConfigItem.property? mapConfigItem.property: null
+			}
+			this.existComponentData[main.id] = ComponentDataValue
+
+			if(main.interactive){
+				this.affectedMapLayer[main.id] = main.interactive
+			}else if(this.fromComponent === componentIndex){
+				this.mapBoxObject.setLayoutProperty(main.id, 'visibility', 'visible')
+			}
+
 			if(extra && extra.id){
-				this.mapBoxObject.addLayer(extra)
+				if(!this.mapBoxObject.getLayer(extra.id)){
+					this.mapBoxObject.addLayer(extra)
+				}
 				this.existCacheMapLayer[extra.id] = componentIndex
-				if(this.fromComponent === componentIndex){
-					this.mapBoxObject.setLayoutProperty(extra.id, 'visibility', 'visible')
+				this.existComponentData[extra.id] = ComponentDataValue
+				if(extra.interactive){
+					this.affectedMapLayer[extra.id] = extra.interactive
+				}else if(this.fromComponent === componentIndex){
+					this.mapBoxObject.setLayoutProperty(extra.id, 'visibility', interactive? 'none': 'visible')
 				}
 			}
-		}
+		},
+        updateRainLayer(componentToggle){
+			this.clearMapboxPopup()
+            RainOptions.map((rainFallItem) => {
+				const MapLayerIndex = rainFallItem.index
+				const MapVisible = (componentToggle && rainFallItem.value === this.$store.state.rainfallLayerShow)?  'visible': 'none'
+				if(!this.mapBoxObject.getLayer(`${MapLayerIndex}`)){
+					this.fetchDataset(rainFallItem).then(data => {
+						if(!data) return
+						this.mapBoxObject.addSource(`${MapLayerIndex}`, { type: 'geojson', data: data }).addLayer({
+							id: MapLayerIndex,
+							source: `${MapLayerIndex}`,
+							type: 'fill',
+							paint: RainPaintConfig,
+							layout: {
+								'visibility': MapVisible
+							}
+						})
+						this.existCacheMapLayer[MapLayerIndex] = 'flood_risk'
+						this.existComponentData[MapLayerIndex] = {
+							title: rainFallItem.title,
+							property: [
+								{key: "name", name: "可能積水深度"}
+							]
+						}
+					})
+                }else{
+					this.mapBoxObject.setLayoutProperty(MapLayerIndex, 'visibility', MapVisible)
+				}
+            })
+        }
 	},
   	data(){
 		return {
 			mapLoadong: false,
 			mapBoxObject: null,
-			existComponent: [],
+			mapBoxPopup: null,
+			existComponentDisplay: {},
 			existCacheMapLayer: {},
+
+			//maplayerID:componentData
+			existComponentData: {},
+
 			activeBasicComponent: [],
-			activeTopicComponent: []
+			activeTopicComponent: [],
+			
+			affectedMapLayer: {}
 		}
 	},
     mounted() {
         this.initMapBox()
     },
-    destroyed() {
+    beforeDestroy() {
+        this.$store.commit('changeRainfall', "")
 		if(this.mapBoxObject) this.mapBoxObject.remove()
     }
 }

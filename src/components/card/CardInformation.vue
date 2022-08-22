@@ -1,7 +1,8 @@
 <script setup>
+    import { computed } from 'vue'
+    import { useRouter, useRoute } from 'vue-router'
     import LockComponent from '@/components/highcharts/LockComponent.vue'
 	import CardBody from '@/components/card/CardBody.vue'
-    import { useRouter, useRoute } from 'vue-router'
 
     const props = defineProps({
         menuActive: {type: String, default: ''},
@@ -13,7 +14,7 @@
         {index: "work",label: "相關案例", value: ""},
         {index: "same",label: "相關組件", value: ""},
         {index: "sample_data",label: "紀錄時間", value: ""},
-        {index: "source_from",label: "資料來源：", value: ""},
+        {index: "source_from",label: "資料來源", value: ""},
     ]
     const router = useRouter()
     const route = useRoute()
@@ -27,6 +28,10 @@
             }
         })
     }
+    const MapBtnShow = computed(() => {
+        return route.name !== 'mapview' && props.information.map_config
+    })
+
 </script>
 
 <template>
@@ -41,6 +46,7 @@
                 :key="item.index"
                 :name="information.name"
                 :request="item"
+                :belong="`information_${route.name}`"
             />
         </el-col>
         <el-col :xs="24" :span="6" class="informationBox">
@@ -53,7 +59,7 @@
                 </div>
             </div>
             <div>
-                <el-button v-if="information.map_config" type="info" size="small" @click="routeToMap">地圖交叉查詢</el-button>
+                <el-button v-if="MapBtnShow" type="info" size="small" @click="routeToMap">地圖交叉查詢</el-button>
                 <el-button v-if="information.calculation_config" type="info" size="small">時間軸檢視</el-button>
             </div>
         </el-col>

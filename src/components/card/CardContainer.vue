@@ -1,13 +1,16 @@
 <script setup>
     import { ref, defineProps } from 'vue'
+    import { useRoute } from 'vue-router'
+
     import LockComponent from '@/components/highcharts/LockComponent.vue'
     import CardDialog from '@/components/card/CardDialog.vue'
     import AddCommonlyBtn from '@/components/action/AddCommonlyBtn.vue'
-
 	import CardBody from '@/components/card/CardBody.vue'
 
 	const dialogVisible = ref(false)
 	const dialogInformation = ref({})
+    const route = useRoute()
+
     const props = defineProps({
         menuActive: { type: String, default: ''},
         titleShow: { type: Boolean, default: true },
@@ -40,6 +43,7 @@
             :key="item.index"
             :components="data"
             :request="item"
+            :belong="`card_${route.name}`"
         />
         <el-button 
             v-if="!titleShow" 
@@ -89,6 +93,12 @@
     opacity: 0.25;
     &:hover{
         opacity: 0.5;
+    }
+}
+.mapBasicDrawerContainer,
+.mapTopicDrawerContainer{
+    .infoTextBtn{
+        bottom: 0;
     }
 }
 </style>

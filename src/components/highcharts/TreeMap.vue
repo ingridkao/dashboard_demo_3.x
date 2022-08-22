@@ -25,6 +25,9 @@ export default {
 		request: {
 			type: Object,
 			default: () => {}
+		},
+		belong: {
+			type: String
 		}
 	},
     watch: {
@@ -43,7 +46,7 @@ export default {
 	},
 	computed:{
 		chartContainerHeight(){
-			if(this.$route.name === 'mapview'){
+			if(this.belong === 'card_mapview'){
 				return {height: '15rem'}
 			}else{
 				return {height: '100%'}

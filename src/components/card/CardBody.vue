@@ -7,6 +7,9 @@
         },
         request: { 
             type: Object || null
+        },
+        belong: { 
+            type: String
         }
     })
     const AsyncComp = defineAsyncComponent({
@@ -33,6 +36,7 @@
         :name="components && components.name? components.name: ''"
         :request="request"
         :components="components"
+        :belong="belong"
     />
 </template>
 

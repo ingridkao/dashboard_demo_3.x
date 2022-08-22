@@ -45,7 +45,10 @@ watch(
                 alt="城市運營聯合儀表板logo" 
             />
             <span>
-                <h1>城市運營聯合儀表板</h1>
+                <h1>
+                    城市運營聯合儀表板
+                    <span>體驗版</span>
+                </h1>
                 <h2>Taipei City Dashboard</h2>
             </span>
         </el-menu-item>
@@ -95,7 +98,16 @@ watch(
             }
             margin: 0 0 0 1rem;
             line-height: 150%;
-            h1{font-size: 100%;}
+            h1{
+                position: relative;
+                font-size: 100%;
+                span{
+                    position: absolute;
+                    top: .1rem;
+                    right: -2.5rem;
+                    font-size: .1rem;
+                }
+            }
             h2{font-size: 30%;}
         }
     }

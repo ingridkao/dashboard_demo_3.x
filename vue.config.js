@@ -1,9 +1,11 @@
 
 const webpack = require('webpack')
+const BASE_URL = process.env.VUE_APP_BASE_URL
+const WEB_TITLE = process.env.VUE_APP_WEB_TITLE
 
 module.exports = {
     publicPath: process.env.NODE_ENV === 'production'
-    ? '/dashboard_demo_3.x/'
+    ? `${BASE_URL}/`
     : '/',
     configureWebpack: {
         plugins: [
@@ -25,8 +27,8 @@ module.exports = {
             msTileImage: null
         },
         manifestOptions: {
-            name: "城市運營聯合儀表板",
-            short_name: "儀表板",
+            name: WEB_TITLE,
+            short_name: "城市運營儀表板",
             start_url: "./",
             display: "standalone",
             theme_color: "#000000",

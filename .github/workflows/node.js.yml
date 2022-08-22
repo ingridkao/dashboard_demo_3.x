@@ -32,6 +32,7 @@ jobs:
         yarn
         yarn build
       env:
+        VUE_APP_SHARE_URL: ${{ secrets.VUE_APP_SHARE_URL }}
         VUE_APP_GOOGLE_ANALYTICS: ${{ secrets.VUE_APP_GOOGLE_ANALYTICS }}
         VUE_APP_MAPBOXTOKEN: ${{ secrets.VUE_APP_MAPBOXTOKEN }}
 

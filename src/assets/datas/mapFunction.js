@@ -3,7 +3,7 @@
 import { hexToHSL } from '@/assets/js/commom.js'
 import * as mapLayerStyle from '@/assets/datas/mapConfig.js'
 
-export const ParseLayer = (MapConfig, MapLabel = {}) => {
+export const ParseMapLayer = (MapConfig, MapLabel = {}) => {
     if(!MapConfig) return
     const MapLayerIndex = MapConfig.index
     const mapIconColor = (MapLabel && MapLabel.color)? MapLabel.color: (MapConfig.color? MapConfig.color: "#ddd")
@@ -65,28 +65,32 @@ export const ParseLayer = (MapConfig, MapLabel = {}) => {
             symbolType = 'symbol'
             break;
     }
+    symbolLayout = {
+        ...symbolLayout,
+        'visibility': 'visible',
+    }
 
+    if(MapConfig.layout){
+        symbolLayout = {
+            ...symbolLayout,
+            ...MapConfig.layout
+        }
+    }
     if(MapConfig.paint){
-        // if(typeof MapConfig.paint === "string"){
-        //     MapConfig.paint = JSON.parse(MapConfig.paint)
-        // }
         symbolPaint = {
             ...symbolPaint,
             ...MapConfig.paint
         }
     }
-    // const layerBeforeId = this.getDataLayerBeforeId()
 
     const mapLayerConfig = {
         id: MapLayerIndex,
         type: symbolType,
         source: `${MapLayerIndex}_source`,
         paint: symbolPaint,
-        layout: {
-            ...symbolLayout,
-            'visibility': 'visible'
-        }
+        layout: symbolLayout
     }
+
     // if(MapConfig.filter && MapConfig.filter.target === 'hr'){
     //     const refer = dayjs().hour()
     //     mapLayerConfig.filter = ['==', ['get', 'hr'], refer]
@@ -116,7 +120,8 @@ export const ParseLayer = (MapConfig, MapLabel = {}) => {
                         0.6,`hsla(${heatmap_hsl}, 50%)`,
                         1,`hsla(${heatmap_hsl}, 75%)`
                     ]
-                }
+                },
+                interactive: (MapConfig.interactive && MapConfig.interactive.affected)? MapConfig.interactive.affected: null
             }
             mapLayerConfig.type = 'circle'
             break;
@@ -128,15 +133,18 @@ export const ParseLayer = (MapConfig, MapLabel = {}) => {
                 paint: {
                     ...mapLayerStyle.fillCommonStyle,
                     'fill-color': `hsla(${hexToHSL(mapIconColor)}, 50%)`
-                }
+                },
+                interactive: (MapConfig.interactive && MapConfig.interactive.affected)? MapConfig.interactive.affected: null
             }
             break;
         default:
         break;
     }
+
     return {
         main: mapLayerConfig,
         extra: mapExtraLayer,
-        loadImage: loadImage
+        loadImage: loadImage,
+        interactive: (MapConfig.interactive && MapConfig.interactive.affected)? MapConfig.interactive.affected: null
     }
 }

@@ -23,13 +23,69 @@ export const TopicList = [
         name: '城市建設',
         disabled: false
     },
-    {
-        index: 'Basic',
-        icon: "Briefcase",
-        name: '基本圖資',
-        disabled: false
-    }
+    // {
+    //     index: 'Basic',
+    //     icon: "Briefcase",
+    //     name: '基本圖資',
+    //     disabled: false
+    // }
 ]
+
+const building_publand_config = {
+    symbol: "fill",
+    property: [
+        {key: "publand_1_土地權屬情形", name: "土地權屬情形"},
+        {key: "publand_1_類型", name: "類型"},
+        {key: "publand_1_管理機關", name: "管理機關"},
+        {key: "area", name: "面積"}
+    ],
+    paint: {
+        "fill-color": [
+        "match", ["get","publand_1_土地權屬情形"],
+        "國有", "#2d7b7d",
+        "臺北市有", "#38b19f",
+        "公私共有", "#07a0d4",
+        "公私共有或其他", "#07a0d4",
+        "其他政府機關有", "#007aff",
+        "臺北市及國有共有", "#27d5d7",
+        "臺北市有、國有及其他政府機關共有", "#3975b7",
+        "臺北市有及非國有政府機關共有", "#223477",
+        "#ccc"
+        ]
+    }
+}
+
+export const RainOptions = [{
+    value: '78.8',
+    label: '78.8mm',
+    index: "patrol_flood_78_8",
+    title:"近一小時降雨78.8mm可能淹水範圍",
+}, {
+    value: '100',
+    label: '100mm',
+    index: "patrol_flood_100",
+    title:"近一小時降雨100mm可能淹水範圍",
+}, {
+    value: '130',
+    label: '130mm',
+    index: "patrol_flood_130",
+    title:"近一小時降雨130mm可能淹水範圍",
+}]
+
+export const RainPaintConfig = {
+    "fill-color":[
+        "match",["get","name"],
+        "1.0 m ~ 2.0 m","#4d9bd1",
+        "0.30 m ~ 1.0 m","#70b5c8",
+        "0.15 m ~ 0.30 m","#baf4f5",
+        "#4d9bd1"
+    ],
+    "fill-opacity": [
+        "interpolate",["linear"],["zoom"],
+        11,0.75,
+        13.5,0.5
+    ]
+}
 
 /**
  * overview_display: default(1X1)| wide(2X1) |tall(1X2) | large(2X2)
@@ -57,15 +113,20 @@ export const basicMapLayer = [
                 {name:"臺北市有及非國有政府機關共有",value: 0.05869149 ,color:"#223477"}
             ]
         }],
-        // map_config: [
-        //     {
-        //         index: 'building_publand',
-        //         // property: [
-        //         //     {key: "OFFICE_NAME", name: "所屬分局"},
-        //         //     {key: "STATION_NAME", name: "名稱"}
-        //         // ]
-        //     }
-        // ]
+        map_config: [
+            {
+                index: 'building_publand_0',
+                ...building_publand_config
+            },
+            {
+                index: 'building_publand_1',
+                ...building_publand_config
+            },
+            {
+                index: 'building_publand_2',
+                ...building_publand_config
+            }
+        ]
     },
     {
         index: 'police_facility',
@@ -96,16 +157,18 @@ export const basicMapLayer = [
                 index: 'police_station',
                 property: [
                     {key: "OFFICE_NAME", name: "所屬分局"},
-                    {key: "STATION_NAME", name: "名稱"}
+                    {key: "STATION_NAME", name: "名稱"},
+                    {key: "ADDR", name: "地址"}
                 ],
                 interactive: {
-                    resultset: ["station", "precinct"], 
                     target: "patrol_district",
-                    trigger: "STATION_NAME"
+                    trigger: "STATION_NAME",
+                    resultset: ["station", "precinct"], 
                 }
             },
             {
                 index: 'patrol_district',
+                layout: {'visibility': 'none'},
                 interactive: {
                     affected: "police_station"
                 }
@@ -136,21 +199,21 @@ export const basicMapLayer = [
                 ]
             }
         ],
-        // map_config: [
-        //     {
-        //         index: 'patrol_fire_brigade',
-        //         property: [
-        //             {key: "name", name: "名稱"}
-        //         ]
-        //     },
-        //     {
-        //         index: 'fire_hydrant_location',
-        //         property: [
-        //             {key: "type", name: "類型"},
-        //             {key: "location", name: "位置"}
-        //         ]
-        //     }
-        // ]
+        map_config: [
+            {
+                index: 'patrol_fire_brigade',
+                property: [
+                    {key: "name", name: "名稱"}
+                ]
+            },
+            {
+                index: 'fire_hydrant_location',
+                property: [
+                    {key: "type", name: "類型"},
+                    {key: "location", name: "位置"}
+                ]
+            }
+        ]
     },
     {
         index: 'building_landuse',
@@ -161,8 +224,7 @@ export const basicMapLayer = [
         sample_data: '樣本數據',
         request_list: [{
             type: 'TreeMap',
-            config: {
-            },
+            config: {},
             data:[
                 {name: "保護區", value: 68.95487201399997, color:"#7fff00"},
                 {name: "其他", value: 54.980457214000005,color:"#00ff00"},
@@ -188,7 +250,45 @@ export const basicMapLayer = [
                 {name: "保存區", value: 0.16782077599999998,color:"#00ff00"},
                 {name: "兒童遊樂場", value: 0.013729825,color:"#00ff00"}
             ]
-        }]
+        }],
+        map_config: [
+            {
+                index: "building_landuse",
+                symbol: "fill",
+                paint: {
+                    "fill-color": 
+                    ["match",["get","顏色"],
+                    "0","#00ff00",
+                    "3","#ff003f",
+                    "4","#ffff00",
+                    "5","#b3b3b3",
+                    "7","#7fffff",
+                    "9","#7f3f00",
+                    "10","#bf7fff",
+                    "11","#70dcaf",
+                    "13","#007fff",
+                    "14","#7fff00",
+                    "15","#00ff00",
+                    "16","#ff3f00",
+                    "17","#ff00ff",
+                    "18","#e6e6e6",
+                    "19","#00ff00",
+                    "29","#ff8fad",
+                    "34","#00ff00",
+                    "50","#7fff00",
+                    "53","#e58bd8",
+                    "82","#00ff00",
+                    "#7fff00"]
+                },
+                property: [
+                    {key: "landuse group_metadata_用地分類",name: "用地分類"},
+                    {key: "使用分區",name: "使用分區"},
+                    {key: "分區簡稱",name: "分區簡稱"},
+                    {key: "編號",name: "編號"},
+                    {key: "area",name: "面積" }
+                ]
+            }
+        ]
     },
     {
         index: 'fet_age',
@@ -269,14 +369,14 @@ export const basicMapLayer = [
                 },
                 mapLabel: [
                     {
-                        index: 'pop_live',
+                        index: 'pop-live',
                         name: '居住推估人數',
                         symbol: 'fill',
                         color: '#d76c29',
                         data: 2350032
                     },
                     {
-                        index: 'pop_work',
+                        index: 'pop-work',
                         name: '工作推估人數',
                         symbol: 'fill',
                         color: '#77dddf',
@@ -290,8 +390,8 @@ export const basicMapLayer = [
                 index: 'tp_fet_work_live',
                 symbol: 'fill-extrusion',
                 property: [
-                    {key: "pop_live", name: "居住推估人數"},
-                    {key: "pop_work", name: "工作推估人數"}
+                    {key: "pop-live", name: "居住推估人數"},
+                    {key: "pop-work", name: "工作推估人數"}
                 ],
                 paint:{
                     "fill-extrusion-color": [
@@ -424,38 +524,38 @@ export const SentimentMapLayer = [
             ]
         }]
     },
-    {
-        index: 'dispatching',
-        name: '派工案件',
-        overview_display: 'tall', 
-        order: 3,
-        sample_data: '2020-12-31T00:00:00+08:00',
-        source_from: '派工系統',
-        request_list: [],
-        calculation_config:{
-            table: "sentiment_dispatching",
-            time_field: "成案時間utc"
-        },
-        map_config: [
-            {
-                index: "dispatchingpoint",
-                title: "派工類別",
-                symbol: "heatmap",
-                color: "#fc9f0b",
-                paint: {
-                    "circle-color":[
-                        "match",
-                        ["get", "案件類型"],
-                        "大型廢棄物清運聯繫","#fc9f0b",
-                        "場所與設施噪音舉發","#dac117",
-                        "污染舉發","#FDD79B",
-                        "路燈故障或設施損壞","#FDD79B",
-                        "#555"
-                    ]
-                }
-            }
-        ]
-    },
+    // {
+    //     index: 'dispatching',
+    //     name: '派工案件',
+    //     overview_display: 'tall', 
+    //     order: 3,
+    //     sample_data: '2020-12-31T00:00:00+08:00',
+    //     source_from: '派工系統',
+    //     request_list: [],
+    //     calculation_config:{
+    //         table: "sentiment_dispatching",
+    //         time_field: "成案時間utc"
+    //     },
+    //     map_config: [
+    //         {
+    //             index: "dispatchingpoint",
+    //             title: "派工類別",
+    //             symbol: "heatmap",
+    //             color: "#fc9f0b",
+    //             paint: {
+    //                 "circle-color":[
+    //                     "match",
+    //                     ["get", "案件類型"],
+    //                     "大型廢棄物清運聯繫","#fc9f0b",
+    //                     "場所與設施噪音舉發","#dac117",
+    //                     "污染舉發","#FDD79B",
+    //                     "路燈故障或設施損壞","#FDD79B",
+    //                     "#555"
+    //                 ]
+    //             }
+    //         }
+    //     ]
+    // },
     {
         index: 'circular',
         name: '單一陳情系統案件',
@@ -670,22 +770,18 @@ export const PatrolMapLayer = [
         map_config:[
             {
                 index: 'patrol_debris',
-                // type: "geojson",
                 property: {}
             },
             {
                 index: 'patrol_debrisarea',
-                // type: "geojson",
                 property: {}
             },
             {
                 index: 'patrol_artificial_slope',
-                // type: "geojson",
                 property: {}
             },
             {
                 index: 'patrol_old_settlement',
-                // type: "geojson",
                 property: {}
             }
         ]
@@ -779,8 +875,9 @@ export const TrafficMapLayer = [
     {
         index: 'traffic_todaywork',
         name: '道路施工',
-        overview_display: 'wide',
-        order: 6,
+        // overview_display: 'wide',
+        overview_display: '',
+        order: 2,
         source_from: '工務局',
         sample_data: '',
         request_list: [
@@ -805,7 +902,7 @@ export const TrafficMapLayer = [
     {
         index: 'traffic_mrt',
         name: '捷運人流趨勢',
-        overview_display: '',
+        overview_display: 'wide',
         order: 2,
         source_from: '臺北大眾捷運股份有限公司',
         sample_data: '2022-08-04',
@@ -912,28 +1009,27 @@ export const TrafficMapLayer = [
             {
                 index: 'traffic_metro_station',
                 title: '捷運站點',
-                symbol: 'metro',
-                paint: {
-                    'text-halo-color': [
-                        'match',
-                        ['get', 'Countdown'],
-                        '列車進站',
-                        '#68ccf8',
-                        "hsla(240, 0%, 100%, 0)"
-                    ]
-                }
+                symbol: 'metro'
             }
         ]
     },
-    {
-        index: 'traffic_mrt_bl',
-        name: '板南線車廂擁擠程度',
-        overview_display: 'tall',
-        order: 3,
-        source_from: '',
-        sample_data: '',
-        request_list: []
-    },
+    // {
+    //     index: 'traffic_mrt_bl',
+    //     name: '板南線車廂擁擠程度',
+    //     overview_display: 'tall',
+    //     order: 3,
+    //     source_from: '',
+    //     sample_data: '',
+    //     request_list: [],
+    //     map_config: [
+    //         {
+    //             index: 'traffic_metro_line',
+    //             title: '板南線',
+    //             symbol: 'line',
+    //             color: '#d7c500'
+    //         }
+    //     ]
+    // },
     // {
     //     index: 'youbike',
     //     name: 'Youbike空位數量',
@@ -941,17 +1037,33 @@ export const TrafficMapLayer = [
     //     order: 5,
     //     source_from: '',
     //     sample_data: '',
-    //     request_list: []
+    //     request_list: [],
+    //     map_config: [
+    //         {
+    //             index: 'traffic_youbike_station',
+    //             title: 'Youbike站點',
+    //             // symbol: 'metro',
+    //             // paint: {
+    //             //     'text-halo-color': [
+    //             //         'match',
+    //             //         ['get', 'Countdown'],
+    //             //         '列車進站',
+    //             //         '#68ccf8',
+    //             //         "hsla(240, 0%, 100%, 0)"
+    //             //     ]
+    //             // }
+    //         }
+    //     ]
     // },
-    {
-        index: 'bus',
-        name: '公車行駛狀態',
-        overview_display: '',
-        order: 7,
-        source_from: '',
-        sample_data: '',
-        request_list: []
-    }
+    // {
+    //     index: 'bus',
+    //     name: '公車行駛狀態',
+    //     overview_display: '',
+    //     order: 7,
+    //     source_from: '',
+    //     sample_data: '',
+    //     request_list: []
+    // }
 ]
 
 export const ConstructionMapLayer = [
@@ -981,10 +1093,30 @@ export const ConstructionMapLayer = [
         }]
     },
     {
+        index: 'tpmo',
+        name: 'TPMO智慧城市專案',
+        overview_display: '',
+        order: 2,
+        source_from: 'TPMO',
+        sample_data: '2022-07-24',
+        request_list: [{
+            type: 'Column',
+            config: {
+                inverted: false
+            },
+            categories:["智慧經濟", "智慧安防", "智慧教育", "智慧建築", "智慧交通", "智慧健康", "智慧環境", "智慧政府", "其他"],
+            data:[{
+                name: '數量',
+                data: [47,23,25,31,59,63,39,53,11],
+                color: "#52b69a"
+            }]
+        }]
+    },
+    {
         index: 'building_age',
         name: '全市屋齡分布',
         overview_display: 'wide',
-        order: 2,
+        order: 3,
         source_from: '建管處&消防局',
         sample_data: '2021-12-27',
         request_list: [{
@@ -1029,26 +1161,8 @@ export const ConstructionMapLayer = [
                 color: "#8ce8ff"
             }]
         }]
-    },
-    {
-        index: 'tpmo',
-        name: 'TPMO智慧城市專案',
-        overview_display: '',
-        order: 3,
-        source_from: 'TPMO',
-        sample_data: '2022-07-24',
-        request_list: [{
-            type: 'Column',
-            config: {
-                inverted: false
-            },
-            categories:["智慧經濟", "智慧安防", "智慧教育", "智慧建築", "智慧交通", "智慧健康", "智慧環境", "智慧政府", "其他"],
-            data:[{
-                name: '數量',
-                data: [47,23,25,31,59,63,39,53,11],
-                color: "#52b69a"
-            }]
-        }]
+        //building_age_0
+        //building_age_1
     },
     {
         index: 'building_renew',
@@ -1130,7 +1244,15 @@ export const ConstructionMapLayer = [
                         '#166759',
                         '#ccc'
                     ]
-                }
+                },
+                property: [
+                    {key: "progress", name: "進度"},
+                    {key: "name", name: "名稱"},
+                    {key: "address", name: "位置"},
+                    {key: "floors", name: "樓層"},
+                    {key: "households", name: "戶數"},
+                    {key: "persons", name: "人數"}
+                ]
             }
         ]
     }

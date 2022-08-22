@@ -6,6 +6,8 @@
 				<el-select 
 					v-model="rainValue" 
 					placeholder="請選擇"
+					clearable
+					@change="rainfallHandle"
 				>
 					<el-option
 						v-for="item in rainOptions"
@@ -41,6 +43,7 @@
 </template>
 
 <script>
+import { RainOptions } from '@/assets/datas/topicList.js'
 export default {
 	props: {
 		request: {
@@ -62,7 +65,10 @@ export default {
 				css.borderColor = color     
             }
             return css
-        }
+        },
+		rainfallHandle(e){
+            this.$store.commit('changeRainfall', e)
+		}
 	},
   	data(){
 		return {
@@ -86,19 +92,13 @@ export default {
 					color: '#4d9bd1'
 				}
 			],
-			rainValue: '',
-			rainOptions: [{
-				value: '78.8',
-				label: '78.8mm'
-			}, {
-				value: '100',
-				label: '100mm'
-			}, {
-				value: '130',
-				label: '130mm'
-			}]
+			rainOptions: RainOptions,
+			rainValue: ''
 		}
-	}
+	},
+    beforeDestroy() {
+        this.$store.commit('changeRainfall', "")
+    }
 }
 </script>
 <style lang="scss" scoped>

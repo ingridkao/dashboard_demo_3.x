@@ -32,19 +32,22 @@
 	<el-drawer
 		v-model="TopicToggle"
 		direction="ltr"
-		:with-header="false"
+		modal-class="mapDrawerModalEl"
+		custom-class="mapTopicDrawerContainer"
+		:modal="false"
+		:size="300"
 	>
-		<el-breadcrumb separator="/">
-			<el-breadcrumb-item :to="{ path: '/' }">
-				<el-icon><House /></el-icon>
-			</el-breadcrumb-item>
-			<el-breadcrumb-item>{{activeTopic}}</el-breadcrumb-item>
-		</el-breadcrumb>
-
+		<template #header="{}">
+			<el-breadcrumb separator="/">
+				<el-breadcrumb-item :to="{ path: '/' }">
+					<el-icon><House /></el-icon>
+				</el-breadcrumb-item>
+				<el-breadcrumb-item>{{activeTopic}}</el-breadcrumb-item>
+			</el-breadcrumb>
+		</template>
 		<el-collapse 
 			v-model="ActiveNames" 
 			@change="handleChange"
-			class="mapDrawerContainer"
 		>
 			<el-collapse-item 
 				v-for="item in targetTopicComponent"
@@ -61,12 +64,18 @@
 	</el-drawer>
 </template>
 <style lang="scss">
-.mapDrawerContainer{
-	margin-top: 1rem;
-    .highcharts-contextbutton,
-    .highcharts-exporting-group{
-        display: block;
-    }
+.mapDrawerModalEl{
+	width: 300px;
+}
+.mapTopicDrawerContainer{
+	.el-drawer{
+		&__header{
+			margin-bottom: 0.5rem;
+		}
+		&__body{
+			padding-top: 0;
+		}
+	}
 	.card-container{
 		--el-card-padding: .25rem;
 		.mapIconRow{

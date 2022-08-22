@@ -16,12 +16,20 @@
 	<el-drawer
 		v-model="BasicListToggle"
 		direction="ltr"
-		:with-header="false"
+		modal-class="mapDrawerModalEl"
+		custom-class="mapBasicDrawerContainer"
+		:modal="false"
+		:size="300"
 	>
+		<template #header="{ titleId, titleClass }">
+			<h6 :id="titleId" :class="titleClass">
+				<el-icon><Briefcase /></el-icon>
+				基本圖資
+			</h6>
+		</template>
 		<el-collapse 
 			v-model="activeNames" 
 			@change="handleChange"
-			class="mapDrawerContainer"
 		>
 			<el-collapse-item 
 				v-for="item in basicMapLayer"
@@ -38,11 +46,29 @@
 	</el-drawer>
 </template>
 <style lang="scss">
-.mapDrawerContainer{
-    .highcharts-contextbutton,
-    .highcharts-exporting-group{
-        display: block;
-    }
+.mapDrawerModalEl{
+	width: 300px;
+}
+.mapBasicDrawerContainer{
+	.el-drawer{
+		&__header{
+			margin-bottom: .5rem;
+		}
+		&__body{
+			padding-top: 0;
+		}
+		&__title{
+			display: inline-flex;
+			font-weight: 400;
+			color: var(--el-text-color-regular);
+			cursor: text;
+			font-size: 14px;
+			line-height: 1;
+			i{
+				margin-right: .5rem;
+			}
+		}
+	}
 	.card-container{
 		--el-card-padding: .25rem;
 		.mapIconRow{
