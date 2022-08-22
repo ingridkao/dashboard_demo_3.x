@@ -1,2 +1,5 @@
-public/datas/building_age.geojson filter=lfs diff=lfs merge=lfs -text
-public/datas/sentiment_dispatching.geojson filter=lfs diff=lfs merge=lfs -text
+public/datas/building_age_0.geojson filter=lfs diff=lfs merge=lfs -text
+public/datas/building_age_1.geojson filter=lfs diff=lfs merge=lfs -text
+public/datas/building_publand_0.geojson filter=lfs diff=lfs merge=lfs -text
+public/datas/building_publand_1.geojson filter=lfs diff=lfs merge=lfs -text
+public/datas/building_publand_2.geojson filter=lfs diff=lfs merge=lfs -text

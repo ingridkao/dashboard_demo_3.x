@@ -34,5 +34,7 @@ jobs:
       env:
         VUE_APP_SHARE_URL: ${{ secrets.VUE_APP_SHARE_URL }}
         VUE_APP_GOOGLE_ANALYTICS: ${{ secrets.VUE_APP_GOOGLE_ANALYTICS }}
+        VUE_APP_WEB_TITLE: ${{ secrets.VUE_APP_WEB_TITLE }}
+        VUE_APP_BASE_URL: ${{ secrets.VUE_APP_BASE_URL }}
         VUE_APP_MAPBOXTOKEN: ${{ secrets.VUE_APP_MAPBOXTOKEN }}
 
