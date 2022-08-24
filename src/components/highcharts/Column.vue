@@ -1,10 +1,36 @@
 <template>
+	<el-row v-if="keyratioInfo.length>0" justify="start" class="keyratio">
+		<el-col 
+			v-for="(item, index) in sum" 
+			:key="index" 
+			:span="sum.length/24"
+		>
+			<div>{{item.label}}</div>
+			<div>{{item.value}}</div>
+		</el-col>
+		<el-col 
+			v-for="(item, index) in keyratioInfo" 
+			:key="index" 
+			:span="keyratioInfo.length/24"
+		>
+			<div>
+				<span 
+					v-if="item.symbol"
+					class="mapIcon big" 
+					:class="translateSymbol(item.symbol)" 
+					:style="translateStyle(item, index)"
+				/>
+				{{item.label}}
+			</div>
+			<div>{{item.value}}</div>
+		</el-col>
+	</el-row>
 	<highcharts 
 		class="chartContainer column"
 		:style="chartContainerHeight"
 		:options="chartOptions" 
 	/>
-	<el-row justify="center">
+	<el-row justify="center" class="columnActionBts">
 		<el-button size="small" text bg @click="updateChart()">垂直</el-button>
 		<el-button size="small" text bg @click="updateChart('inverted')">水平</el-button>
 		<el-button size="small" text bg @click="updateChart('polar')">雷達</el-button>
@@ -30,11 +56,20 @@ export default {
 		}
 	},
 	computed:{
+		keyratioInfo(){
+			return this.request.keyratio && this.request.keyratio.info? this.request.keyratio.info: []
+		},
 		chartContainerHeight(){
-			if(this.belong === 'card_mapview'){
-				return {height: '15rem'}
+			if(this.belong === 'information_home'){
+				return {height: '80%'}
+			}else if((this.keyratioInfo.length > 0)){
+				if(this.belong === 'card_mapview'){
+					return {height: '10rem'}
+				}else if(this.belong === 'card_home'){
+					return {height: '16rem'}
+				}
 			}else{
-				return {height: '100%'}
+				return {height: '90%'}
 			}
 		}
 	},
@@ -83,6 +118,19 @@ export default {
 		}
 	},
 	methods: {
+		translateSymbol(contentSymbol){
+            return (contentSymbol)? contentSymbol: 'circle'
+        },
+        translateStyle(content){
+            if(content){
+				return {
+					backgroundColor: content.color? content.color: '#ddd',
+					borderColor: content.color? content.color: '#ddd' 
+				}    
+            }else{
+				return {}
+			}
+        },
 		updateChart(type){
 			this.chartOptions.chart.inverted = (type === 'inverted')
 			this.chartOptions.chart.polar = (type === 'polar')

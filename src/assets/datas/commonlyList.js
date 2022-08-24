@@ -10,12 +10,12 @@ export const StrChRules = new RegExp("^[\u4e00-\u9fa5_a-zA-Z0-9_]+$")
 export const CommonlyList = [
     {
         id: '1',
-        name: '每日通勤必看',
+        name: '每日業務必看',
         value: false
     },
     {
         id: '2',
-        name: '買房關注焦點',
+        name: '每週關注焦點',
         value: false
     }
 ]
@@ -59,28 +59,25 @@ export const DeleteCommonlyList = (CommonlyArray, payload) => {
     return CommonlyNewArray
 }
 
-
-
 /** Custom component mapping list
  * <CommonlyList id>: [<component index>, <component index>...]
  */
-const CustomComponent = {
-    '1': ['hotnews'],
-    '2': ['designate', 'building_renew']
+const CustomComponentList = {
+    '1': ['hotnews', 'traffic_mrt', 'traffic_live'],
+    '2': ['building_renew', 'circular', 'traffic_todaywork', 'tpmo', 'social_house']
 }
 
 export const GetCustomComponent = () => {
     // const retrievedObject = localStorage.getItem('CommonlyComponent')
-    // return retrievedObject? JSON.parse(retrievedObject): CustomComponent
-    return CustomComponent
+    // return retrievedObject? JSON.parse(retrievedObject): CustomComponentList
+    return CustomComponentList
 }
 
 export const SetCustomComponent = (array, obj, componentIndex) => {
-    console.log(obj);
     // if(obj){
     //     const newObj = {}
     //     array.map(item => {
-    //         const componentArray = CustomComponent[item.id]
+    //         const componentArray = CustomComponentList[item.id]
     //         if(componentArray.includes(componentIndex)){
     //             componentArray = componentArray.filter(item2 => item2 != componentIndex)
 

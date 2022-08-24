@@ -87,9 +87,33 @@
 			@media screen and (min-width: 600px) {
 				&.tall {
 					grid-row: span 2 / auto;
+					.marginBox{
+						margin-top: 2.5rem;
+					}
+					.chartContainer.column{
+						max-height: 20rem;
+					}
 				}
 				&.wide {
 					grid-column: span 2 / auto;
+					&.multiple{
+						.el-card__body{
+							display: inline-flex;
+						}
+						.chartContainer.column{
+							max-width: 25rem;
+						}
+						.chartContainer.circle{
+							max-width: 25rem;
+						}
+						.columnActionBts{
+							max-width: 5rem;
+							align-content: space-evenly;
+						}
+					}
+					.marginBox{
+						margin-left: .5rem;
+					}
 				}
 				&.large {
 					grid-row: span 2 / auto;

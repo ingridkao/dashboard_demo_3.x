@@ -32,8 +32,11 @@ export const ParseMapLayer = (MapConfig, MapLabel = {}) => {
             symbolPaint = { ...mapLayerStyle.lineWideStyle, 'line-color': mapIconColor}
             break;
 
+        case 'lineThin':
+            symbolPaint = { ...mapLayerStyle.lineSuperWideStyle, 'line-color': mapIconColor}
+            break;
+
         case 'dasharray':
-            symbolType = 'line'
             symbolPaint = { ...mapLayerStyle.lineWideStyle, 'line-color': mapIconColor, 'line-dasharray': [2, 2]}
             break;
 
@@ -85,7 +88,6 @@ export const ParseMapLayer = (MapConfig, MapLabel = {}) => {
 
     const mapLayerConfig = {
         id: MapLayerIndex,
-        type: symbolType,
         source: `${MapLayerIndex}_source`,
         paint: symbolPaint,
         layout: symbolLayout
@@ -97,52 +99,53 @@ export const ParseMapLayer = (MapConfig, MapLabel = {}) => {
     // }
 
     // Add extra layers
-    switch (symbolType) {
-        case 'heatmap':
-            //https://docs.mapbox.com/mapbox-gl-js/example/heatmap-layer/
-            const heatmap_hsl = hexToHSL(mapIconColor)
-            mapExtraLayer = {
-                ...mapLayerConfig,
-                id: `heatmap_${MapLayerIndex}`,
-                type: 'heatmap',
-                paint: {
-                    ...mapLayerStyle.heatmapCommonStyle,
-                    'heatmap-intensity': [
-                        "interpolate",["linear"],["zoom"],
-                        10.99,0,
-                        11,0.01,
-                        15,0.2
-                    ],
-                    'heatmap-radius': 10,
-                    'heatmap-color': [
-                        "step",["heatmap-density"],`hsla(${heatmap_hsl}, 0%)`,
-                        0.1,`hsla(${heatmap_hsl}, 25%)`,
-                        0.6,`hsla(${heatmap_hsl}, 50%)`,
-                        1,`hsla(${heatmap_hsl}, 75%)`
-                    ]
-                },
-                interactive: (MapConfig.interactive && MapConfig.interactive.affected)? MapConfig.interactive.affected: null
-            }
-            mapLayerConfig.type = 'circle'
-            break;
-        case 'line':
-            mapExtraLayer = {
-                ...mapLayerConfig,
-                id: `linefill_${MapLayerIndex}`,
-                type: 'fill',
-                paint: {
-                    ...mapLayerStyle.fillCommonStyle,
-                    'fill-color': `hsla(${hexToHSL(mapIconColor)}, 50%)`
-                },
-                interactive: (MapConfig.interactive && MapConfig.interactive.affected)? MapConfig.interactive.affected: null
-            }
-            break;
-        default:
-        break;
-    }
+    if(symbolType === 'heatmap'){
+        symbolType = 'circle'
+        //https://docs.mapbox.com/mapbox-gl-js/example/heatmap-layer/
+        const heatmap_hsl = hexToHSL(mapIconColor)
+        mapExtraLayer = {
+            ...mapLayerConfig,
+            id: `heatmap_${MapLayerIndex}`,
+            type: 'heatmap',
+            paint: {
+                ...mapLayerStyle.heatmapCommonStyle,
+                'heatmap-intensity': [
+                    "interpolate",["linear"],["zoom"],
+                    10.99,0,
+                    11,0.01,
+                    15,0.2
+                ],
+                'heatmap-radius': 10,
+                'heatmap-color': [
+                    "step",["heatmap-density"],`hsla(${heatmap_hsl}, 0%)`,
+                    0.1,`hsla(${heatmap_hsl}, 25%)`,
+                    0.6,`hsla(${heatmap_hsl}, 50%)`,
+                    1,`hsla(${heatmap_hsl}, 75%)`
+                ]
+            },
+            interactive: (MapConfig.interactive && MapConfig.interactive.affected)? MapConfig.interactive.affected: null
+        }
+    }else if(symbolType === 'line' || symbolType === 'dasharray'){
+        symbolType = 'line'
+        mapExtraLayer = {
+            ...mapLayerConfig,
+            id: `linefill_${MapLayerIndex}`,
+            type: 'fill',
+            paint: {
+                ...mapLayerStyle.fillCommonStyle,
+                'fill-color': `hsla(${hexToHSL(mapIconColor)}, 50%)`
+            },
+            interactive: (MapConfig.interactive && MapConfig.interactive.affected)? MapConfig.interactive.affected: null
+        }
 
+    }else if(symbolType === 'lineThin'){
+        symbolType = 'line'
+    }
     return {
-        main: mapLayerConfig,
+        main: {
+            ...mapLayerConfig,
+            type: symbolType
+        },
         extra: mapExtraLayer,
         loadImage: loadImage,
         interactive: (MapConfig.interactive && MapConfig.interactive.affected)? MapConfig.interactive.affected: null

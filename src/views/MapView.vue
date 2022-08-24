@@ -69,29 +69,24 @@ const BASE_URL = process.env.VUE_APP_BASE_URL
 
 import mapStyle from '@/assets/datas/mapStyle.js'
 import { ParseMapLayer } from '@/assets/datas/mapFunction.js'
-import { basicMapLayer, topicComponentList, RainOptions, RainPaintConfig } from '@/assets/datas/topicList.js'
+import { basicMapLayer, MapTopicComponentList, RainOptions, RainPaintConfig } from '@/assets/datas/topicList.js'
 import { MapObjectConfig, MapFogStyle, BuildingsIn3D, TaipeiTown, TaipeiVillage } from '@/assets/datas/mapConfig.js'
+const CalculationList = ['hour', 'day', 'month']
 
-const MapStyle = {
+const MapColorStyle = {
 	'light':'mapbox://styles/mapbox/light-v10',
 	'dark': mapStyle
 }
 
-const CalculationList = ['hour', 'day', 'month']
 export default {
 	props: {
 		mode: {
 			type: String
 		}
 	},
-	methods: {
-		// translateSymbol(contentSymbol){
-        //     return (contentSymbol)? contentSymbol: 'circle'
-        // }
-	},
 	watch: {
 		mode() {
-			this.mapBoxObject.setStyle(MapStyle[this.mode])
+			// this.mapBoxObject.setStyle(MapColorStyle[this.mode])
 		},
 		'$store.state.rainfallLayerShow'() {
 			this.updateRainLayer(true)
@@ -100,9 +95,10 @@ export default {
 	methods: {
 		initMapBox() {
             mapboxgl.accessToken = MAPBOXTOKEN
+			const Mode = this.mode? this.mode: 'dark'
             this.mapBoxObject = new mapboxgl.Map({
 				...MapObjectConfig,
-                style: MapStyle[this.mode]
+                style: MapColorStyle[Mode]
             })
             this.mapBoxObject.addControl( new mapboxgl.NavigationControl() )
 			this.mapBoxObject.addControl(new MapboxLanguage({defaultLanguage: 'zh-Hant'}))
@@ -110,10 +106,13 @@ export default {
 
 			this.mapBoxObject.on('style.load', () => { //1
 				this.mapLoadong = true
-				this.mapBoxObject.setFog(MapFogStyle[this.mode])
+				this.mapBoxObject.setFog(MapFogStyle[Mode])
 				this.initMapBasicLayer()
-
+				if(!this.initMapLoad ){
+					this.uploadAllActiveComponent()
+				}
 			}).on('load', (e) => { //2
+				this.initMapLoad = false
 				this.parseRouterQuery()
 
 			}).on('idle', () => { //3
@@ -134,7 +133,7 @@ export default {
 		initMapBasicLayer(){
 			const layers = this.mapBoxObject.getStyle().layers
 			const checkLayer = layers.find(layer => layer.type === 'symbol' && layer.layout['text-field'])
-            this.mapBoxObject.addLayer(BuildingsIn3D(this.mode), checkLayer.id)
+			this.mapBoxObject.addLayer(BuildingsIn3D(this.mode), checkLayer.id)
 
             fetch(`${BASE_URL}/datas/taipei_town.geojson`).then((response) => (response.json())).then(data => {
 				this.mapBoxObject.addSource('taipei_town', { type: 'geojson', data: data }).addLayer(TaipeiTown(this.mode))
@@ -180,44 +179,49 @@ export default {
             if(this.mapBoxPopup)this.mapBoxPopup.remove()
         },
 		updateAllDrawerSelect(target){
+			console.log('updateAllDrawerSelect');
 			// First laod - Layer settings are loaded only once
-			const { name, map_config, request_list, calculation_config } = target
+			const { name, map_config, request_list } = target
 			const ComponentIndex = target.index
 			if(!(map_config && request_list))return
 			const TargetRequest = request_list.find(list => list.type === 'MapIconDisplay')
 			map_config.map(mapConfigItem => {
 				const MapLayerIndex = mapConfigItem.index
-				if(!Object.keys(this.existCacheMapLayer).includes(MapLayerIndex)){
-					this.fetchDataset(mapConfigItem).then(data => {
-						if(!data) return
-						this.addMapLayer(TargetRequest, mapConfigItem, data, ComponentIndex, name)
-						this.existComponentDisplay[ComponentIndex] = true
-					})
-				}
-				// if(calculation_config){
-				// 	this.fetchHistoryDataset()
-				// }
-				// if(configItem.interactive){}
+				const exitCache = Object.keys(this.existCacheMapLayer).includes(MapLayerIndex)
+				if(exitCache)return
+				this.fetchDataset(mapConfigItem).then(data => {
+					if(!data) returnå
+					this.addMapLayer(TargetRequest, mapConfigItem, data, ComponentIndex, name)
+					this.existComponentDisplay[ComponentIndex] = true
+				})
 			})
 		},
-		// fetchHistoryDataset(componentIndex, mapConfigItem){},
 		updateTopicComponentToMap(updateData){
 			// Replace active list
-			this.clearMapboxPopup()
 			this.activeTopicComponent = updateData.active
-			this.updateActiveComponent(updateData.topicLayer.value)
+			this.activeTopicLayer = updateData.topicLayer.value
+			this.clearMapboxPopup()
+			this.updateActiveComponent(this.activeTopicLayer)
 		},
 		updateBasicComponentToMap(layers){
 			// Replace active list
-			this.clearMapboxPopup()
 			this.activeBasicComponent = layers
+			this.clearMapboxPopup()
 			this.updateRainLayer(layers.includes('flood_risk'))
 			this.updateActiveComponent(basicMapLayer)
+
+		},
+		uploadAllActiveComponent(){
+			this.clearMapboxPopup()
+			this.updateRainLayer(this.activeBasicComponent.includes('flood_risk'))
+			// const 
+			this.updateActiveComponent([...basicMapLayer, ...this.activeTopicLayer])
+
 		},
 		parseRouterQuery(){
 			const {topic, component} = this.$route.query
 			if(!(topic && component)) return 
-			const TargetTopic = topicComponentList.find(item => item.index === topic)
+			const TargetTopic = MapTopicComponentList.find(item => item.index === topic)
 			if(!TargetTopic) return
 			const TargetComponent = TargetTopic.components.find(item => item.index === component)
 			this.TopicNames = component
@@ -228,9 +232,9 @@ export default {
 			const DrawerActiveComponent = this.activeBasicComponent.concat(this.activeTopicComponent)
 			// Clean active component
             DrawerActiveComponent.map(componentIndex => {
-				const target = MapLayers.find(item => item.index === componentIndex)
-				if(!target)return
-				this.updateAllDrawerSelect(target)
+				const targetObj = MapLayers.find(item => item.index === componentIndex)
+				if(!targetObj)return
+				this.updateAllDrawerSelect(targetObj)
             })
 
 			Object.keys(this.existComponentDisplay).filter(item => {
@@ -240,11 +244,14 @@ export default {
 			// Check exist layers - Show or Hide map layer from cache
 			if(Object.keys(this.existCacheMapLayer).length === 0) return
 			Object.keys(this.existCacheMapLayer).map(layerIndex => {
-				if(!this.mapBoxObject.getLayer(layerIndex)) return
-				const TargertComponent = this.existCacheMapLayer[layerIndex]
-				// const LayerVisible = this.mapBoxObject.getLayoutProperty(layerIndex, 'visibility')
-				if(!this.affectedMapLayer[layerIndex]){
-					this.mapBoxObject.setLayoutProperty(layerIndex, 'visibility', (this.existComponentDisplay[TargertComponent])?'visible': 'none')
+				if(this.mapBoxObject.getLayer(layerIndex)){
+					const TargertComponent = this.existCacheMapLayer[layerIndex]
+					if(!this.affectedMapLayer[layerIndex]){
+						this.mapBoxObject.setLayoutProperty(layerIndex, 'visibility', (this.existComponentDisplay[TargertComponent])?'visible': 'none')
+					}
+				}else{
+					// All the map source & layer are missing because change map style mode.
+					console.log(layerIndex);
 				}
 			})
 		},
@@ -333,6 +340,7 @@ export default {
 	},
   	data(){
 		return {
+			initMapLoad: true,
 			mapLoadong: false,
 			mapBoxObject: null,
 			mapBoxPopup: null,
@@ -344,6 +352,7 @@ export default {
 
 			activeBasicComponent: [],
 			activeTopicComponent: [],
+			activeTopicLayer: [],
 			
 			affectedMapLayer: {}
 		}

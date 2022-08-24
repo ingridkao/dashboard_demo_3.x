@@ -10,7 +10,6 @@
 	const dialogVisible = ref(false)
 	const dialogInformation = ref({})
     const route = useRoute()
-
     const props = defineProps({
         menuActive: { type: String, default: ''},
         titleShow: { type: Boolean, default: true },
@@ -25,7 +24,8 @@
     <el-card
         :class="[
             'card-container',
-            data.overview_display
+            data.overview_display,
+            {multiple: data.request_list.length > 1}
         ]"
         :style="{
             order: data.order
@@ -44,6 +44,7 @@
             :components="data"
             :request="item"
             :belong="`card_${route.name}`"
+            :margin="data.request_list.length"
         />
         <el-button 
             v-if="!titleShow" 
@@ -61,6 +62,7 @@
         :data="data"
         :dialogVisible="dialogVisible"
         :dialogInformation="dialogInformation"
+        @closeDialog="dialogVisible = false"
     />
 </template>
 

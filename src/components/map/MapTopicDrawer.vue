@@ -3,7 +3,7 @@
 	import { useRoute } from 'vue-router'
 
 	import CardContainer from '@/components/card/CardContainer.vue'
-	import { TopicList, topicComponentList } from '@/assets/datas/topicList.js'
+	import { TopicList, MapTopicComponentList } from '@/assets/datas/topicList.js'
 
     const props = defineProps({
         TopicToggle: { type: Boolean, default: false },
@@ -20,7 +20,7 @@
 	const activeTopic = ref('')
 	const targetTopicComponent = computed(()=>{
 		if(!route.query.topic) return []
-		const target = topicComponentList.find(item => item.index === route.query.topic)
+		const target = MapTopicComponentList.find(item => item.index === route.query.topic)
 		if(!target) return []
 		const targetTopic = TopicList.find(CommonItem => CommonItem.index === target.index)
 		activeTopic.value = targetTopic.name

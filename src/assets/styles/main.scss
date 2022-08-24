@@ -11,3 +11,45 @@
 		width: 4.5rem;
 	} 
 }
+$iconWidth:1rem;
+$borderWidth: 0.1rem;
+.mapIcon{
+	display: inline-flex;
+	width: $iconWidth;
+	height: $iconWidth;
+	margin-right: $iconWidth/2;
+	&.big{
+		width: .5rem;
+		height: .5rem;
+		margin-right: .1rem;
+	}
+	&.dasharray{
+		background-color: transparent !important;
+		border-width: $iconWidth/5;
+		border-style: dotted;
+	}
+	&.circle{
+		width: $borderWidth;
+		height: $borderWidth;
+		border-radius: $borderWidth;
+		border-width: $borderWidth;
+		border-style: solid;
+	}
+	&.circle_stroke{
+		background-color: transparent !important;
+		border-width: $borderWidth;
+		border-radius: $iconWidth;
+		border-style: solid;
+	}
+	// &.square{
+	// 	transform: rotate(45deg);
+	// }
+	&.triangle_white{
+		background-color: var(--el-color-info-light-7);
+		border-radius: 50%;
+	}
+	&.line{
+		height: $borderWidth*2;
+		border-radius: $borderWidth;
+	}
+}

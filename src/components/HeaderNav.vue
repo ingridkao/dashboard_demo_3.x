@@ -46,8 +46,7 @@ watch(
             />
             <span>
                 <h1>
-                    城市運營聯合儀表板
-                    <span>體驗版</span>
+                    城市運營聯合儀表板體驗版
                 </h1>
                 <h2>Taipei City Dashboard</h2>
             </span>
@@ -92,23 +91,18 @@ watch(
             filter: var(--filter);
         }
         span{
+            text-align: left;
             >*{
                 margin:0;
                 padding: 0;
             }
             margin: 0 0 0 1rem;
             line-height: 150%;
-            h1{
-                position: relative;
-                font-size: 100%;
-                span{
-                    position: absolute;
-                    top: .1rem;
-                    right: -2.5rem;
-                    font-size: .1rem;
-                }
+            h1{font-size: 80%;}
+            h2{
+                font-size: 50%;
+                font-weight: normal;
             }
-            h2{font-size: 30%;}
         }
     }
 }

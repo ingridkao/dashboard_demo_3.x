@@ -183,6 +183,20 @@ export const lineWideStyle = {
     ]
 }
 
+export const lineSuperWideStyle = {
+    'line-width': [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        10.99,
+        0,
+        12,
+        1,
+        18,
+        4
+    ]
+}
+
 export const fillCommonStyle = {
     'fill-opacity': [
         "interpolate",

@@ -51,6 +51,12 @@ export default {
 				}, 0): []
 				this.chartOptions.name.text = `<b>${name}</b><br/>${dataset}`
 				this.chartOptions.series[0].name = label
+
+				let str = ''
+				label.split(' ').map(item =>{
+					str += `${item}<br/>`
+				})
+				this.chartOptions.title.text = str
 				this.chartOptions.series[0].data = data
             }
         }
@@ -77,6 +83,11 @@ export default {
 		return {
 			chartOptions: {
 				...Options,
+				title:{
+					text: '',
+					align: 'center',
+					verticalAlign: 'middle'
+				},
 				chart: {
 					type: 'pie',
 					...ChartConfig,
@@ -104,7 +115,7 @@ export default {
 						cursor: 'pointer',
 						dataLabels: {
 							enabled: true,
-							format: '{point.name}:<br/>{point.percentage:.1f} %',
+							format: '<h6 style="font-size: 1rem">{point.percentage:.1f} %</h6><br/>{point.name}:{point.y}',
 							padding: 1,
                 			distance: '50%'
 						}
@@ -112,7 +123,7 @@ export default {
 				},
 				series: [
 					{
-						size: '50%',
+						// size: '50%',
 						innerSize: '85%',
 						data: []
 					}

@@ -92,8 +92,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-$iconWidth:1rem;
-$borderWidth: $iconWidth/10;
 .mapIconRow{
 	width: calc(100% - 3rem);
     height: 100%;
@@ -112,41 +110,6 @@ $borderWidth: $iconWidth/10;
 		flex-wrap: wrap;
 		align-items: center;
 		justify-content: space-between;
-	}
-	.mapIcon{
-		display: inline-flex;
-		width: $iconWidth;
-		height: $iconWidth;
-		margin-right: $iconWidth/2;
-		&.dasharray{
-			background-color: transparent !important;
-			border-width: $iconWidth/5;
-			border-style: dotted;
-		}
-		&.circle{
-			width: $borderWidth;
-			height: $borderWidth;
-			border-radius: $borderWidth;
-			border-width: $borderWidth;
-			border-style: solid;
-		}
-		&.circle_stroke{
-			background-color: transparent !important;
-			border-width: $borderWidth;
-			border-radius: $iconWidth;
-			border-style: solid;
-		}
-		// &.square{
-		// 	transform: rotate(45deg);
-		// }
-		&.triangle_white{
-			background-color: var(--el-color-info-light-7);
-			border-radius: 50%;
-		}
-		&.line{
-			height: $borderWidth*2;
-			border-radius: $borderWidth;
-		}
 	}
 	.mapData{
 		align-items: end !important;

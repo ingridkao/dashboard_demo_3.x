@@ -1,5 +1,5 @@
 <template>
-	<el-row v-if="keyratioInfo.length>0" justify="start" class="keyratio">
+	<el-row justify="start" class="keyratio">
 		<el-col 
 			v-for="(item, index) in sum" 
 			:key="index" 
@@ -13,20 +13,12 @@
 			:key="index" 
 			:span="keyratioInfo.length/24"
 		>
-			<div>
-				<span 
-					v-if="item.symbol"
-					class="mapIcon big" 
-					:class="translateSymbol(item.symbol)" 
-					:style="translateStyle(item, index)"
-				/>
-				{{item.label}}
-			</div>
+			<div>{{item.label}}</div>
 			<div>{{item.value}}</div>
 		</el-col>
 	</el-row>
 	<highcharts 
-		class="chartContainer area"
+		class="chartContainer line"
 		:style="chartContainerHeight"
 		:options="chartOptions" 
 		:updateArgs="[true, false]" 
@@ -64,9 +56,7 @@ export default {
 					this.sum = data.map(item => {
 						return {
 							label: `${item.name}${keyratioName}`,
-							value: item.data.reduce((a,b) => a+b, 0),
-							symbol: item.symbol? item.symbol:null,
-							color: item.color? item.color:null
+							value: item.data.reduce((a,b) => a+b, 0)
 						}
 					})
 				}
@@ -106,30 +96,11 @@ export default {
 			}
 		}
 	},
-	methods: {
-		translateSymbol(contentSymbol){
-            return (contentSymbol)? contentSymbol: 'circle'
-        },
-        translateStyle(content){
-            if(content){
-				return {
-					backgroundColor: content.color? content.color: '#ddd',
-					borderColor: content.color? content.color: '#ddd' 
-				}    
-            }else{
-				return {}
-			}
-        }
-	},
   	data(){
 		return {
 			sum:[],
 			chartOptions: {
 				...Options,
-				chart: {
-					type: 'area'
-				},
-				// colors: ['#A81A9A', '#00abff'],
 				xAxis: {
 					...LineXAxis
 				},
@@ -161,7 +132,8 @@ export default {
 }
 </script>
 <style lang="scss">
-.chartContainer.area{
+.chartContainer.line{
+	max-height: 20rem;
 	.highcharts-line-series text,
 	.highcharts-area-series text{
 		fill: var(--el-menu-text-color) !important;

@@ -29,6 +29,10 @@ const routes = [
         path: '/mapview',
         name: 'mapview',
         component: MapView
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        redirect: '/'
     }
 ]
 

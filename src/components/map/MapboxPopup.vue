@@ -7,15 +7,15 @@
             :key="i"
         >
             <div v-if="item !== ''">
-                <span :style="{width: `${strCount}em`}">{{i}}</span>
-                <span :style="{width: `calc(100% - ${strCount}em)`}">
-                    <img v-if="i === 'img'" :src="item" :alt="item"/>
+                <span :style="{width: `${strCount+1}em`}">{{i}}</span>
+                <span :style="{width: `calc(100% - ${strCount+1}em)`}">
+                    <img v-if="i === '圖片'" :src="item" :alt="item"/>
                     <el-link v-else-if="i === 'Link'" 
                         :href="item" 
                         target="_blank" 
                         rel="noreferrer noopenner"
-                    >專案連結</el-link>
-                    <div v-else>{{item}}</div>
+                    >連結</el-link>
+                    <div v-else :class="{scrollbox: item.length>100}">{{item}}</div>
                 </span>
             </div>
         </div>
@@ -150,9 +150,13 @@ export default {
                 color: var(--white);
                 img{
                     height: 8rem;
-                    font-size: 0.75rem;
                 }
             }
+        }
+        .scrollbox{
+            max-height: 5rem;
+            overflow: scroll;
+            margin-bottom: .5rem;
         }
     }
     // >.custom_pagination {

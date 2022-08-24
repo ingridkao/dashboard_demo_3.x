@@ -10,6 +10,9 @@
         },
         belong: { 
             type: String
+        },
+        margin: {
+            type: Number
         }
     })
     const AsyncComp = defineAsyncComponent({
@@ -38,6 +41,7 @@
         :components="components"
         :belong="belong"
     />
+    <div v-if="margin>1" class="marginBox"/>
 </template>
 
 <style lang="scss">

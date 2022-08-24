@@ -29,14 +29,21 @@
         })
     }
     const MapBtnShow = computed(() => {
+        if(['police_facility', 'fire_brigade', 'flood_risk'].includes(props.information.index))return false
         return route.name !== 'mapview' && props.information.map_config
     })
 
 </script>
 
 <template>
-    <el-row class="informationContainer">
-        <el-col :xs="24" :span="18">
+    <el-row 
+        :class="[
+            'informationContainer',
+            information.overview_display,
+            {multiple: information.request_list.length > 1}
+        ]"
+    >
+        <el-col :xs="24" :span="18" class="chartBox">
             <LockComponent
                 v-if="!information.request_list[0]"
             />
@@ -47,6 +54,7 @@
                 :name="information.name"
                 :request="item"
                 :belong="`information_${route.name}`"
+                :margin="information.request_list.length"
             />
         </el-col>
         <el-col :xs="24" :span="6" class="informationBox">
@@ -73,10 +81,17 @@
     .highcharts-exporting-group{
         display: block;
     }
+    .chartBox{
+        height: 100%;
+        overflow: scroll;
+        padding-right: 1rem;
+    }
     .informationBox{
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        height: 100%;
+        padding-left: 1rem;
         .informationDesc{
             padding-left: 10px;
             >*{
@@ -86,6 +101,26 @@
                 padding-left: 0;
             }
         }
+    }
+    &.tall {
+        .marginBox{
+            margin-top: 2.5rem;
+        }
+    }
+    &.wide {
+        &.multiple{
+            .chartBox{
+                display: inline-flex;
+                .chartContainer{
+                    width: 50%;
+                }
+            }
+        }
+        .marginBox{
+            margin-left: .5rem;
+        }
+    }
+    &.large {
     }
 }
 </style>
