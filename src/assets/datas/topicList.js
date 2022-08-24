@@ -1187,7 +1187,7 @@ export const TrafficMapLayer = [
             },
             data:[
                 {name: "可借",y: 4490,color: "#356340"},
-                {name: "可還",y: 2893,color: "#ddd"}
+                {name: "可還",y: 2893,color: "#222"}
             ]
         },{
             type: 'Pie',
@@ -1196,7 +1196,7 @@ export const TrafficMapLayer = [
             },
             data:[
                 {name: "可借",y: 11415,color: "#9dc56e"},
-                {name: "可還",y: 5522,color: "#ddd"}
+                {name: "可還",y: 5522,color: "#222"}
             ]
         }],
         map_config: [

@@ -42,11 +42,11 @@ watch(
         <el-menu-item index="/" class="logoBox">
             <img 
                 src="../assets/img/TUIC.svg"
-                alt="城市運營聯合儀表板logo" 
+                alt="城市聯合儀表板logo" 
             />
             <span>
                 <h1>
-                    城市運營聯合儀表板體驗版
+                    城市聯合儀表板體驗版
                 </h1>
                 <h2>Taipei City Dashboard</h2>
             </span>

@@ -34,7 +34,7 @@ npm install --force
     `vi .env`
 2. 編輯.env
     ```
-    VUE_APP_WEB_TITLE=城市運營聯合儀表板體驗版
+    VUE_APP_WEB_TITLE=城市聯合儀表板體驗版
     VUE_APP_BASE_URL=/dashboard_demo
     VUE_APP_SHARE_URL=https://ingridkao.github.io/dashboard_demo_3.x/
     VUE_APP_GOOGLE_ANALYTICS=G-XXXXXXXXX
@@ -146,8 +146,8 @@ Element+暗黑模式[官網說明](https://element-plus.org/zh-CN/guide/dark-mod
     pwa: {
         ...
         manifestOptions: {
-            name: "城市運營聯合儀表板",
-            short_name: "城市運營儀表板",
+            name: "城市聯合儀表板",
+            short_name: "城市聯合儀表板",
             start_url: "index.html",
             display: "standalone",
             theme_color: "#080403",

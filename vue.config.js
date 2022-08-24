@@ -28,7 +28,7 @@ module.exports = {
         },
         manifestOptions: {
             name: WEB_TITLE,
-            short_name: "城市運營儀表板",
+            short_name: "城市聯合儀表板體驗版",
             start_url: "./",
             display: "standalone",
             theme_color: "#000000",

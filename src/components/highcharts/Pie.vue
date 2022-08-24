@@ -86,7 +86,11 @@ export default {
 				title:{
 					text: '',
 					align: 'center',
-					verticalAlign: 'middle'
+					verticalAlign: 'middle',
+					style: {
+						fontSize: '0.8rem'
+					}
+
 				},
 				chart: {
 					type: 'pie',
@@ -99,12 +103,12 @@ export default {
 					align: 'center',
 					verticalAlign: 'middle',
 					style: {
-						fontSize: '1.5rem'
+						fontSize: '1rem'
 					}
 				},
 				tooltip: {
 					useHTML: true,
-					headerFormat: '<table><tr><th colspan="2">{point.key}:  {point.percentage:.1f}% </th></tr>',
+					headerFormat: '<table><tr><th colspan="2" style="margin-right: 1rem">{point.key}:  {point.percentage:.1f}% </th></tr>',
 					pointFormat: '<tr><td>{series.name} </td>' +
 						'<td style="text-align: right"><b>{point.y}</b></td></tr>',
 					footerFormat: '</table>'
@@ -115,16 +119,16 @@ export default {
 						cursor: 'pointer',
 						dataLabels: {
 							enabled: true,
-							format: '<h6 style="font-size: 1rem">{point.percentage:.1f} %</h6><br/>{point.name}:{point.y}',
-							padding: 1,
-                			distance: '50%'
+							format: '<h6 style="font-size: 1rem">{point.percentage:.1f} %</h6><br/>{point.name} : <br/>{point.y}',
+							padding: .5,
+                			distance: '30%'
 						}
 					}
 				},
 				series: [
 					{
-						// size: '50%',
-						innerSize: '85%',
+						size: '50%',
+						innerSize: '60%',
 						data: []
 					}
 				]
