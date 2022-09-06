@@ -20,7 +20,6 @@
         if(!props.component) return
         const likeArray = checkboxs.value.select
         if(likeArray.length === 0) return
-        console.log(CustomComponent);
         // SetCustomComponent(CommonlyList, CustomComponent, componentIndex)
         // ElMessage({
         //     type: 'success',

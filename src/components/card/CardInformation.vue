@@ -29,10 +29,9 @@
         })
     }
     const MapBtnShow = computed(() => {
-        if(['police_facility', 'fire_brigade', 'flood_risk'].includes(props.information.index))return false
+        if(['police_facility', 'fire_brigade', 'flood_risk'].includes(props.information.index))return true
         return route.name !== 'mapview' && props.information.map_config
     })
-
 </script>
 
 <template>
@@ -111,8 +110,10 @@
         &.multiple{
             .chartBox{
                 display: inline-flex;
+                flex-direction: column;
                 .chartContainer{
-                    width: 50%;
+                    width: 100%;
+                    height: 30rem;
                 }
             }
         }
@@ -122,5 +123,6 @@
     }
     &.large {
     }
+
 }
 </style>

@@ -3,9 +3,9 @@
 	import { basicMapLayer } from '@/assets/datas/topicList.js'
 	import CardContainer from '@/components/card/CardContainer.vue'
     const props = defineProps({
-        BasicListToggle: { type: Boolean, default: false }
+        BasicListToggle: { type: Boolean, default: false },
+        ActiveNames: { type: Array, default: () => [] }
     })
-	const activeNames = ref([])
 	const emit = defineEmits(['update'])
 	const handleChange = (val) => {
 		emit("update", val)
@@ -28,7 +28,7 @@
 			</h6>
 		</template>
 		<el-collapse 
-			v-model="activeNames" 
+			v-model="ActiveNames" 
 			@change="handleChange"
 		>
 			<el-collapse-item 

@@ -20,7 +20,7 @@ export const MapObjectConfig = {
     container: "mapboxBox",
     center: MapPositions.center,
     maxBounds: MaxBounds,
-    zoom:12.5,
+    zoom:13,
     minZoom: 11,
     maxZoom: 22,
     antialias: true, // 抗鋸齒
@@ -330,9 +330,9 @@ export const symbolTextHaloStyle = {
             "interpolate",
             ["linear"],
             ["zoom"],
-            11.99,0,
-            12,0.1,
-            14,0.3
+            12.99,0,
+            13,0.1,
+            15,0.3
         ],
         "icon-allow-overlap": true,
         "text-field": "○",
@@ -341,7 +341,8 @@ export const symbolTextHaloStyle = {
             ["linear"],
             ["zoom"],
             12.99,0,
-            13,40,
+            13,5,
+            14,40,
             22,55
         ]
     }

@@ -26,6 +26,14 @@
 		activeTopic.value = targetTopic.name
 		return target.components
 	})
+	const handleBreadcrumb = computed(()=>{
+        return { 
+			path: '/',
+            query: {
+                topic: route.query.topic
+            }
+		}
+	})
 </script>
 
 <template>
@@ -39,7 +47,7 @@
 	>
 		<template #header="{}">
 			<el-breadcrumb separator="/">
-				<el-breadcrumb-item :to="{ path: '/' }">
+				<el-breadcrumb-item :to="handleBreadcrumb">
 					<el-icon><House /></el-icon>
 				</el-breadcrumb-item>
 				<el-breadcrumb-item>{{activeTopic}}</el-breadcrumb-item>

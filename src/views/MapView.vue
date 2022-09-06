@@ -8,6 +8,7 @@
 
 	const MapContainer = ref(null)
 	const TopicNames = ref([])
+	const BasicNames = ref([])
 	const { isFullscreen, toggle } = useFullscreen(MapContainer)
 
 	const ComponentListOpen = ref(false)
@@ -29,6 +30,7 @@
 		/>
 
 		<MapBasicDrawer
+			:ActiveNames="BasicNames"
 			:BasicListToggle="BasicListToggle"
 			@update="updateBasicComponentToMap"
 		/>
@@ -46,10 +48,20 @@
 					<el-icon v-if="isFullscreen"><Close /></el-icon>
 					<el-icon v-else><FullScreen/></el-icon>
 				</el-button>
-				<el-button type="info" circle @click="ToggleComponentList">
+				<el-button 
+					type="info"
+					:class="{active: TopicNames.length > 0}"
+					circle 
+					@click="ToggleComponentList"
+				>
 					<el-icon><Collection /></el-icon>
 				</el-button>
-				<el-button type="info" circle @click="ToggleBasicList">
+				<el-button 
+					type="info"
+					:class="{active: BasicNames.length > 0}"
+					circle 
+					@click="ToggleBasicList"
+				>
 					<el-icon><Box /></el-icon>
 				</el-button>
 			</div>
@@ -95,10 +107,11 @@ export default {
 	methods: {
 		initMapBox() {
             mapboxgl.accessToken = MAPBOXTOKEN
-			const Mode = this.mode? this.mode: 'dark'
+			// const Mode = this.mode? this.mode: 'dark'
             this.mapBoxObject = new mapboxgl.Map({
 				...MapObjectConfig,
-                style: MapColorStyle[Mode]
+                // style: MapColorStyle[Mode]
+                style: mapStyle
             })
             this.mapBoxObject.addControl( new mapboxgl.NavigationControl() )
 			this.mapBoxObject.addControl(new MapboxLanguage({defaultLanguage: 'zh-Hant'}))
@@ -106,7 +119,9 @@ export default {
 
 			this.mapBoxObject.on('style.load', () => { //1
 				this.mapLoadong = true
-				this.mapBoxObject.setFog(MapFogStyle[Mode])
+				// this.mapBoxObject.setFog(MapFogStyle[Mode])
+				this.mapBoxObject.setFog(MapFogStyle['dark'])
+
 				this.initMapBasicLayer()
 				if(!this.initMapLoad ){
 					this.uploadAllActiveComponent()
@@ -133,13 +148,16 @@ export default {
 		initMapBasicLayer(){
 			const layers = this.mapBoxObject.getStyle().layers
 			const checkLayer = layers.find(layer => layer.type === 'symbol' && layer.layout['text-field'])
-			this.mapBoxObject.addLayer(BuildingsIn3D(this.mode), checkLayer.id)
+			// this.mapBoxObject.addLayer(BuildingsIn3D(this.mode), checkLayer.id)
+			this.mapBoxObject.addLayer(BuildingsIn3D('dark'), checkLayer.id)
 
             fetch(`${BASE_URL}/datas/taipei_town.geojson`).then((response) => (response.json())).then(data => {
-				this.mapBoxObject.addSource('taipei_town', { type: 'geojson', data: data }).addLayer(TaipeiTown(this.mode))
+				// this.mapBoxObject.addSource('taipei_town', { type: 'geojson', data: data }).addLayer(TaipeiTown(this.mode))
+				this.mapBoxObject.addSource('taipei_town', { type: 'geojson', data: data }).addLayer(TaipeiTown('dark'))
 			})
             fetch(`${BASE_URL}/datas/taipei_village.geojson`).then((response) => (response.json())).then(data => {
-				this.mapBoxObject.addSource('taipei_village', { type: 'geojson', data: data }).addLayer(TaipeiVillage(this.mode))
+				// this.mapBoxObject.addSource('taipei_village', { type: 'geojson', data: data }).addLayer(TaipeiVillage(this.mode))
+				this.mapBoxObject.addSource('taipei_village', { type: 'geojson', data: data }).addLayer(TaipeiVillage('dark'))
 			})
 		},
 		fetchDataset(mapConfigItem){
@@ -179,7 +197,6 @@ export default {
             if(this.mapBoxPopup)this.mapBoxPopup.remove()
         },
 		updateAllDrawerSelect(target){
-			console.log('updateAllDrawerSelect');
 			// First laod - Layer settings are loaded only once
 			const { name, map_config, request_list } = target
 			const ComponentIndex = target.index
@@ -209,12 +226,10 @@ export default {
 			this.clearMapboxPopup()
 			this.updateRainLayer(layers.includes('flood_risk'))
 			this.updateActiveComponent(basicMapLayer)
-
 		},
 		uploadAllActiveComponent(){
 			this.clearMapboxPopup()
 			this.updateRainLayer(this.activeBasicComponent.includes('flood_risk'))
-			// const 
 			this.updateActiveComponent([...basicMapLayer, ...this.activeTopicLayer])
 
 		},
@@ -224,9 +239,16 @@ export default {
 			const TargetTopic = MapTopicComponentList.find(item => item.index === topic)
 			if(!TargetTopic) return
 			const TargetComponent = TargetTopic.components.find(item => item.index === component)
-			this.TopicNames = component
-			this.activeTopicComponent = [component]
-			this.updateActiveComponent(TargetTopic.components)
+			if(TargetComponent){
+				this.ComponentListOpen = true
+				this.TopicNames = component
+				this.activeTopicComponent = [component]
+				this.updateActiveComponent(TargetTopic.components)
+			}else{
+				this.BasicListToggle = true
+				this.BasicNames = [component]
+				this.updateBasicComponentToMap([component])
+			}
 		},
 		updateActiveComponent(MapLayers = []){
 			const DrawerActiveComponent = this.activeBasicComponent.concat(this.activeTopicComponent)
@@ -370,7 +392,6 @@ export default {
 <style lang="scss">
 #mapboxContainer{
 	position: relative;
-	width: 100%;
 	&.fullscreen{
 		--el-main-padding: 0 !important;
 		#mapBtnBox{
@@ -385,6 +406,9 @@ export default {
 		position: absolute;
 		top: 2.5rem;
 		left: 2.5rem;
+		>button.active{
+			--el-button-text-color: var(--el-color-primary-light-3);
+		}
 	}
 }
 </style>

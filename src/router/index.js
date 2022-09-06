@@ -32,7 +32,7 @@ const routes = [
     },
     {
         path: '/:pathMatch(.*)*',
-        redirect: '/'
+        component: CityView
     }
 ]
 

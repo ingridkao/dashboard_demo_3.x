@@ -439,7 +439,7 @@ export const SentimentMapLayer = [
         name: '新聞熱議關鍵字',
         overview_display: '',
         order: 3,
-        sample_data: '2022-08-22',
+        sample_data: '2022-09-06',
         source_from: '新聞知識系統',
         request_list: [{
             type: 'WordCloud',
@@ -447,15 +447,16 @@ export const SentimentMapLayer = [
                 label: "出現次數"
             },
             data:[
-                {name: '疫情', weight: 60, color: "hsl(210deg,80%,54%)"},
-                {name: '民進黨', weight: 60, color: "hsl(210deg,80%,54%)"},
-                {name: '媒體', weight: 49, color: "hsl(210deg,80%,54%)"},
-                {name: '城博會', weight: 39, color: "hsl(210deg,50%,54%)"},
-                {name: '調查', weight: 36, color: "hsl(210deg,50%,54%)"},
-                {name: '風險', weight: 26, color: "hsl(210deg,50%,54%)"},
-                {name: '殉職', weight: 20, color: "hsl(210deg,25%,54%)"},
-                {name: '記者會', weight: 16, color: "hsl(210deg,25%,54%)"},
-                {name: '台南市', weight: 16, color: "hsl(210deg,25%,54%)"}
+                {name: '民進黨', weight: 1125, color: "hsl(210deg,80%,54%)"},
+                {name: '媒體', weight: 1127, color: "hsl(210deg,80%,54%)"},
+                {name: '參選人', weight: 969, color: "hsl(210deg,80%,54%)"},
+                {name: '疫情', weight: 958, color: "hsl(210deg,80%,54%)"},
+                {name: '陳時中', weight: 942, color: "hsl(210deg,80%,54%)"},
+                {name: '柯文哲', weight: 785, color: "hsl(210deg,50%,54%)"},
+                {name: '台北市長', weight: 777, color: "hsl(210deg,50%,54%)"},
+                {name: '美國', weight: 709, color: "hsl(210deg,50%,54%)"},
+                {name: '感謝', weight: 415, color: "hsl(210deg,50%,54%)"},
+                {name: '蔣萬安', weight: 249, color: "hsl(210deg,50%,54%)"}
             ]
         }]
     },
@@ -591,8 +592,8 @@ export const SentimentMapLayer = [
                         ["get", "案件類型"],
                         "大型廢棄物清運聯繫","#fc9f0b",
                         "場所與設施噪音舉發","#dac117",
-                        "污染舉發","#FDD79B",
-                        "路燈故障或設施損壞","#FDD79B",
+                        "污染舉發","#ffc107",
+                        "路燈故障或設施損壞","#ffc107",
                         "#555"
                     ]
                 },
@@ -745,7 +746,7 @@ export const PatrolMapLayer = [
                         index: 'patrol_designate_place',
                         name: '避難場所',
                         symbol: 'circle_stroke',
-                        color: '#FDD79B',
+                        color: '#ffc107',
                         data: 289
                     }
                 ]
@@ -758,7 +759,7 @@ export const PatrolMapLayer = [
                 paint: {
                     "circle-opacity": 0,
                     "circle-stroke-width": 1,
-                    'circle-stroke-color': '#FDD79B',
+                    'circle-stroke-color': '#ffc107',
                     'circle-radius': [
                         'interpolate', ['cubic-bezier', 0, 0.5, 1, 1],
                         ["to-number", ["get", "容納人數"]],
@@ -916,7 +917,6 @@ export const TrafficMapLayer = [
                     {"key": "type","name": "事故類型"},
                     {"key": "location","name": "事故位置"}
                 ]
-
             }
         ]
     },
@@ -1346,7 +1346,7 @@ export const ConstructionMapLayer = [
         index: 'building_age',
         name: '全市屋齡分布',
         overview_display: 'wide',
-        order: 4,
+        order: 5,
         source_from: '建管處&消防局',
         sample_data: '2021-12-27',
         request_list: [{
@@ -1489,7 +1489,7 @@ export const ConstructionMapLayer = [
         index: 'social_house',
         name: '社會住宅建設進度',
         overview_display: '',
-        order: 5,
+        order: 4,
         source_from: '都發局',
         sample_data: '2022-08-03',
         request_list: [{

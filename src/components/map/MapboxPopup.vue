@@ -120,8 +120,8 @@ export default {
 }
 .mapboxgl-popup-content{
     background-color: rgba(18, 18, 18,0.8);
-    border: 1px solid var(--order);
-    color: var(--gray);
+    border: 1px solid #f0f0f0;
+    color: #f0f0f0;
     border-radius: 1rem;
     padding: 0.5rem 1rem;
     min-width: 20rem;
@@ -138,6 +138,7 @@ export default {
     min-height: 8em;
     h6{
         color: var(--white);
+        margin-bottom: .5rem;
     }
     .propertieBox{
         >div{
@@ -159,17 +160,10 @@ export default {
             margin-bottom: .5rem;
         }
     }
-    // >.custom_pagination {
-    //     text-align: right;
-    //     list-style-type: none;
-    //     li {
-    //         padding: 0 .5rem;
-    //         color: var(--text-main-l2);
-    //         cursor: pointer;
-    //         &.active {
-    //             color: var(--white);
-    //         }
-    //     }
-    // }
+    .el-pagination {
+        --el-pagination-button-disabled-bg-color: transparent;
+        --el-pagination-bg-color: transparent;
+        --el-text-color-primary: var(--text-main-l2);
+    }
 }
 </style>

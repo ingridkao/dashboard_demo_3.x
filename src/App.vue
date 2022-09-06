@@ -40,6 +40,14 @@
 		}
 		#PageContainer{
 			background-color: var(--el-bg-color-page);
+			> *{
+				width: 100vw;
+				max-width: 80rem;
+				margin: 0 auto;
+				&.fullscreen{
+					max-width: 100rem;
+				}
+			}
 		}
 	}
 </style>

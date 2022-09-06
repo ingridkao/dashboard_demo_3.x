@@ -1,4 +1,6 @@
 <script setup>
+	import { useRouter, useRoute } from 'vue-router'
+
 	import { TopicList, topicComponentList} from '@/assets/datas/topicList.js'
 	import AsideBar from '@/components/city/AsideBar.vue'
 	import CardContainer from '@/components/card/CardContainer.vue'
@@ -8,22 +10,36 @@
 	const { width, height } = useWindowSize()
 	const { isFullscreen } = useFullscreen()
 	const isCollapse = ref(false)
-	const menuActive = ref(TopicList[0]['index'])
-	const targetTopic = computed(()=>{
-		return topicComponentList.find(item => item.index === menuActive.value)
-	})
-	const handleCollapse = () => {
-		isCollapse.value = !isCollapse.value
+	const menuActive = ref("")
+
+	const router = useRouter()
+    const route = useRoute()
+
+	if(route.query && route.query.topic){
+		menuActive.value = route.query.topic
+	}else{
+		menuActive.value = TopicList[0]['index']
 	}
 	const handleSelect = (e) => {
         menuActive.value = e
+        router.push({
+            query: {
+                ...route.query,
+                topic: e
+            }
+        })
 	}
+	const handleCollapse = () => {
+		isCollapse.value = !isCollapse.value
+	}
+	const targetTopic = computed(()=> topicComponentList.find(item => item.index === menuActive.value))
 	watch(isFullscreen, (state) => {
 		if(state) isCollapse.value = true
 	})
 </script>
 
 <template>
+<el-container id="cityViewContainer">
 	<el-aside 
 		class="asideContainer"
 		:class="{
@@ -56,11 +72,11 @@
 			/>
 		</el-main>
 	</el-scrollbar>
+</el-container>
 </template>
 
 <style lang="scss">
 #cityMainContainer{
-	width: 100%;
 	.el-main{
 		margin: 0 auto;
 		display: grid;
@@ -101,10 +117,10 @@
 							display: inline-flex;
 						}
 						.chartContainer.column{
-							max-width: 25rem;
+							max-width: 50%;
 						}
 						.chartContainer.circle{
-							max-width: 25rem;
+							max-width: 50%;
 						}
 						.columnActionBts{
 							max-width: 5rem;

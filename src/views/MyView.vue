@@ -59,11 +59,6 @@
 
 <style lang="scss">
 #myViewContainer{
-	margin: 0 auto;
-	max-width: 80rem;
-	&.fullscreen{
-		max-width: 100rem;
-	}
 	@media all and (min-width: 1920px){
 		max-width: 95rem;
 		&.fullscreen{
