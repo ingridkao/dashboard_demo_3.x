@@ -3,8 +3,8 @@
 	import { basicMapLayer } from '@/assets/datas/topicList.js'
 	import CardContainer from '@/components/card/CardContainer.vue'
     const props = defineProps({
-        BasicListToggle: { type: Boolean, default: false },
-        ActiveNames: { type: Array, default: () => [] }
+        basicToggle: { type: Boolean, default: false },
+		activeNames: { type: Array, default: () => [] }
     })
 	const emit = defineEmits(['update'])
 	const handleChange = (val) => {
@@ -14,7 +14,7 @@
 
 <template>
 	<el-drawer
-		v-model="BasicListToggle"
+		v-model="props.basicToggle"
 		direction="ltr"
 		modal-class="mapDrawerModalEl"
 		custom-class="mapBasicDrawerContainer"
@@ -28,7 +28,7 @@
 			</h6>
 		</template>
 		<el-collapse 
-			v-model="ActiveNames" 
+			v-model="props.activeNames" 
 			@change="handleChange"
 		>
 			<el-collapse-item 

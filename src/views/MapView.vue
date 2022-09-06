@@ -7,31 +7,20 @@
 	import MapBasicDrawer from '@/components/map/MapBasicDrawer.vue'
 
 	const MapContainer = ref(null)
-	const TopicNames = ref([])
-	const BasicNames = ref([])
 	const { isFullscreen, toggle } = useFullscreen(MapContainer)
-
-	const ComponentListOpen = ref(false)
-	const ToggleComponentList = () => {
-		ComponentListOpen.value = !ComponentListOpen.value
-	}
-	const BasicListToggle = ref(false)
-	const ToggleBasicList = () => {
-		BasicListToggle.value = !BasicListToggle.value
-	}
 </script>
 
 <template>
 	<el-container ref="MapContainer">
 		<MapTopicDrawer
-			:ActiveNames="TopicNames"
-			:TopicToggle="ComponentListOpen"
+			:active-names="topicNames"
+			:topicToggle="componentListOpen"
 			@update="updateTopicComponentToMap"
 		/>
 
 		<MapBasicDrawer
-			:ActiveNames="BasicNames"
-			:BasicListToggle="BasicListToggle"
+			:active-names="basicNames"
+			:basicToggle="basicListOpen"
 			@update="updateBasicComponentToMap"
 		/>
 
@@ -50,17 +39,17 @@
 				</el-button>
 				<el-button 
 					type="info"
-					:class="{active: TopicNames.length > 0}"
+					:class="{active: topicNames.length > 0}"
 					circle 
-					@click="ToggleComponentList"
+					@click="componentListToggle"
 				>
 					<el-icon><Collection /></el-icon>
 				</el-button>
 				<el-button 
 					type="info"
-					:class="{active: BasicNames.length > 0}"
+					:class="{active: basicNames.length > 0}"
 					circle 
-					@click="ToggleBasicList"
+					@click="basicListToggle"
 				>
 					<el-icon><Box /></el-icon>
 				</el-button>
@@ -231,7 +220,6 @@ export default {
 			this.clearMapboxPopup()
 			this.updateRainLayer(this.activeBasicComponent.includes('flood_risk'))
 			this.updateActiveComponent([...basicMapLayer, ...this.activeTopicLayer])
-
 		},
 		parseRouterQuery(){
 			const {topic, component} = this.$route.query
@@ -240,14 +228,14 @@ export default {
 			if(!TargetTopic) return
 			const TargetComponent = TargetTopic.components.find(item => item.index === component)
 			if(TargetComponent){
-				this.ComponentListOpen = true
-				this.TopicNames = component
-				this.activeTopicComponent = [component]
+				this.topicNames = Array(component)
+				this.activeTopicComponent = Array(component)
 				this.updateActiveComponent(TargetTopic.components)
+				this.componentListToggle()
 			}else{
-				this.BasicListToggle = true
-				this.BasicNames = [component]
-				this.updateBasicComponentToMap([component])
+				this.basicNames = Array(component)
+				this.updateBasicComponentToMap(Array(component))
+				this.basicListToggle()
 			}
 		},
 		updateActiveComponent(MapLayers = []){
@@ -358,7 +346,13 @@ export default {
 					this.mapBoxObject.setLayoutProperty(MapLayerIndex, 'visibility', MapVisible)
 				}
             })
-        }
+        },
+		componentListToggle(event){
+			this.componentListOpen = !this.componentListOpen
+		},
+		basicListToggle(event){
+			this.basicListOpen = !this.basicListOpen
+		}
 	},
   	data(){
 		return {
@@ -376,7 +370,12 @@ export default {
 			activeTopicComponent: [],
 			activeTopicLayer: [],
 			
-			affectedMapLayer: {}
+			affectedMapLayer: {},
+
+			basicListOpen: false,
+			componentListOpen: false,
+			topicNames: [],
+			basicNames: [],
 		}
 	},
     mounted() {

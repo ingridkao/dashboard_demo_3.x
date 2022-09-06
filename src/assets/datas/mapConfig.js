@@ -20,7 +20,7 @@ export const MapObjectConfig = {
     container: "mapboxBox",
     center: MapPositions.center,
     maxBounds: MaxBounds,
-    zoom:13,
+    zoom:12.5,
     minZoom: 11,
     maxZoom: 22,
     antialias: true, // 抗鋸齒

@@ -6,8 +6,8 @@
 	import { TopicList, MapTopicComponentList } from '@/assets/datas/topicList.js'
 
     const props = defineProps({
-        TopicToggle: { type: Boolean, default: false },
-        ActiveNames: { type: Array, default: () => [] }
+        topicToggle: { type: Boolean, default: false },
+        activeNames: { type: Array, default: () => [] }
     })
 	const emit = defineEmits(['update'])
 	const handleChange = (val) => {
@@ -38,7 +38,7 @@
 
 <template>
 	<el-drawer
-		v-model="TopicToggle"
+		v-model="props.topicToggle"
 		direction="ltr"
 		modal-class="mapDrawerModalEl"
 		custom-class="mapTopicDrawerContainer"
@@ -54,7 +54,7 @@
 			</el-breadcrumb>
 		</template>
 		<el-collapse 
-			v-model="ActiveNames" 
+			v-model="props.activeNames" 
 			@change="handleChange"
 		>
 			<el-collapse-item 
